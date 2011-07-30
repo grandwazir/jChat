@@ -11,21 +11,30 @@ import name.richardson.james.jchat.listeners.jChatPlayerListener;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
+import com.nijiko.permissions.PermissionHandler;
+import com.nijikokun.bukkit.Permissions.Permissions;
+
 public class jChat extends JavaPlugin {
 
   private final static File confFile = new File("plugins/jChat/config.yml");
-  private static jChat instance;
   private final static Logger logger = Logger.getLogger("Minecraft");
-  public Configuration conf;
-  private PluginDescriptionFile desc;
+  
   private final jChatPlayerListener playerListener;
+ 
+  private static jChat instance;
+  
+  private PluginDescriptionFile desc;
   private PluginManager pm;
-
+  
+  public Configuration conf;
+  public PermissionHandler externalPermissions;
+  
   public jChat() {
     jChat.instance = this;
     playerListener = new jChatPlayerListener(this);
@@ -48,6 +57,7 @@ public class jChat extends JavaPlugin {
 
     // load configuration
     loadConfiguration();
+    connectPermissions();
 
     // register events
     pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
@@ -106,9 +116,21 @@ public class jChat extends JavaPlugin {
       final String path = String.format("%s.%s", parentNode, node);
       if (player.hasPermission(permission)) { 
         return conf.getString(path).replace("&", "§"); 
+      } else if (externalPermissions != null) {
+        if (externalPermissions.has(player, permission)) {
+          return conf.getString(path).replace("&", "§");
+        }
       }
     }
     return "";
   }
-
+  
+  private void connectPermissions() {
+    final Plugin permissionsPlugin = getServer().getPluginManager().getPlugin("Permissions");
+    if (permissionsPlugin != null) {
+      externalPermissions = ((Permissions) permissionsPlugin).getHandler();
+      log(Level.INFO, String.format("External permissions system found: %s", ((Permissions) permissionsPlugin).getDescription().getFullName()));
+    }
+  }
+  
 }
