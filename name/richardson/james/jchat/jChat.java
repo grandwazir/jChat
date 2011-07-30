@@ -3,6 +3,9 @@ package name.richardson.james.jchat;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,6 +37,7 @@ public class jChat extends JavaPlugin {
   
   public Configuration conf;
   public PermissionHandler externalPermissions;
+  public Map<String, UUID> players = new HashMap<String, UUID>();
   
   public jChat() {
     jChat.instance = this;
@@ -47,6 +51,7 @@ public class jChat extends JavaPlugin {
   public void onDisable() {
     for (final Player player : getServer().getOnlinePlayers())
       revertDisplayName(player);
+    players.clear();
     log(Level.INFO, String.format("%s is disabled", desc.getName()));
   }
 
@@ -62,11 +67,13 @@ public class jChat extends JavaPlugin {
     // register events
     pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
     pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this);
+    pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Event.Priority.Low, this);
 
     // apply initial colours
-    for (final Player player : getServer().getOnlinePlayers())
+    for (final Player player : getServer().getOnlinePlayers()) {
       setDisplayName(player);
-
+    }
+      
     log(Level.INFO, String.format("%s is enabled!", desc.getFullName()));
   }
 
@@ -78,6 +85,7 @@ public class jChat extends JavaPlugin {
     final String prefix = searchNodes(player, "prefix");
     final String suffix = searchNodes(player, "suffix") + "§f";
     player.setDisplayName(prefix + ChatColor.stripColor(player.getDisplayName()) + suffix);
+    players.put(player.getName(), player.getWorld().getUID());
   }
 
   private void createConfiguration() {
