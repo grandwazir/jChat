@@ -122,12 +122,18 @@ public class jChat extends JavaPlugin {
     for (final String node : conf.getKeys(parentNode)) {
       final String permission = String.format("%s.%s.%s", desc.getName().toLowerCase(), parentNode, node);
       final String path = String.format("%s.%s", parentNode, node);
-      if (player.hasPermission(permission)) { 
-        return conf.getString(path).replace("&", "§"); 
-      } else if (externalPermissions != null) {
-        if (externalPermissions.has(player, permission)) {
-          return conf.getString(path).replace("&", "§");
+      String title = conf.getString(path);
+      
+      if (title != null) {
+        if (player.hasPermission(permission)) {
+            return title.replace("&", "§");
+        } else if (externalPermissions != null) {
+          if (externalPermissions.has(player, permission)) {
+            return title.replace("&", "§");
+          }
         }
+      } else {
+        log(Level.WARNING, "Found a " + parentNode + " that is not defined: " + node);
       }
     }
     return "";
