@@ -84,7 +84,7 @@ public class jChat extends JavaPlugin {
   public void setDisplayName(final Player player) {
     final String prefix = searchNodes(player, "prefix");
     final String suffix = searchNodes(player, "suffix") + "§f";
-    player.setDisplayName(prefix + ChatColor.stripColor(player.getDisplayName()) + suffix);
+    player.setDisplayName(prefix + ChatColor.stripColor(player.getName()) + suffix);
     players.put(player.getName(), player.getWorld().getUID());
   }
 
