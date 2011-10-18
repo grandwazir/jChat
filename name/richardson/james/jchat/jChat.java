@@ -9,9 +9,9 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import name.richardson.james.jchat.listeners.jChatEntityListener;
 import name.richardson.james.jchat.listeners.jChatPlayerListener;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
@@ -29,7 +29,8 @@ public class jChat extends JavaPlugin {
   private final static Logger logger = Logger.getLogger("Minecraft");
   
   private final jChatPlayerListener playerListener;
- 
+  private final jChatEntityListener entityListener;
+  
   private static jChat instance;
   
   private PluginDescriptionFile desc;
@@ -42,6 +43,7 @@ public class jChat extends JavaPlugin {
   public jChat() {
     jChat.instance = this;
     playerListener = new jChatPlayerListener(this);
+    entityListener = new jChatEntityListener();
   }
 
   public static void log(final Level level, final String msg) {
@@ -65,9 +67,19 @@ public class jChat extends JavaPlugin {
     connectPermissions();
 
     // register events
+    pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Event.Priority.Monitor, this);
+    
+    if (conf.getBoolean("colourMessages.join", true)) {
     pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
-    pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this);
-    pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Event.Priority.Low, this);
+    }
+    
+    if (conf.getBoolean("colourMessages.death", true)) {
+      pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
+    }
+    
+    if (conf.getBoolean("colourMessages.quit", true)) {
+      pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this);
+    }
 
     // apply initial colours
     for (final Player player : getServer().getOnlinePlayers()) {
@@ -84,7 +96,7 @@ public class jChat extends JavaPlugin {
   public void setDisplayName(final Player player) {
     final String prefix = searchNodes(player, "prefix");
     final String suffix = searchNodes(player, "suffix") + "§f";
-    player.setDisplayName(prefix + ChatColor.stripColor(player.getName()) + suffix);
+    player.setDisplayName(prefix + player.getName() + suffix);
     players.put(player.getName(), player.getWorld().getUID());
   }
 
@@ -95,6 +107,7 @@ public class jChat extends JavaPlugin {
       confFile.getParentFile().mkdirs();
       confFile.createNewFile();
       conf.getString("colourMessages", "");
+      conf.getBoolean("colourMessages.death", true);
       conf.getBoolean("colourMessages.join", true);
       conf.getBoolean("colourMessages.quit", true);
       conf.getString("prefix", null);
