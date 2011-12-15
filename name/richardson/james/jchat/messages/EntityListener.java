@@ -1,13 +1,12 @@
-package name.richardson.james.jchat.listeners;
+package name.richardson.james.jchat.messages;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityListener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 
-public class jChatEntityListener extends EntityListener {
+public class EntityListener extends org.bukkit.event.entity.EntityListener {
   
   public void onEntityDeath(EntityDeathEvent event) {
     if (event instanceof PlayerDeathEvent) {

@@ -1,4 +1,4 @@
-package name.richardson.james.jchat.listeners;
+package name.richardson.james.jchat.messages;
 
 import name.richardson.james.jchat.jChat;
 
@@ -7,15 +7,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 
-public class jChatPlayerListener extends PlayerListener {
+public class PlayerListener extends org.bukkit.event.player.PlayerListener {
   private final jChat plugin;
   
   
-  public jChatPlayerListener(jChat plugin) {
+  public PlayerListener(jChat plugin) {
     this.plugin = plugin;
   }
   
