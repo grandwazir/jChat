@@ -21,7 +21,7 @@ import org.bukkit.util.config.Configuration;
 
 public class jChat extends JavaPlugin {
 
-  private final static File confFile = new File("plugins/jChat/config.yml");
+  private final static Logger logger = new Logger(jChat.class);
   
   private final PlayerListener playerListener;
   private final EntityListener entityListener;
@@ -44,7 +44,7 @@ public class jChat extends JavaPlugin {
     for (final Player player : getServer().getOnlinePlayers())
       revertDisplayName(player);
     players.clear();
-    Logger.info("jChat is disabled.");
+    logger.info("jChat is disabled.");
   }
 
   public void onEnable() {
@@ -75,7 +75,7 @@ public class jChat extends JavaPlugin {
       setDisplayName(player);
     }
       
-    Logger.info(String.format("%s is enabled.", desc.getFullName()));
+    logger.info(String.format("%s is enabled.", desc.getFullName()));
   }
 
   public void revertDisplayName(final Player player) {
@@ -107,7 +107,7 @@ public class jChat extends JavaPlugin {
       conf.getString("suffix.admin", null);
       conf.save();
     } catch (final IOException e) {
-      Logger.severe(String.format("Unable to load configuration: %s", confFile.getPath()));
+      logger.severe(String.format("Unable to load configuration: %s", confFile.getPath()));
       pm.disablePlugin(instance);
     }
   }
@@ -117,7 +117,7 @@ public class jChat extends JavaPlugin {
     if (conf.getAll().isEmpty()) {
       createConfiguration();
     }
-    Logger.info(String.format("Loaded configuration: %s", confFile.getPath()));
+    logger.info(String.format("Loaded configuration: %s", confFile.getPath()));
   }
 
   private String searchNodes(final Player player, final String parentNode) {
@@ -131,7 +131,7 @@ public class jChat extends JavaPlugin {
             return title.replace("&", "§");
         }
       } else {
-        Logger.warning("Found a " + parentNode + " that is not defined: " + node);
+        logger.warning("Found a " + parentNode + " that is not defined: " + node);
       }
     }
     return "";
