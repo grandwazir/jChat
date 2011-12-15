@@ -19,9 +19,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
-import com.nijiko.permissions.PermissionHandler;
-import com.nijikokun.bukkit.Permissions.Permissions;
-
 public class jChat extends JavaPlugin {
 
   private final static File confFile = new File("plugins/jChat/config.yml");
@@ -35,7 +32,6 @@ public class jChat extends JavaPlugin {
   private PluginManager pm;
   
   public Configuration conf;
-  public PermissionHandler externalPermissions;
   public Map<String, UUID> players = new HashMap<String, UUID>();
   
   public jChat() {
@@ -58,7 +54,6 @@ public class jChat extends JavaPlugin {
 
     // load configuration
     loadConfiguration();
-    connectPermissions();
 
     // register events
     pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Event.Priority.Monitor, this);
@@ -134,24 +129,12 @@ public class jChat extends JavaPlugin {
       if (title != null) {
         if (player.hasPermission(permission)) {
             return title.replace("&", "§");
-        } else if (externalPermissions != null) {
-          if (externalPermissions.has(player, permission)) {
-            return title.replace("&", "§");
-          }
         }
       } else {
         Logger.warning("Found a " + parentNode + " that is not defined: " + node);
       }
     }
     return "";
-  }
-  
-  private void connectPermissions() {
-    final Plugin permissionsPlugin = getServer().getPluginManager().getPlugin("Permissions");
-    if (permissionsPlugin != null) {
-      externalPermissions = ((Permissions) permissionsPlugin).getHandler();
-      Logger.info(String.format("External permissions system found: %s", ((Permissions) permissionsPlugin).getDescription().getFullName()));
-    }
   }
   
 }
