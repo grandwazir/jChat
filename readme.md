@@ -5,6 +5,8 @@ jChat - Simple chat prefix and suffixes
 
 jChat is a simple and flexible plugin for the Minecraft wrapper [Bukkit](http://bukkit.org/) designed to allow adding prefixes and suffixes to players names. Currently it is only compatible with the inbuilt permissions in Bukkit. 
 
+Further [instructions](https://github.com/grandwazir/DynamicMOTD/wiki/instructions) and documentation is available on wiki. 
+
 ## Features
 
 - Lightweight: only manages prefixes and suffixes.
@@ -41,4 +43,4 @@ You add additional prefixes and suffixes to the lists by using the defaults as a
 
 - /jchat refresh (refresh your display name)
 
-Further [instructions](https://github.com/grandwazir/DynamicMOTD/wiki/instructions) are available on wiki. 
+
