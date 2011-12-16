@@ -1,11 +1,10 @@
 
 package name.richardson.james.jchat;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import name.richardson.james.jchat.messages.EntityListener;
 import name.richardson.james.jchat.messages.PlayerListener;
@@ -13,128 +12,89 @@ import name.richardson.james.jchat.util.Logger;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
 
 public class jChat extends JavaPlugin {
 
   private final static Logger logger = new Logger(jChat.class);
+  private final static jChatHandler handler = new jChatHandler(jChat.class);
   
   private final PlayerListener playerListener;
   private final EntityListener entityListener;
   
   private static jChat instance;
   
-  private PluginDescriptionFile desc;
-  private PluginManager pm;
-  
-  public Configuration conf;
-  public Map<String, UUID> players = new HashMap<String, UUID>();
+  private PluginDescriptionFile description;
+  private PluginManager pluginManager;
+  private CommandManager commandManager;
   
   public jChat() {
     jChat.instance = this;
-    playerListener = new PlayerListener(this);
+    commandManager = new CommandManager();
+    playerListener = new PlayerListener();
     entityListener = new EntityListener();
   }
 
   public void onDisable() {
-    for (final Player player : getServer().getOnlinePlayers())
-      revertDisplayName(player);
-    players.clear();
+    logger.debug("Reverting display names for all online players...");
+    handler.revertPlayerDisplayNames(this.getOnlinePlayers());
     logger.info("jChat is disabled.");
   }
 
   public void onEnable() {
-    desc = getDescription();
-    pm = getServer().getPluginManager();
-    conf = new Configuration(confFile);
+    description = getDescription();
+    pluginManager = getServer().getPluginManager();
 
-    // load configuration
-    loadConfiguration();
-
-    // register events
-    pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Event.Priority.Monitor, this);
-    
-    if (conf.getBoolean("colourMessages.join", true)) {
-    pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
-    }
-    
-    if (conf.getBoolean("colourMessages.death", true)) {
-      pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
-    }
-    
-    if (conf.getBoolean("colourMessages.quit", true)) {
-      pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this);
-    }
-
-    // apply initial colours
-    for (final Player player : getServer().getOnlinePlayers()) {
-      setDisplayName(player);
-    }
-      
-    logger.info(String.format("%s is enabled.", desc.getFullName()));
-  }
-
-  public void revertDisplayName(final Player player) {
-    player.setDisplayName(player.getName());
-  }
-
-  public void setDisplayName(final Player player) {
-    final String prefix = searchNodes(player, "prefix");
-    final String suffix = searchNodes(player, "suffix") + "§f";
-    player.setDisplayName(prefix + player.getName() + suffix);
-    players.put(player.getName(), player.getWorld().getUID());
-  }
-
-  private void createConfiguration() {
     try {
-      Logger.warning(String.format("Configuration file not found!", confFile.getPath()));
-      Logger.info(String.format("Creating new configuration: %s", confFile.getPath()));
-      confFile.getParentFile().mkdirs();
-      confFile.createNewFile();
-      conf.getString("colourMessages", "");
-      conf.getBoolean("colourMessages.death", true);
-      conf.getBoolean("colourMessages.join", true);
-      conf.getBoolean("colourMessages.quit", true);
-      conf.getString("prefix", null);
-      conf.getString("prefix.guest", "&2");
-      conf.getString("prefix.admin", "&e");
-      conf.getString("suffix", null);
-      conf.getString("suffix.guest", null);
-      conf.getString("suffix.admin", null);
-      conf.save();
-    } catch (final IOException e) {
-      logger.severe(String.format("Unable to load configuration: %s", confFile.getPath()));
-      pm.disablePlugin(instance);
+      this.loadConfiguration();
+      this.registerListeners();
+      this.registerCommands();
+      logger.debug("Setting display names for all online players...");
+      handler.setPlayerDisplayNames(this.getOnlinePlayers());
+    } catch (final IOException exception) {
+      jChat.logger.severe("Unable to load configuration!");
+      this.pluginManager.disablePlugin(this);
+    } catch (final IllegalStateException exception) {
+      jChat.logger.severe(exception.getMessage());
+      this.pluginManager.disablePlugin(this);
+    } finally {
+      if (!this.pluginManager.isPluginEnabled(this)) return;
     }
-  }
-
-  private void loadConfiguration() {
-    conf.load();
-    if (conf.getAll().isEmpty()) {
-      createConfiguration();
-    }
-    logger.info(String.format("Loaded configuration: %s", confFile.getPath()));
-  }
-
-  private String searchNodes(final Player player, final String parentNode) {
-    for (final String node : conf.getKeys(parentNode)) {
-      final String permission = String.format("%s.%s.%s", desc.getName().toLowerCase(), parentNode, node);
-      final String path = String.format("%s.%s", parentNode, node);
-      String title = conf.getString(path);
+    
+    logger.info(String.format("%s is enabled.", description.getFullName()));
       
-      if (title != null) {
-        if (player.hasPermission(permission)) {
-            return title.replace("&", "§");
-        }
-      } else {
-        logger.warning("Found a " + parentNode + " that is not defined: " + node);
-      }
-    }
-    return "";
   }
+
+  private Set<Player> getOnlinePlayers() {
+    return new HashSet<Player>(Arrays.asList(this.getServer().getOnlinePlayers()));
+  }
+  
+  private void registerListeners() {
+    jChatConfiguration configuration = jChatConfiguration.getInstance();
+    pluginManager.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Event.Priority.Monitor, this);
+    if (configuration.isColouringDeathMessages()) pluginManager.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this); 
+    if (configuration.isColouringJoinMessages()) pluginManager.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
+    if (configuration.isColouringQuitMessages()) pluginManager.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this);
+  }
+  
+  private void registerCommands() {
+    this.getCommand("jchat").setExecutor(this.commandManager);
+    this.commandManager.registerCommand("refresh", new RefreshCommand(this));
+  }
+
+  private void loadConfiguration() throws IOException {
+    jChatConfiguration configuration = new jChatConfiguration();
+    if (configuration.isDebugging()) {
+      Logger.enableDebugging();
+      configuration.logValues();
+    }
+  }
+
+  public static jChat getInstance() {
+    return instance;
+  }
+
   
 }
