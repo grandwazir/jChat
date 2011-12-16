@@ -3,7 +3,7 @@ main: name.richardson.james.jchat.jChat
 author: James Richardson (grandwazir)
 description: Simple chat prefix/suffix plugin for use with BukkitPermissions.
 website: https://github.com/grandwazir/jChat 
-version: 1.3.0
+version: 1.3.1
 commands:
   jchat:
     description: The root jChat command

@@ -21,7 +21,7 @@ package name.richardson.james.jchat;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import name.richardson.james.jchat.util.Configuration;
@@ -89,7 +89,7 @@ public class jChatConfiguration extends Configuration {
   }
 
   private void setPrefixPermissions() {
-    Set<String> set = new HashSet<String>();
+    Set<String> set = new LinkedHashSet<String>();
     for (String prefix : configuration.getConfigurationSection("prefix").getKeys(true)) {
       String title = "prefix." + prefix;
       set.add(title);
@@ -98,7 +98,7 @@ public class jChatConfiguration extends Configuration {
   }
 
   private void setSuffixPermissions() {
-    Set<String> set = new HashSet<String>();
+    Set<String> set = new LinkedHashSet<String>();
     for (String suffix : configuration.getConfigurationSection("suffix").getKeys(true)) {
       String title = "suffix." + suffix;
       set.add(title);
