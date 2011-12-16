@@ -12,12 +12,13 @@ import name.richardson.james.jchat.util.Logger;
 
 public class jChatConfiguration extends Configuration {
 
-  protected final static Logger logger = new Logger(jChatConfiguration.class);
   protected final static String fileName = "config.yml";
+  protected final static Logger logger = new Logger(jChatConfiguration.class);
 
-  protected final InputStream defaults = jChat.getInstance().getResource(fileName);
   private Set<String> prefixPermissions;
   private Set<String> suffixPermissions;
+  
+  protected final InputStream defaults = jChat.getInstance().getResource(fileName);
 
   public jChatConfiguration() throws IOException {
     super();
@@ -29,31 +30,33 @@ public class jChatConfiguration extends Configuration {
     return (jChatConfiguration) instance;
   }
 
-  public boolean isDebugging() {
-    return configuration.getBoolean("debugging");
+  public Set<String> getPrefixPaths() {
+    return Collections.unmodifiableSet(prefixPermissions);
   }
-  
+
+  public Set<String> getSuffixPaths() {
+    return Collections.unmodifiableSet(suffixPermissions);
+  }
+
   public String getTitle(String path) {
     return configuration.getString(path);
   }
-  
-  private void setPrefixPermissions() {
-    Set<String> set = new HashSet<String>();
-    for (String prefix : configuration.getConfigurationSection("prefix").getKeys(true)) {
-      String title =  "prefix." + prefix;
-      set.add(title);
-    }
-    prefixPermissions = set;
+
+  public boolean isColouringDeathMessages() {
+    return configuration.getBoolean("colour-messages.death");
   }
-  
-  private void setSuffixPermissions() {
-    Set<String> set = new HashSet<String>();
-    for (String suffix : configuration.getConfigurationSection("suffix").getKeys(true)) {
-      String title = "suffix." + suffix;
-      set.add(title);
-    }
-    suffixPermissions = set;
-  } 
+
+  public boolean isColouringJoinMessages() {
+    return configuration.getBoolean("colour-messages.join");
+  }
+
+  public boolean isColouringQuitMessages() {
+    return configuration.getBoolean("colour-messages.quit");
+  }
+
+  public boolean isDebugging() {
+    return configuration.getBoolean("debugging");
+  }
 
   public void logValues() {
     logger.config(String.format("debugging : %b", this.isDebugging()));
@@ -67,25 +70,23 @@ public class jChatConfiguration extends Configuration {
       logger.config(String.format("%s : %s", path, this.getTitle(path)));
     }
   }
-  
-  public boolean isColouringDeathMessages() {
-    return configuration.getBoolean("colour-messages.death");
-  }
-  
-  public boolean isColouringJoinMessages() {
-    return configuration.getBoolean("colour-messages.join");
-  }
-  
-  public boolean isColouringQuitMessages() {
-    return configuration.getBoolean("colour-messages.quit");
+
+  private void setPrefixPermissions() {
+    Set<String> set = new HashSet<String>();
+    for (String prefix : configuration.getConfigurationSection("prefix").getKeys(true)) {
+      String title = "prefix." + prefix;
+      set.add(title);
+    }
+    prefixPermissions = set;
   }
 
-  public Set<String> getSuffixPaths() {
-    return Collections.unmodifiableSet(suffixPermissions);
+  private void setSuffixPermissions() {
+    Set<String> set = new HashSet<String>();
+    for (String suffix : configuration.getConfigurationSection("suffix").getKeys(true)) {
+      String title = "suffix." + suffix;
+      set.add(title);
+    }
+    suffixPermissions = set;
   }
 
-  public Set<String> getPrefixPaths() {
-    return Collections.unmodifiableSet(prefixPermissions);
-  }
-  
 }

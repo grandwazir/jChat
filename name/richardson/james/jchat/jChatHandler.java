@@ -19,36 +19,23 @@
 
 package name.richardson.james.jchat;
 
-
 import java.util.Set;
+
+import name.richardson.james.jchat.util.Handler;
+import name.richardson.james.jchat.util.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
-import name.richardson.james.jchat.util.Handler;
-import name.richardson.james.jchat.util.Logger;
-
 public final class jChatHandler extends Handler {
 
   protected final static Logger logger = new Logger(jChatHandler.class);
-  
+
   public jChatHandler(Class<?> owner) {
     super(owner);
   }
-  
-  public void setPlayerDisplayName(final Player player) {
-    String displayName = getPrefix(player) + player.getName() + getSuffix(player);
-    player.setDisplayName(displayName);
-    logger.debug(String.format("%s's display name set to %s.", player.getName(), player.getDisplayName()));
-  }
-  
-  public void setPlayerDisplayNames(final Set<Player> players) {
-    for (Player player : players) {
-      setPlayerDisplayName(player);
-    }
-  }
-  
+
   public void revertPlayerDisplayName(final Player player) {
     player.setDisplayName(player.getName());
     logger.debug(String.format("%s's display name has been reset.", player.getName()));
@@ -59,13 +46,32 @@ public final class jChatHandler extends Handler {
       revertPlayerDisplayName(player);
     }
   }
-  
+
+  public void setPlayerDisplayName(final Player player) {
+    String displayName = getPrefix(player) + player.getName() + getSuffix(player);
+    player.setDisplayName(displayName);
+    logger.debug(String.format("%s's display name set to %s.", player.getName(), player.getDisplayName()));
+  }
+
+  public void setPlayerDisplayNames(final Set<Player> players) {
+    for (Player player : players) {
+      setPlayerDisplayName(player);
+    }
+  }
+
   private String getPrefix(final Player player) {
     String title = getTitle(player, jChatConfiguration.getInstance().getPrefixPaths(), "prefix");
     logger.debug(String.format("Using prefix: %s", title));
     return title.replace("&", "§");
   }
-  
+
+  private String getSuffix(final Player player) {
+    String title = getTitle(player, jChatConfiguration.getInstance().getSuffixPaths(), "suffix");
+    logger.debug(String.format("Using suffix: %s", title));
+    title = title.replace("&", "§");
+    return title + ChatColor.WHITE;
+  }
+
   private String getTitle(Player player, Set<String> keys, String filter) {
     String title = "";
     for (Permission permission : jChat.getInstance().getPermissions()) {
@@ -77,12 +83,5 @@ public final class jChatHandler extends Handler {
     }
     return title.replace("&", "§");
   }
-  
-  private String getSuffix(final Player player) {
-    String title = getTitle(player, jChatConfiguration.getInstance().getSuffixPaths(), "suffix");
-    logger.debug(String.format("Using suffix: %s", title));
-    title = title.replace("&", "§");
-    return title + ChatColor.WHITE;
-  }
-  
+
 }

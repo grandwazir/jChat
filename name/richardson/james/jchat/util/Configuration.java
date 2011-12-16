@@ -32,11 +32,11 @@ public abstract class Configuration {
   protected static Configuration instance;
   protected final static Logger logger = new Logger(Configuration.class);
 
-  protected final InputStream defaults = jChat.getInstance().getResource("config.yml");
-  protected final File dataFolder = jChat.getInstance().getDataFolder();
-  protected YamlConfiguration defaultConfiguration;
   protected YamlConfiguration configuration;
   protected final File configurationFile;
+  protected final File dataFolder = jChat.getInstance().getDataFolder();
+  protected YamlConfiguration defaultConfiguration;
+  protected final InputStream defaults = jChat.getInstance().getResource("config.yml");
   protected final String fileName = "config.yml";
 
   public Configuration() throws IOException {
@@ -61,6 +61,5 @@ public abstract class Configuration {
   public static Configuration getInstance() {
     return instance;
   }
-  
 
 }

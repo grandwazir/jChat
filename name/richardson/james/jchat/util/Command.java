@@ -37,14 +37,14 @@ import org.bukkit.permissions.PermissionDefault;
 
 public abstract class Command implements CommandExecutor {
 
-  protected final jChat plugin;
-  protected final Logger logger;
-
+  protected static jChatHandler handler;
   protected String description;
+
+  protected final Logger logger;
   protected String name;
   protected String permission;
+  protected final jChat plugin;
   protected String usage;
-  protected static jChatHandler handler;
 
   public Command(final jChat plugin) {
     this.plugin = plugin;
@@ -90,9 +90,7 @@ public abstract class Command implements CommandExecutor {
       return true;
     else if (sender instanceof Player) {
       final Player player = (Player) sender;
-      if (player.hasPermission(this.permission) || player.hasPermission("jchat.*")) {
-        return true;
-      }
+      if (player.hasPermission(this.permission) || player.hasPermission("jchat.*")) { return true; }
     }
     return false;
   }

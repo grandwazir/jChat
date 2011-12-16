@@ -1,3 +1,4 @@
+
 package name.richardson.james.jchat.messages;
 
 import org.bukkit.ChatColor;
@@ -6,7 +7,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class EntityListener extends org.bukkit.event.entity.EntityListener {
-  
+
   public void onEntityDeath(EntityDeathEvent event) {
     if (event instanceof PlayerDeathEvent) {
       PlayerDeathEvent e = (PlayerDeathEvent) event;
@@ -14,9 +15,9 @@ public class EntityListener extends org.bukkit.event.entity.EntityListener {
       e.setDeathMessage((colourMessage(player, e.getDeathMessage())));
     }
   }
-  
+
   private String colourMessage(Player player, String message) {
     return message.replace(player.getName(), player.getDisplayName() + ChatColor.RED);
   }
-  
+
 }
