@@ -39,6 +39,8 @@ public class jChatConfiguration extends Configuration {
 
   public jChatConfiguration() throws IOException {
     super();
+    this.checkDefaults();
+
     this.setPrefixPermissions();
     this.setSuffixPermissions();
   }
@@ -86,6 +88,26 @@ public class jChatConfiguration extends Configuration {
     for (String path : getSuffixPaths()) {
       logger.config(String.format("%s : %s", path, this.getTitle(path)));
     }
+  }
+
+  // this is necessary because if we save the defaults on creation
+  // it preserves the order in the config.yml which is very annoying.
+  // we have to do it this way to make sure it does not move our defaults,
+  // around.
+  private void checkDefaults() throws IOException {
+    Boolean configurationChanged = false;
+    if (!configuration.isConfigurationSection("prefix")) {
+      configuration.createSection("prefix");
+      configuration.getConfigurationSection("prefix").set("default", "&c");
+      configurationChanged = true;
+    }
+    // now check the suffixes
+    if (!configuration.isConfigurationSection("suffix")) {
+      configuration.createSection("suffix");
+      configuration.getConfigurationSection("suffix").set("default", "&c");
+      configurationChanged = true;
+    }
+    if (configurationChanged) configuration.save(configurationFile);
   }
 
   private void setPrefixPermissions() {

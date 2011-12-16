@@ -73,6 +73,7 @@ public final class jChatHandler extends Handler {
 
   private String getTitle(Player player, Set<String> keys, String filter) {
     String title = "";
+    logger.debug(jChat.getInstance().getPermissions().toString());
     for (Permission permission : jChat.getInstance().getPermissions()) {
       logger.debug(String.format("Checking to see if %s has the permission node: %s", player.getName(), permission.getName()));
       if (player.hasPermission(permission) && permission.getName().contains(filter)) {

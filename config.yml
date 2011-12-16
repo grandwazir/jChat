@@ -3,7 +3,3 @@ colour-messages:
   death: true
   join: true
   quit: true
-prefix:
-  default: '&c'
-suffix:
-  default: ''

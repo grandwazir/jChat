@@ -42,6 +42,15 @@ public class jChat extends JavaPlugin {
     entityListener = new EntityListener();
   }
 
+  public static jChat getInstance() {
+    return instance;
+  }
+
+  public Set<Permission> getPermissions() {
+    logger.debug(permissions.toString());
+    return Collections.unmodifiableSet(permissions);
+  }
+
   public void onDisable() {
     logger.debug("Reverting display names for all online players...");
     handler.revertPlayerDisplayNames(this.getOnlinePlayers());
@@ -77,17 +86,25 @@ public class jChat extends JavaPlugin {
     return new HashSet<Player>(Arrays.asList(this.getServer().getOnlinePlayers()));
   }
 
+  private void loadConfiguration() throws IOException {
+    jChatConfiguration configuration = new jChatConfiguration();
+    if (configuration.isDebugging()) {
+      Logger.enableDebugging();
+      configuration.logValues();
+    }
+  }
+
+  private void registerCommands() {
+    this.getCommand("jchat").setExecutor(this.commandManager);
+    this.commandManager.registerCommand("refresh", new RefreshCommand(this));
+  }
+
   private void registerListeners() {
     jChatConfiguration configuration = jChatConfiguration.getInstance();
     pluginManager.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Event.Priority.Monitor, this);
     if (configuration.isColouringDeathMessages()) pluginManager.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
     if (configuration.isColouringJoinMessages()) pluginManager.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
     if (configuration.isColouringQuitMessages()) pluginManager.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this);
-  }
-
-  private void registerCommands() {
-    this.getCommand("jchat").setExecutor(this.commandManager);
-    this.commandManager.registerCommand("refresh", new RefreshCommand(this));
   }
 
   private void registerPermissions() {
@@ -106,22 +123,6 @@ public class jChat extends JavaPlugin {
         permission.setDefault(PermissionDefault.TRUE);
       }
     }
-  }
-
-  private void loadConfiguration() throws IOException {
-    jChatConfiguration configuration = new jChatConfiguration();
-    if (configuration.isDebugging()) {
-      Logger.enableDebugging();
-      configuration.logValues();
-    }
-  }
-
-  public static jChat getInstance() {
-    return instance;
-  }
-
-  public Set<Permission> getPermissions() {
-    return Collections.unmodifiableSet(permissions);
   }
 
 }
