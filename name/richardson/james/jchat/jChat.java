@@ -47,7 +47,6 @@ public class jChat extends JavaPlugin {
   }
 
   public Set<Permission> getPermissions() {
-    logger.debug(permissions.toString());
     return Collections.unmodifiableSet(permissions);
   }
 
