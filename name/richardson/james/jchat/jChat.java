@@ -3,7 +3,9 @@ package name.richardson.james.jchat;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import name.richardson.james.jchat.messages.EntityListener;
@@ -12,6 +14,8 @@ import name.richardson.james.jchat.util.Logger;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,12 +27,14 @@ public class jChat extends JavaPlugin {
   
   private final PlayerListener playerListener;
   private final EntityListener entityListener;
+  private final Set<Permission> permissions = new LinkedHashSet<Permission>();
   
   private static jChat instance;
   
   private PluginDescriptionFile description;
   private PluginManager pluginManager;
   private CommandManager commandManager;
+  
   
   public jChat() {
     jChat.instance = this;
@@ -50,6 +56,7 @@ public class jChat extends JavaPlugin {
     try {
       this.loadConfiguration();
       this.registerListeners();
+      this.registerPermissions();
       this.registerCommands();
       logger.debug("Setting display names for all online players...");
       handler.setPlayerDisplayNames(this.getOnlinePlayers());
@@ -83,6 +90,24 @@ public class jChat extends JavaPlugin {
     this.getCommand("jchat").setExecutor(this.commandManager);
     this.commandManager.registerCommand("refresh", new RefreshCommand(this));
   }
+  
+  private void registerPermissions() {
+    // register prefixes
+    Set<String> permissionNames = new LinkedHashSet<String>();
+    permissionNames.addAll(jChatConfiguration.getInstance().getPrefixPaths());
+    permissionNames.addAll(jChatConfiguration.getInstance().getSuffixPaths());
+    for (String titlePath : permissionNames) {
+      String permissionPath = "jchat." + titlePath;
+      Permission permission = new Permission(permissionPath, "jChat permission node");
+      logger.debug(String.format("Creating permission node: %s", permissionPath));
+      pluginManager.addPermission(permission);
+      permissions.add(permission);
+      // if the default prefix make it a permission default
+      if (permissionPath.contains(".default")) {
+        permission.setDefault(PermissionDefault.TRUE);
+      }
+    }
+  }
 
   private void loadConfiguration() throws IOException {
     jChatConfiguration configuration = new jChatConfiguration();
@@ -94,6 +119,10 @@ public class jChat extends JavaPlugin {
 
   public static jChat getInstance() {
     return instance;
+  }
+
+  public Set<Permission> getPermissions() {
+    return Collections.unmodifiableSet(permissions);
   }
 
   

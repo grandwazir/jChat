@@ -37,7 +37,7 @@ public class jChatConfiguration extends Configuration {
     return configuration.getString(path);
   }
   
-  public void setPrefixPermissions() {
+  private void setPrefixPermissions() {
     Set<String> set = new HashSet<String>();
     for (String prefix : configuration.getConfigurationSection("prefix").getKeys(true)) {
       String title =  "prefix." + prefix;
@@ -46,7 +46,7 @@ public class jChatConfiguration extends Configuration {
     prefixPermissions = set;
   }
   
-  public void setSuffixPermissions() {
+  private void setSuffixPermissions() {
     Set<String> set = new HashSet<String>();
     for (String suffix : configuration.getConfigurationSection("suffix").getKeys(true)) {
       String title = "suffix." + suffix;
@@ -60,10 +60,10 @@ public class jChatConfiguration extends Configuration {
     logger.config(String.format("colour-messages.death : %b", this.isColouringDeathMessages()));
     logger.config(String.format("colour-messages.join : %b", this.isColouringJoinMessages()));
     logger.config(String.format("colour-messages.quit : %b", this.isColouringDeathMessages()));
-    for (String path : getPrefixPermissions()) {
+    for (String path : getPrefixPaths()) {
       logger.config(String.format("%s : %s", path, this.getTitle(path)));
     }
-    for (String path : getSuffixPermissions()) {
+    for (String path : getSuffixPaths()) {
       logger.config(String.format("%s : %s", path, this.getTitle(path)));
     }
   }
@@ -80,11 +80,11 @@ public class jChatConfiguration extends Configuration {
     return configuration.getBoolean("colour-messages.quit");
   }
 
-  public Set<String> getSuffixPermissions() {
+  public Set<String> getSuffixPaths() {
     return Collections.unmodifiableSet(suffixPermissions);
   }
 
-  public Set<String> getPrefixPermissions() {
+  public Set<String> getPrefixPaths() {
     return Collections.unmodifiableSet(prefixPermissions);
   }
   

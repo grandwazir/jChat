@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 
 import name.richardson.james.jchat.util.Handler;
 import name.richardson.james.jchat.util.Logger;
@@ -35,7 +36,7 @@ public final class jChatHandler extends Handler {
   public jChatHandler(Class<?> owner) {
     super(owner);
   }
-
+  
   public void setPlayerDisplayName(final Player player) {
     String displayName = getPrefix(player) + player.getName() + getSuffix(player);
     player.setDisplayName(displayName);
@@ -60,18 +61,17 @@ public final class jChatHandler extends Handler {
   }
   
   private String getPrefix(final Player player) {
-    String title = getTitle(player, jChatConfiguration.getInstance().getPrefixPermissions());
+    String title = getTitle(player, jChatConfiguration.getInstance().getPrefixPaths(), "prefix");
     logger.debug(String.format("Using prefix: %s", title));
     return title.replace("&", "§");
   }
   
-  private String getTitle(Player player, Set<String> keys) {
+  private String getTitle(Player player, Set<String> keys, String filter) {
     String title = "";
-    for (String key : keys) {
-      String permissionName = "jchat." + key;
-      logger.debug(String.format("Checking to see if %s has the permission node: %s", player.getName(), permissionName));
-      if (player.hasPermission(permissionName)) {
-        title = jChatConfiguration.getInstance().getTitle(key);
+    for (Permission permission : jChat.getInstance().getPermissions()) {
+      logger.debug(String.format("Checking to see if %s has the permission node: %s", player.getName(), permission.getName()));
+      if (player.hasPermission(permission) && permission.getName().contains(filter)) {
+        title = jChatConfiguration.getInstance().getTitle(permission.getName().replaceFirst("jchat.", ""));
         break;
       }
     }
@@ -79,7 +79,7 @@ public final class jChatHandler extends Handler {
   }
   
   private String getSuffix(final Player player) {
-    String title = getTitle(player, jChatConfiguration.getInstance().getSuffixPermissions());
+    String title = getTitle(player, jChatConfiguration.getInstance().getSuffixPaths(), "suffix");
     logger.debug(String.format("Using suffix: %s", title));
     title = title.replace("&", "§");
     return title + ChatColor.WHITE;
