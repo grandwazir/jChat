@@ -31,6 +31,8 @@ public final class jChatHandler extends Handler {
 
   protected final static Logger logger = new Logger(jChatHandler.class);
 
+  private static final int LIST_NAME_LIMIT = 16;
+
   private final jChatConfiguration configuration;
 
   public jChatHandler(Class<?> owner) {
@@ -40,6 +42,7 @@ public final class jChatHandler extends Handler {
 
   public void revertPlayerDisplayName(final Player player) {
     player.setDisplayName(player.getName());
+    player.setPlayerListName(player.getName());
     logger.debug(String.format("%s's display name has been reset.", player.getName()));
   }
 
@@ -52,6 +55,7 @@ public final class jChatHandler extends Handler {
   public void setPlayerDisplayName(final Player player) {
     String displayName = getPrefix(player) + player.getName() + getSuffix(player);
     player.setDisplayName(displayName);
+    player.setPlayerListName(this.validateListDisplayName(displayName));
     logger.debug(String.format("%s's display name set to %s.", player.getName(), player.getDisplayName()));
   }
 
@@ -85,6 +89,14 @@ public final class jChatHandler extends Handler {
     return this.replaceChatColors(title);
   }
 
+  private String validateListDisplayName(String displayName) {
+    if (displayName.length() > LIST_NAME_LIMIT) {
+      logger.warning("Truncating displayName for use in the player list.");
+      displayName = displayName.substring(0, LIST_NAME_LIMIT - 1);
+    }
+    return displayName;
+  }
+  
   private String replaceChatColors(String title) {
     for (ChatColor colour : ChatColor.values()) {
       title = title.replaceAll("!" + colour.name(), colour.toString());
