@@ -97,7 +97,7 @@ public class jChatConfiguration extends AbstractConfiguration {
     // we do this to avoid reordering the list
     if (!configuration.isConfigurationSection("prefix")) {
       configuration.createSection("prefix");
-      configuration.getConfigurationSection("prefix").set("default", "!DARK_BLUE");
+      configuration.getConfigurationSection("prefix").set("default", "&DARK_BLUE");
     }
     // now check the suffixes
     if (!configuration.isConfigurationSection("suffix")) {

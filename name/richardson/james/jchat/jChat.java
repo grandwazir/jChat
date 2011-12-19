@@ -24,14 +24,15 @@ import name.richardson.james.jchat.util.Logger;
 public class jChat extends JavaPlugin {
 
   private final static Logger logger = new Logger(jChat.class);
-  private final static jChatHandler handler = new jChatHandler(jChat.class);
-
+  
+  
   private final PlayerListener playerListener;
   private final EntityListener entityListener;
   private final Set<Permission> permissions = new LinkedHashSet<Permission>();
 
   private static jChat instance;
 
+  private jChatHandler handler;
   private jChatConfiguration configuration;
   private PluginDescriptionFile description;
   private PluginManager pluginManager;
@@ -69,6 +70,7 @@ public class jChat extends JavaPlugin {
 
     try {
       this.loadConfiguration();
+      handler = new jChatHandler(jChat.class);
       this.registerListeners();
       this.registerPermissions();
       this.registerCommands();

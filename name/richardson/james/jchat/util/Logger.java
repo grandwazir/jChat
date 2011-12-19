@@ -25,13 +25,12 @@ import java.util.logging.Level;
 
 public final class Logger {
 
-  
   private static final Level DEBUG_LEVEL = Level.FINE;
   private static final String PREFIX = "[jChat ] ";
-  
+
   private static final java.util.logging.Logger parentLogger = java.util.logging.Logger.getLogger("Minecraft");
   private static final Set<Logger> registeredLoggers = new HashSet<Logger>();
-  
+
   private static boolean currentlyDebugging = false;
 
   private final java.util.logging.Logger logger;

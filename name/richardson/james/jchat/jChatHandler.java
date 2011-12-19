@@ -99,7 +99,7 @@ public final class jChatHandler extends Handler {
   
   private String replaceChatColors(String title) {
     for (ChatColor colour : ChatColor.values()) {
-      title = title.replaceAll("!" + colour.name(), colour.toString());
+      title = title.replaceAll("&" + colour.name(), colour.toString());
     }
     return title;
   }
