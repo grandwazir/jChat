@@ -29,7 +29,7 @@ import name.richardson.james.jchat.jChatHandler;
 
 public class PlayerListener extends org.bukkit.event.player.PlayerListener {
 
-  private final static jChatHandler handler = new jChatHandler(PlayerListener.class);
+  private final jChatHandler handler = new jChatHandler(PlayerListener.class);
 
   public void onPlayerDeath(PlayerDeathEvent event) {
     final Player player = (Player) event.getEntity();

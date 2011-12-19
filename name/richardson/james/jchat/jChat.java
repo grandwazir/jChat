@@ -70,11 +70,11 @@ public class jChat extends JavaPlugin {
 
     try {
       this.loadConfiguration();
-      handler = new jChatHandler(jChat.class);
       this.registerListeners();
       this.registerPermissions();
       this.registerCommands();
       logger.debug("Setting display names for all online players...");
+      handler = new jChatHandler(jChat.class);
       handler.setPlayerDisplayNames(this.getOnlinePlayers());
     } catch (final IOException exception) {
       jChat.logger.severe("Unable to load configuration!");

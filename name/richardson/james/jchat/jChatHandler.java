@@ -37,7 +37,7 @@ public final class jChatHandler extends Handler {
 
   public jChatHandler(Class<?> owner) {
     super(owner);
-    this.configuration = jChat.getInstance().getjChatConfiguration();
+    this.configuration = jChatConfiguration.getInstance();
   }
 
   public void revertPlayerDisplayName(final Player player) {

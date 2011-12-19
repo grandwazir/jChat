@@ -30,18 +30,24 @@ import name.richardson.james.jchat.util.configuration.AbstractConfiguration;
 public class jChatConfiguration extends AbstractConfiguration {
 
   protected final static String FILE_NAME = "config.yml";
-
+  private static jChatConfiguration instance;
+  
   private Set<String> prefixPermissions;
   private Set<String> suffixPermissions;
-
+  
   protected final InputStream defaults = jChat.getInstance().getResource(FILE_NAME);
 
   public jChatConfiguration() throws IOException {
     super();
     this.setPrefixPermissions();
     this.setSuffixPermissions();
+    jChatConfiguration.instance = this;
   }
 
+  public static jChatConfiguration getInstance() {
+    return instance;
+  }
+  
   public File getFile() {
     return new File(jChat.getInstance().getDataFolder() + "/" + FILE_NAME);
   }
