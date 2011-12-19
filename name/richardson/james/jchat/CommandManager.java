@@ -66,8 +66,6 @@ public class CommandManager implements CommandExecutor {
     return true;
   }
 
-
-
   /**
    * Register a sub command underneath the root command defined the executor was
    * created.
@@ -80,6 +78,5 @@ public class CommandManager implements CommandExecutor {
   protected void registerCommand(final String command, final Command executor) {
     this.commands.put(command, executor);
   }
-
 
 }

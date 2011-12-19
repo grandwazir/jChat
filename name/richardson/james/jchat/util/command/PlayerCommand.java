@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011 James Richardson.
  * 
- * Command.java is part of jChat.
+ * PlayerCommand.java is part of jChat.
  * 
  * jChat is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software

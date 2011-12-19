@@ -33,10 +33,10 @@ public class jChatConfiguration extends AbstractConfiguration {
   protected final static String FILE_NAME = "config.yml";
   protected final static Logger logger = new Logger(jChatConfiguration.class);
   private static jChatConfiguration instance;
-  
+
   private Set<String> prefixPermissions;
   private Set<String> suffixPermissions;
-  
+
   protected final InputStream defaults = jChat.getInstance().getResource(FILE_NAME);
 
   public jChatConfiguration() throws IOException {
@@ -49,7 +49,7 @@ public class jChatConfiguration extends AbstractConfiguration {
   public static jChatConfiguration getInstance() {
     return instance;
   }
-  
+
   public File getFile() {
     return new File(jChat.getInstance().getDataFolder() + "/" + FILE_NAME);
   }
