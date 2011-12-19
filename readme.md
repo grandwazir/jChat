@@ -42,6 +42,8 @@ You add additional prefixes and suffixes to the lists by using the defaults as a
 
 ### Commands
 
-- /jchat refresh (refresh your display name)
+For a full list of commands type:
+
+   /jchat
 
 

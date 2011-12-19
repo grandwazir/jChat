@@ -43,14 +43,14 @@ public class RefreshCommand extends PlayerCommand {
   public static final String USAGE = "/jchat refresh [name]";
   public static final PermissionDefault PERMISSION_DEFAULT = PermissionDefault.TRUE;
   public static final Permission PERMISSION = new Permission("jchat.refresh", PERMISSION_DESCRIPTION, PERMISSION_DEFAULT);
-
+  public static final Permission PERMISSION_OTHER = new Permission("jchat.refresh.other", "Allow users to refresh other player's display names.", PermissionDefault.OP);
+  
   private final jChatHandler handler = new jChatHandler(RefreshCommand.class);
-
+  
   public RefreshCommand() {
     super();
     this.registerPermission(PERMISSION, jChat.getInstance().getRootPermission());
-    Permission permission = new Permission("jchat.refresh.other", "Allow users to refresh other player's display names.", PermissionDefault.OP);
-    this.registerPermission(permission, jChat.getInstance().getRootPermission());
+    this.registerPermission(PERMISSION_OTHER , jChat.getInstance().getRootPermission());
   }
 
   @Override
@@ -60,9 +60,13 @@ public class RefreshCommand extends PlayerCommand {
     } else if (!(sender instanceof Player) && arguments.isEmpty()) {
       throw new CommandUsageException("You must specify a player to use this from the console.", RefreshCommand.USAGE);
     } else if (!arguments.isEmpty()) {
-      final Player player = (Player) arguments.get("player");
-      handler.setPlayerDisplayName(player);
-      sender.sendMessage(ChatColor.GREEN + player.getName() + "'s display name has been refreshed.");
+      if (sender.hasPermission(PERMISSION_OTHER) || arguments.get("player").equals(sender)) {
+        final Player player = (Player) arguments.get("player");
+        handler.setPlayerDisplayName(player);
+        sender.sendMessage(ChatColor.GREEN + player.getName() + "'s display name has been refreshed.");
+      } else {
+        throw new CommandPermissionException("You do not have permission to do this.", PERMISSION_OTHER);
+      }
     } else {
       final Player player = (Player) sender;
       handler.setPlayerDisplayName(player);
