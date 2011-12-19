@@ -55,7 +55,9 @@ public final class jChatHandler extends Handler {
   public void setPlayerDisplayName(final Player player) {
     String displayName = getPrefix(player) + player.getName() + getSuffix(player);
     player.setDisplayName(displayName);
-    player.setPlayerListName(this.validateListDisplayName(displayName));
+    if (this.validateListDisplayName(displayName)) {
+      player.setPlayerListName(displayName);
+    }
     logger.debug(String.format("%s's display name set to %s.", player.getName(), player.getDisplayName()));
   }
 
@@ -89,12 +91,13 @@ public final class jChatHandler extends Handler {
     return this.replaceChatColors(title);
   }
 
-  private String validateListDisplayName(String displayName) {
+  private boolean validateListDisplayName(String displayName) {
     if (displayName.length() > LIST_NAME_LIMIT) {
-      logger.warning("Truncating displayName for use in the player list.");
-      displayName = displayName.substring(0, LIST_NAME_LIMIT - 1);
+      logger.warning(String.format("DisplayName is too long by %d characters to be used on the PlayerList: %s", displayName.length() - LIST_NAME_LIMIT, displayName));
+      return false;
+    } else {
+      return true;
     }
-    return displayName;
   }
 
   private String replaceChatColors(String title) {
