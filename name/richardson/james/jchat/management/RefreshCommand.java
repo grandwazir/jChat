@@ -18,6 +18,7 @@
 
 package name.richardson.james.jchat.management;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ import org.bukkit.permissions.PermissionDefault;
 
 import name.richardson.james.jchat.jChat;
 import name.richardson.james.jchat.jChatHandler;
+import name.richardson.james.jchat.util.command.CommandArgumentException;
 import name.richardson.james.jchat.util.command.CommandPermissionException;
 import name.richardson.james.jchat.util.command.CommandUsageException;
 import name.richardson.james.jchat.util.command.PlayerCommand;
@@ -38,7 +40,7 @@ public class RefreshCommand extends PlayerCommand {
   public static final String NAME = "refresh";
   public static final String DESCRIPTION = "Refresh your display name.";
   public static final String PERMISSION_DESCRIPTION = "Allow users to refresh their display names.";
-  public static final String USAGE = "/jchat refresh";
+  public static final String USAGE = "/jchat refresh [name]";
   public static final PermissionDefault PERMISSION_DEFAULT = PermissionDefault.TRUE;
   public static final Permission PERMISSION = new Permission("jchat.refresh", PERMISSION_DESCRIPTION, PERMISSION_DEFAULT);
 
@@ -47,6 +49,8 @@ public class RefreshCommand extends PlayerCommand {
   public RefreshCommand() {
     super();
     this.registerPermission(PERMISSION, jChat.getInstance().getRootPermission());
+    Permission permission = new Permission("jchat.refresh.other", "Allow users to refresh other player's display names.", PermissionDefault.OP);
+    this.registerPermission(permission, jChat.getInstance().getRootPermission());
   }
 
   @Override
@@ -55,6 +59,10 @@ public class RefreshCommand extends PlayerCommand {
       throw new CommandPermissionException(RefreshCommand.NAME, RefreshCommand.PERMISSION);
     } else if (!(sender instanceof Player)) {
       throw new CommandUsageException("This command may not be used from the console.", RefreshCommand.USAGE);
+    } else if (!arguments.isEmpty()) {
+      final Player player = (Player) arguments.get("player");
+      handler.setPlayerDisplayName(player);
+      sender.sendMessage(ChatColor.GREEN + player.getName() + "'s display name has been refreshed.");
     } else {
       final Player player = (Player) sender;
       handler.setPlayerDisplayName(player);
@@ -83,8 +91,17 @@ public class RefreshCommand extends PlayerCommand {
   }
 
   @Override
-  public Map<String, Object> parseArguments(final List<String> arguments) throws IllegalArgumentException {
-    return null;
+  public Map<String, Object> parseArguments(final List<String> arguments) throws CommandArgumentException {
+    HashMap<String, Object> map = new HashMap<String, Object>();
+    if (!arguments.isEmpty()) {
+      final Player player = jChat.getInstance().getServer().getPlayer(arguments.get(0));
+      if (player != null) {
+        map.put("player", player);
+      } else {
+        throw new CommandArgumentException("You must specify a player who is online.");
+      }
+    }
+    return map;
   }
 
 }

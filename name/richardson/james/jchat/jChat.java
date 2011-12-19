@@ -1,20 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2011 James Richardson.
- * 
- * jChat.java is part of jChat.
- * 
- * jChat is free software: you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * jChat is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * jChat. If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
 
 package name.richardson.james.jchat;
 
@@ -42,8 +25,9 @@ import name.richardson.james.jchat.util.Logger;
 public class jChat extends JavaPlugin {
 
   private final static Logger logger = new Logger(jChat.class);
-
-  private final PlayerListener playerListener;
+  
+  
+  private PlayerListener playerListener;
   private final EntityListener entityListener;
   private final Set<Permission> permissions = new LinkedHashSet<Permission>();
 
@@ -59,16 +43,11 @@ public class jChat extends JavaPlugin {
   public jChat() {
     jChat.instance = this;
     commandManager = new CommandManager();
-    playerListener = new PlayerListener();
     entityListener = new EntityListener();
   }
 
   public static jChat getInstance() {
     return instance;
-  }
-
-  public jChatConfiguration getjChatConfiguration() {
-    return configuration;
   }
 
   public Set<Permission> getPermissions() {
@@ -126,12 +105,13 @@ public class jChat extends JavaPlugin {
   }
 
   private void registerListeners() {
+    playerListener = new PlayerListener();
     pluginManager.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Event.Priority.Monitor, this);
     if (configuration.isColouringDeathMessages()) pluginManager.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
     if (configuration.isColouringJoinMessages()) pluginManager.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
     if (configuration.isColouringQuitMessages()) pluginManager.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this);
   }
-
+  
   public Permission getRootPermission() {
     return rootPermission;
   }

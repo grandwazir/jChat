@@ -14,7 +14,7 @@ Further [instructions](https://github.com/grandwazir/jChat/wiki/instructions) an
 - Player list (tab) now reflects player's display names.
 - Fast: Formats a players' name permanently on login and when a player changes worlds.
 - Good citizen: Does not interfere with other chat plugins.
-- Simple: Very easy to configure, simply assign the permission nodes to players.
+- Simple: VeAry easy to configure, simply assign the permission nodes to players.
 
 ## Installation
 

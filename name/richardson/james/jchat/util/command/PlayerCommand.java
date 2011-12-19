@@ -66,23 +66,21 @@ public abstract class PlayerCommand implements Command {
     try {
       final LinkedList<String> arguments = new LinkedList<String>();
       arguments.addAll(Arrays.asList(args));
+      arguments.remove(0);
       final Map<String, Object> parsedArguments = this.parseArguments(arguments);
       this.execute(sender, parsedArguments);
-    } catch (final IllegalArgumentException e) {
-      sender.sendMessage(ChatColor.RED + this.getUsage());
-      sender.sendMessage(ChatColor.YELLOW + e.getMessage());
-    } catch (final IllegalStateException e) {
-      sender.sendMessage(ChatColor.RED + this.getUsage());
-      sender.sendMessage(ChatColor.YELLOW + e.getMessage());
     } catch (CommandPermissionException exception) {
       sender.sendMessage(ChatColor.RED + "You do not have permission to do this.");
     } catch (CommandUsageException exception) {
       sender.sendMessage(ChatColor.RED + exception.getMessage());
+    } catch (CommandArgumentException exception) {
+      sender.sendMessage(ChatColor.RED + this.getUsage());
+      sender.sendMessage(ChatColor.YELLOW + exception.getMessage());
     }
     return true;
   }
 
-  public abstract Map<String, Object> parseArguments(List<String> arguments);
+  public abstract Map<String, Object> parseArguments(List<String> arguments) throws CommandArgumentException;
 
   public void registerPermission(Permission permission, Permission parentPermission) {
     permission.addParent(parentPermission, true);
