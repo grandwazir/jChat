@@ -64,13 +64,12 @@ public final class jChatHandler extends Handler {
   private String getPrefix(final Player player) {
     String title = getTitle(player, configuration.getPrefixPaths(), "prefix");
     logger.debug(String.format("Using prefix: %s", title));
-    return title.replace("&", "§");
+    return title;
   }
 
   private String getSuffix(final Player player) {
     String title = getTitle(player, configuration.getSuffixPaths(), "suffix");
     logger.debug(String.format("Using suffix: %s", title));
-    title = title.replace("&", "§");
     return title + ChatColor.WHITE;
   }
 
@@ -83,7 +82,7 @@ public final class jChatHandler extends Handler {
         break;
       }
     }
-    return title.replace("&", "§");
+    return this.replaceChatColors(title);
   }
 
   private String replaceChatColors(String title) {
