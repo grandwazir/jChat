@@ -36,6 +36,7 @@ public class jChat extends JavaPlugin {
   private PluginDescriptionFile description;
   private PluginManager pluginManager;
   private CommandManager commandManager;
+  private Permission rootPermission;
 
   public jChat() {
     jChat.instance = this;
@@ -110,8 +111,15 @@ public class jChat extends JavaPlugin {
     if (configuration.isColouringJoinMessages()) pluginManager.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
     if (configuration.isColouringQuitMessages()) pluginManager.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this);
   }
+  
+  public Permission getRootPermission() {
+    return rootPermission;
+  }
 
   private void registerPermissions() {
+    // register root permission
+    rootPermission = new Permission("jchat", "Allow access to all jChat commands", PermissionDefault.OP);
+    pluginManager.addPermission(rootPermission);
     // register prefixes
     Set<String> permissionNames = new LinkedHashSet<String>();
     permissionNames.addAll(configuration.getPrefixPaths());

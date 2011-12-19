@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import name.richardson.james.jchat.jChat;
 import name.richardson.james.jchat.jChatHandler;
 import name.richardson.james.jchat.util.command.CommandPermissionException;
 import name.richardson.james.jchat.util.command.CommandUsageException;
@@ -45,6 +46,7 @@ public class RefreshCommand extends PlayerCommand {
 
   public RefreshCommand() {
     super();
+    this.registerPermission(PERMISSION, jChat.getInstance().getRootPermission());
   }
 
   @Override
