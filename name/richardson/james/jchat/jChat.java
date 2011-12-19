@@ -17,6 +17,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import name.richardson.james.jchat.management.RefreshCommand;
+import name.richardson.james.jchat.management.ReloadCommand;
 import name.richardson.james.jchat.messages.EntityListener;
 import name.richardson.james.jchat.messages.PlayerListener;
 import name.richardson.james.jchat.util.Logger;
@@ -105,6 +106,7 @@ public class jChat extends JavaPlugin {
   private void registerCommands() {
     this.getCommand("jchat").setExecutor(this.commandManager);
     this.commandManager.registerCommand("refresh", new RefreshCommand());
+    this.commandManager.registerCommand("reload", new ReloadCommand());
   }
 
   private void registerListeners() {
