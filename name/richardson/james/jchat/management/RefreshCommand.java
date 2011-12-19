@@ -43,7 +43,7 @@ public class RefreshCommand extends PlayerCommand {
   public static final String USAGE = "/jchat refresh [name]";
   public static final PermissionDefault PERMISSION_DEFAULT = PermissionDefault.TRUE;
   public static final Permission PERMISSION = new Permission("jchat.refresh", PERMISSION_DESCRIPTION, PERMISSION_DEFAULT);
-  public static final Permission PERMISSION_OTHER = new Permission("jchat.refresh.other", "Allow users to refresh other player's display names.", PermissionDefault.OP);
+  public static final Permission PERMISSION_OTHER = new Permission("jchat.refresh.others", "Allow users to refresh other player's display names.", PermissionDefault.OP);
   
   private final jChatHandler handler = new jChatHandler(RefreshCommand.class);
   
