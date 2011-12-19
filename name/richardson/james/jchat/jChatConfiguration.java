@@ -25,11 +25,13 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import name.richardson.james.jchat.util.Logger;
 import name.richardson.james.jchat.util.configuration.AbstractConfiguration;
 
 public class jChatConfiguration extends AbstractConfiguration {
 
   protected final static String FILE_NAME = "config.yml";
+  protected final static Logger logger = new Logger(jChatConfiguration.class);
   private static jChatConfiguration instance;
   
   private Set<String> prefixPermissions;

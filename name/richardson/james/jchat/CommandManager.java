@@ -19,30 +19,51 @@
 package name.richardson.james.jchat;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import name.richardson.james.jchat.util.command.Command;
+
 public class CommandManager implements CommandExecutor {
 
-  private final HashMap<String, CommandExecutor> commands = new HashMap<String, CommandExecutor>();
+  private final HashMap<String, Command> commands = new LinkedHashMap<String, Command>();
 
-  @Override
-  public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
+  public boolean onCommand(final CommandSender sender, final org.bukkit.command.Command command, final String label, final String[] args) {
 
     if (args.length != 0) {
       if (this.commands.containsKey(args[0])) {
         this.commands.get(args[0]).onCommand(sender, command, label, args);
-        return true;
+      } else if (args[0].equalsIgnoreCase("help")) {
+        if (args.length != 2) {
+          sender.sendMessage(ChatColor.RED + "/jchat help <command>");
+          sender.sendMessage(ChatColor.YELLOW + "You must specify a command.");
+        } else if (commands.containsKey(args[1])) {
+          final Command c = commands.get(args[1]);
+          sender.sendMessage(ChatColor.LIGHT_PURPLE + c.getUsage());
+          sender.sendMessage(ChatColor.YELLOW + c.getDescription());
+        } else {
+          sender.sendMessage(ChatColor.RED + "/jchat help <command>");
+          sender.sendMessage(ChatColor.YELLOW + "You must specify a valid command.");
+        }
+      } else {
+        sender.sendMessage(ChatColor.RED + "Invalid command!");
+        sender.sendMessage(ChatColor.YELLOW + "Type /jchat for a list of commands.");
+      }
+    } else {
+      sender.sendMessage(ChatColor.LIGHT_PURPLE + jChat.getInstance().getDescription().getFullName());
+      sender.sendMessage(ChatColor.GREEN + "Type /jchat help <command> for details on a command.");
+      for (Entry<String, Command> c : commands.entrySet()) {
+        sender.sendMessage(ChatColor.YELLOW + "- " + c.getValue().getUsage());
       }
     }
-
-    sender.sendMessage(ChatColor.RED + "Invalid command!");
-    sender.sendMessage(ChatColor.YELLOW + "/jchat [refresh]");
     return true;
   }
+
+
 
   /**
    * Register a sub command underneath the root command defined the executor was
@@ -53,8 +74,9 @@ public class CommandManager implements CommandExecutor {
    * @param command
    * An instance of the command that should be registered.
    */
-  protected void registerCommand(final String command, final CommandExecutor executor) {
+  protected void registerCommand(final String command, final Command executor) {
     this.commands.put(command, executor);
   }
+
 
 }
