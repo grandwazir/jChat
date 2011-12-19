@@ -3,5 +3,3 @@ colour-messages:
   death: true
   join: true
   quit: true
-prefix:
-  default: !DARK_BLUE
