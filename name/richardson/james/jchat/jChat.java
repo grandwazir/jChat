@@ -118,7 +118,7 @@ public class jChat extends JavaPlugin {
 
   private void registerPermissions() {
     // register root permission
-    rootPermission = new Permission("jchat", "Allow access to all jChat commands", PermissionDefault.OP);
+    rootPermission = new Permission("jchat.*", "Allow access to all jChat commands", PermissionDefault.OP);
     pluginManager.addPermission(rootPermission);
     // register prefixes
     Set<String> permissionNames = new LinkedHashSet<String>();
