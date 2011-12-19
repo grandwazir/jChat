@@ -58,7 +58,7 @@ public class RefreshCommand extends PlayerCommand {
     if (!sender.hasPermission(PERMISSION)) {
       throw new CommandPermissionException(RefreshCommand.NAME, RefreshCommand.PERMISSION);
     } else if (!(sender instanceof Player) && arguments.isEmpty()) {
-      throw new CommandUsageException("This command may not be used from the console.", RefreshCommand.USAGE);
+      throw new CommandUsageException("You must specify a player to use this from the console.", RefreshCommand.USAGE);
     } else if (!arguments.isEmpty()) {
       final Player player = (Player) arguments.get("player");
       handler.setPlayerDisplayName(player);
