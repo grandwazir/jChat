@@ -18,14 +18,14 @@
 
 package name.richardson.james.jchat.messages;
 
-import name.richardson.james.jchat.jChatHandler;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import name.richardson.james.jchat.jChatHandler;
 
 public class PlayerListener extends org.bukkit.event.player.PlayerListener {
 

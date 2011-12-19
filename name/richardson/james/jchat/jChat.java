@@ -8,10 +8,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import name.richardson.james.jchat.messages.EntityListener;
-import name.richardson.james.jchat.messages.PlayerListener;
-import name.richardson.james.jchat.util.Logger;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.permissions.Permission;
@@ -19,6 +15,11 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import name.richardson.james.jchat.management.RefreshCommand;
+import name.richardson.james.jchat.messages.EntityListener;
+import name.richardson.james.jchat.messages.PlayerListener;
+import name.richardson.james.jchat.util.Logger;
 
 public class jChat extends JavaPlugin {
 
@@ -31,6 +32,7 @@ public class jChat extends JavaPlugin {
 
   private static jChat instance;
 
+  private jChatConfiguration configuration;
   private PluginDescriptionFile description;
   private PluginManager pluginManager;
   private CommandManager commandManager;
@@ -44,6 +46,10 @@ public class jChat extends JavaPlugin {
 
   public static jChat getInstance() {
     return instance;
+  }
+
+  public jChatConfiguration getjChatConfiguration() {
+    return configuration;
   }
 
   public Set<Permission> getPermissions() {
@@ -86,7 +92,7 @@ public class jChat extends JavaPlugin {
   }
 
   private void loadConfiguration() throws IOException {
-    jChatConfiguration configuration = new jChatConfiguration();
+    this.configuration = new jChatConfiguration();
     if (configuration.isDebugging()) {
       Logger.enableDebugging();
       configuration.logValues();
@@ -95,11 +101,10 @@ public class jChat extends JavaPlugin {
 
   private void registerCommands() {
     this.getCommand("jchat").setExecutor(this.commandManager);
-    this.commandManager.registerCommand("refresh", new RefreshCommand(this));
+    this.commandManager.registerCommand("refresh", new RefreshCommand());
   }
 
   private void registerListeners() {
-    jChatConfiguration configuration = jChatConfiguration.getInstance();
     pluginManager.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Event.Priority.Monitor, this);
     if (configuration.isColouringDeathMessages()) pluginManager.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
     if (configuration.isColouringJoinMessages()) pluginManager.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
@@ -109,8 +114,8 @@ public class jChat extends JavaPlugin {
   private void registerPermissions() {
     // register prefixes
     Set<String> permissionNames = new LinkedHashSet<String>();
-    permissionNames.addAll(jChatConfiguration.getInstance().getPrefixPaths());
-    permissionNames.addAll(jChatConfiguration.getInstance().getSuffixPaths());
+    permissionNames.addAll(configuration.getPrefixPaths());
+    permissionNames.addAll(configuration.getSuffixPaths());
     for (String titlePath : permissionNames) {
       String permissionPath = "jchat." + titlePath;
       Permission permission = new Permission(permissionPath, "jChat permission node");

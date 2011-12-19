@@ -20,19 +20,22 @@ package name.richardson.james.jchat;
 
 import java.util.Set;
 
-import name.richardson.james.jchat.util.Handler;
-import name.richardson.james.jchat.util.Logger;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
+
+import name.richardson.james.jchat.util.Handler;
+import name.richardson.james.jchat.util.Logger;
 
 public final class jChatHandler extends Handler {
 
   protected final static Logger logger = new Logger(jChatHandler.class);
 
+  private final jChatConfiguration configuration;
+
   public jChatHandler(Class<?> owner) {
     super(owner);
+    this.configuration = jChat.getInstance().getjChatConfiguration();
   }
 
   public void revertPlayerDisplayName(final Player player) {
@@ -59,13 +62,13 @@ public final class jChatHandler extends Handler {
   }
 
   private String getPrefix(final Player player) {
-    String title = getTitle(player, jChatConfiguration.getInstance().getPrefixPaths(), "prefix");
+    String title = getTitle(player, configuration.getPrefixPaths(), "prefix");
     logger.debug(String.format("Using prefix: %s", title));
     return title.replace("&", "§");
   }
 
   private String getSuffix(final Player player) {
-    String title = getTitle(player, jChatConfiguration.getInstance().getSuffixPaths(), "suffix");
+    String title = getTitle(player, configuration.getSuffixPaths(), "suffix");
     logger.debug(String.format("Using suffix: %s", title));
     title = title.replace("&", "§");
     return title + ChatColor.WHITE;
@@ -76,11 +79,18 @@ public final class jChatHandler extends Handler {
     for (Permission permission : jChat.getInstance().getPermissions()) {
       logger.debug(String.format("Checking to see if %s has the permission node: %s", player.getName(), permission.getName()));
       if (player.hasPermission(permission) && permission.getName().contains(filter)) {
-        title = jChatConfiguration.getInstance().getTitle(permission.getName().replaceFirst("jchat.", ""));
+        title = configuration.getTitle(permission.getName().replaceFirst("jchat.", ""));
         break;
       }
     }
     return title.replace("&", "§");
+  }
+
+  private String replaceChatColors(String title) {
+    for (ChatColor colour : ChatColor.values()) {
+      title = title.replaceAll("!" + colour.name(), colour.toString());
+    }
+    return title;
   }
 
 }

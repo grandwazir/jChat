@@ -18,35 +18,32 @@
 
 package name.richardson.james.jchat;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import name.richardson.james.jchat.util.Configuration;
-import name.richardson.james.jchat.util.Logger;
+import name.richardson.james.jchat.util.configuration.AbstractConfiguration;
 
-public class jChatConfiguration extends Configuration {
+public class jChatConfiguration extends AbstractConfiguration {
 
-  protected final static String fileName = "config.yml";
-  protected final static Logger logger = new Logger(jChatConfiguration.class);
+  protected final static String FILE_NAME = "config.yml";
 
   private Set<String> prefixPermissions;
   private Set<String> suffixPermissions;
 
-  protected final InputStream defaults = jChat.getInstance().getResource(fileName);
+  protected final InputStream defaults = jChat.getInstance().getResource(FILE_NAME);
 
   public jChatConfiguration() throws IOException {
     super();
-    this.checkDefaults();
-
     this.setPrefixPermissions();
     this.setSuffixPermissions();
   }
 
-  public static jChatConfiguration getInstance() {
-    return (jChatConfiguration) instance;
+  public File getFile() {
+    return new File(jChat.getInstance().getDataFolder() + "/" + FILE_NAME);
   }
 
   public Set<String> getPrefixPaths() {
@@ -90,24 +87,24 @@ public class jChatConfiguration extends Configuration {
     }
   }
 
-  // this is necessary because if we save the defaults on creation
-  // it preserves the order in the config.yml which is very annoying.
-  // we have to do it this way to make sure it does not move our defaults,
-  // around.
-  private void checkDefaults() throws IOException {
-    Boolean configurationChanged = false;
+  @Override
+  public void setDefaults() throws IOException {
+    logger.debug(String.format("Apply default configuration."));
+    final org.bukkit.configuration.file.YamlConfiguration defaults = this.getDefaults();
+    configuration.setDefaults(defaults);
+    configuration.options().copyDefaults(true);
+    // check if the default prefix and suffix is there.
+    // we do this to avoid reordering the list
     if (!configuration.isConfigurationSection("prefix")) {
       configuration.createSection("prefix");
       configuration.getConfigurationSection("prefix").set("default", "&c");
-      configurationChanged = true;
     }
     // now check the suffixes
     if (!configuration.isConfigurationSection("suffix")) {
       configuration.createSection("suffix");
       configuration.getConfigurationSection("suffix").set("default", "&c");
-      configurationChanged = true;
     }
-    if (configurationChanged) configuration.save(configurationFile);
+    this.save();
   }
 
   private void setPrefixPermissions() {

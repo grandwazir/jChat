@@ -23,13 +23,16 @@ import java.util.Set;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 
-public class Logger {
+public final class Logger {
 
-  private static boolean currentlyDebugging = false;
-  private static final Level debugLevel = Level.FINE;
+  
+  private static final Level DEBUG_LEVEL = Level.FINE;
+  private static final String PREFIX = "[jChat ] ";
+  
   private static final java.util.logging.Logger parentLogger = java.util.logging.Logger.getLogger("Minecraft");
-  private static final String prefix = "[jChat] ";
   private static final Set<Logger> registeredLoggers = new HashSet<Logger>();
+  
+  private static boolean currentlyDebugging = false;
 
   private final java.util.logging.Logger logger;
 
@@ -58,12 +61,12 @@ public class Logger {
   public static void enableDebugging() {
     Logger.currentlyDebugging = true;
     for (final Handler handler : Logger.parentLogger.getHandlers()) {
-      handler.setLevel(Logger.debugLevel);
+      handler.setLevel(Logger.DEBUG_LEVEL);
     }
     for (final Logger logger : Logger.registeredLoggers) {
       logger.setDebugging(true);
     }
-    parentLogger.fine(prefix + "Debugging is now enabled.");
+    parentLogger.fine(PREFIX + "Debugging is now enabled.");
   }
 
   /**
@@ -73,7 +76,7 @@ public class Logger {
    * The string that you wish to log.
    */
   public void config(final String message) {
-    this.logger.config(Logger.prefix + "<" + this.logger.getName() + "> " + message);
+    this.logger.config(Logger.PREFIX + "<" + this.logger.getName() + "> " + message);
   }
 
   /**
@@ -83,7 +86,7 @@ public class Logger {
    * The string that you wish to log.
    */
   public void debug(final String message) {
-    this.logger.fine(Logger.prefix + "<" + this.logger.getName() + "> " + message);
+    this.logger.fine(Logger.PREFIX + "<" + this.logger.getName() + "> " + message);
   }
 
   /**
@@ -93,7 +96,7 @@ public class Logger {
    * The string that you wish to log.
    */
   public void info(final String message) {
-    this.logger.info(Logger.prefix + message);
+    this.logger.info(Logger.PREFIX + message);
   }
 
   /**
@@ -102,7 +105,7 @@ public class Logger {
    * @return isDebugging true if it is logging debug messages, false otherwise.
    */
   public boolean isDebugging() {
-    return this.logger.isLoggable(Logger.debugLevel);
+    return this.logger.isLoggable(Logger.DEBUG_LEVEL);
   }
 
   /**
@@ -112,7 +115,7 @@ public class Logger {
    * true if it is should log messages, false otherwise.
    */
   public void setDebugging(final Boolean value) {
-    this.logger.setLevel(Logger.debugLevel);
+    this.logger.setLevel(Logger.DEBUG_LEVEL);
   }
 
   /**
@@ -122,7 +125,7 @@ public class Logger {
    * The string that you wish to log.
    */
   public void severe(final String message) {
-    this.logger.severe(Logger.prefix + message);
+    this.logger.severe(Logger.PREFIX + message);
   }
 
   /**
@@ -132,7 +135,7 @@ public class Logger {
    * The string that you wish to log.
    */
   public void warning(final String message) {
-    this.logger.warning(Logger.prefix + message);
+    this.logger.warning(Logger.PREFIX + message);
   }
 
 }
