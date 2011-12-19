@@ -54,7 +54,10 @@ public class CommandManager implements CommandExecutor {
         sender.sendMessage(ChatColor.YELLOW + "Type /jchat for a list of commands.");
       }
     } else {
-      sender.sendMessage(ChatColor.LIGHT_PURPLE + jChat.getInstance().getDescription().getFullName());
+      final String name = jChat.getInstance().getDescription().getFullName();
+      final String description = jChat.getInstance().getDescription().getDescription();
+      sender.sendMessage(ChatColor.LIGHT_PURPLE + name);
+      sender.sendMessage(ChatColor.LIGHT_PURPLE + description);
       sender.sendMessage(ChatColor.GREEN + "Type /jchat help <command> for details on a command.");
       for (Entry<String, Command> c : commands.entrySet()) {
         sender.sendMessage(ChatColor.YELLOW + "- " + c.getValue().getUsage());
