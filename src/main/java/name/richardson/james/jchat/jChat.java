@@ -29,8 +29,8 @@ public class jChat extends Plugin {
 
   private final Logger logger = new Logger(jChat.class);
   
-  private DisplayNameListener playerListener;
-  private final SystemMessageListener entityListener;
+  private DisplayNameListener displayNameListener;
+  private SystemMessageListener entityListener;
   private final Set<Permission> permissions = new LinkedHashSet<Permission>();
 
   private jChatHandler handler;
@@ -40,8 +40,9 @@ public class jChat extends Plugin {
   private CommandManager commandManager;
   private Permission rootPermission;
 
+  private SystemMessageListener systemMessageListener;
+
   public jChat() {
-    entityListener = new SystemMessageListener();
     this.logger.setPrefix("[jChat] ");
   }
 
@@ -101,11 +102,10 @@ public class jChat extends Plugin {
   }
 
   private void registerListeners() {
-    playerListener = new DisplayNameListener();
-    pluginManager.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Event.Priority.Monitor, this);
-    if (configuration.isColouringDeathMessages()) pluginManager.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
-    if (configuration.isColouringJoinMessages()) pluginManager.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
-    if (configuration.isColouringQuitMessages()) pluginManager.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this);
+    displayNameListener = new DisplayNameListener(this);
+    systemMessageListener = new SystemMessageListener(this);
+    pluginManager.registerEvents(displayNameListener, this);
+    pluginManager.registerEvents(systemMessageListener, this);
   }
   
   public Permission getRootPermission() {
