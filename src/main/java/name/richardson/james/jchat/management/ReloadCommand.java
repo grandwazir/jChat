@@ -33,9 +33,6 @@ import org.bukkit.permissions.PermissionDefault;
 import name.richardson.james.jchat.jChat;
 import name.richardson.james.jchat.jChatConfiguration;
 import name.richardson.james.jchat.jChatHandler;
-import name.richardson.james.jchat.util.command.CommandPermissionException;
-import name.richardson.james.jchat.util.command.CommandUsageException;
-import name.richardson.james.jchat.util.command.PlayerCommand;
 
 public class ReloadCommand extends PlayerCommand {
 

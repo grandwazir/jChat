@@ -28,12 +28,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import name.richardson.james.bukkit.util.command.CommandArgumentException;
+import name.richardson.james.bukkit.util.command.CommandPermissionException;
+import name.richardson.james.bukkit.util.command.CommandUsageException;
+import name.richardson.james.bukkit.util.command.PlayerCommand;
 import name.richardson.james.jchat.jChat;
 import name.richardson.james.jchat.jChatHandler;
-import name.richardson.james.jchat.util.command.CommandArgumentException;
-import name.richardson.james.jchat.util.command.CommandPermissionException;
-import name.richardson.james.jchat.util.command.CommandUsageException;
-import name.richardson.james.jchat.util.command.PlayerCommand;
 
 public class RefreshCommand extends PlayerCommand {
 
@@ -46,19 +46,19 @@ public class RefreshCommand extends PlayerCommand {
   public static final Permission PERMISSION_OTHER = new Permission("jchat.refresh.others", "Allow users to refresh other player's display names.", PermissionDefault.OP);
   
   private final jChatHandler handler = new jChatHandler(RefreshCommand.class);
+  private final jChat plugin;
   
-  public RefreshCommand() {
-    super();
-    this.registerPermission(PERMISSION, jChat.getInstance().getRootPermission());
-    this.registerPermission(PERMISSION_OTHER , jChat.getInstance().getRootPermission());
+  public RefreshCommand(jChat plugin) {
+    super(plugin, NAME, DESCRIPTION, USAGE, PERMISSION_DESCRIPTION, PERMISSION);
+    this.plugin = plugin;
+    plugin.addPermission(PERMISSION, true);
+    // plugin.addPermission(PERMISSION_OTHER , jChat.getInstance().getRootPermission());
   }
 
   @Override
   public void execute(final CommandSender sender, final Map<String, Object> arguments) throws CommandPermissionException, CommandUsageException {
-    if (!sender.hasPermission(PERMISSION)) {
-      throw new CommandPermissionException(RefreshCommand.NAME, RefreshCommand.PERMISSION);
-    } else if (!(sender instanceof Player) && arguments.isEmpty()) {
-      throw new CommandUsageException("You must specify a player to use this from the console.", RefreshCommand.USAGE);
+    if (!(sender instanceof Player) && arguments.isEmpty()) {
+      throw new CommandUsageException("You must specify a player to use this from the console.");
     } else if (!arguments.isEmpty()) {
       if (sender.hasPermission(PERMISSION_OTHER) || arguments.get("player").equals(sender)) {
         final Player player = (Player) arguments.get("player");
@@ -73,36 +73,17 @@ public class RefreshCommand extends PlayerCommand {
       sender.sendMessage(ChatColor.GREEN + "Your display name has been refreshed.");
     }
   }
-
-  @Override
-  public String getDescription() {
-    return RefreshCommand.DESCRIPTION;
-  }
-
-  @Override
-  public String getName() {
-    return RefreshCommand.NAME;
-  }
-
-  @Override
-  public Permission getPermission() {
-    return RefreshCommand.PERMISSION;
-  }
-
-  @Override
-  public String getUsage() {
-    return RefreshCommand.USAGE;
-  }
-
+  
   @Override
   public Map<String, Object> parseArguments(final List<String> arguments) throws CommandArgumentException {
     HashMap<String, Object> map = new HashMap<String, Object>();
+    
     if (!arguments.isEmpty()) {
-      final Player player = jChat.getInstance().getServer().getPlayer(arguments.get(0));
+      final Player player = plugin.getServer().getPlayer(arguments.get(0));
       if (player != null) {
         map.put("player", player);
       } else {
-        throw new CommandArgumentException("You must specify a player who is online.");
+        throw new CommandArgumentException("You must specify a player who is online.", "You only need to type in part of the name.");
       }
     }
     return map;
