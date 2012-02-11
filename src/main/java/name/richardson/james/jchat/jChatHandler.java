@@ -24,6 +24,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
+import name.richardson.james.bukkit.util.Colour;
 import name.richardson.james.bukkit.util.Handler;
 import name.richardson.james.bukkit.util.Logger;
 
@@ -31,13 +32,15 @@ public final class jChatHandler extends Handler {
 
   public static final int LIST_NAME_LIMIT = 16;
   
+  private final jChat plugin;
   private final jChatConfiguration configuration;
   
   protected final static Logger logger = new Logger(jChatHandler.class);
 
-  public jChatHandler(Class<?> owner) {
+  public jChatHandler(Class<?> owner, jChat plugin) {
     super(owner);
-    this.configuration = jChatConfiguration.getInstance();
+    this.plugin = plugin;
+    this.configuration = plugin.getjChatConfiguration();
   }
 
   public void revertPlayerDisplayName(final Player player) {
@@ -83,21 +86,13 @@ public final class jChatHandler extends Handler {
 
   private String getTitle(Player player, Set<String> keys, String filter) {
     String title = "";
-    for (Permission permission : jChat.getInstance().getPermissions()) {
+    for (Permission permission : plugin.getPermissions()) {
       logger.debug(String.format("Checking to see if %s has the permission node: %s", player.getName(), permission.getName()));
       if (player.hasPermission(permission) && permission.getName().contains(filter)) {
         title = configuration.getTitle(permission.getName().replaceFirst("jchat.", ""));
         break;
       }
     }
-    return this.replaceChatColors(title);
+    return Colour.replace("&", title);
   }
-
-  private String replaceChatColors(String title) {
-    for (ChatColor colour : ChatColor.values()) {
-      title = title.replaceAll("&" + colour.name(), colour.toString());
-    }
-    return title;
-  }
-
 }
