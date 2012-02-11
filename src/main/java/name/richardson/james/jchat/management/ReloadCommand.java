@@ -43,12 +43,13 @@ public class ReloadCommand extends PlayerCommand {
   public static final PermissionDefault PERMISSION_DEFAULT = PermissionDefault.OP;
   public static final Permission PERMISSION = new Permission("jchat.reload", PERMISSION_DESCRIPTION, PERMISSION_DEFAULT);
 
-  private final jChatHandler handler = new jChatHandler(ReloadCommand.class);
+  private final jChatHandler handler;
   private final jChat plugin;
 
   public ReloadCommand(jChat plugin) {
     super(plugin, NAME, DESCRIPTION, USAGE, PERMISSION_DESCRIPTION, PERMISSION);
     this.plugin = plugin;
+    this.handler = plugin.getHandler(ReloadCommand.class);
     plugin.addPermission(PERMISSION, true);
   }
 

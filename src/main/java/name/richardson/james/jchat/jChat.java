@@ -65,7 +65,7 @@ public class jChat extends Plugin {
       this.registerPermissions();
       this.registerCommands();
       logger.debug("Setting display names for all online players...");
-      handler = new jChatHandler(jChat.class);
+      handler = new jChatHandler(jChat.class, this);
       handler.setPlayerDisplayNames(this.getOnlinePlayers());
     } catch (final IOException exception) {
       logger.severe("Unable to load configuration!");
@@ -96,8 +96,8 @@ public class jChat extends Plugin {
   private void registerCommands() {
     commandManager = new CommandManager(this.getDescription());
     this.getCommand("jchat").setExecutor(this.commandManager);
-    this.commandManager.registerCommand("refresh", new RefreshCommand());
-    this.commandManager.registerCommand("reload", new ReloadCommand());
+    this.commandManager.registerCommand("refresh", new RefreshCommand(this));
+    this.commandManager.registerCommand("reload", new ReloadCommand(this));
   }
 
   private void registerListeners() {
@@ -112,6 +112,8 @@ public class jChat extends Plugin {
     return rootPermission;
   }
 
+  
+  
   private void registerPermissions() {
     // register root permission
     rootPermission = new Permission("jchat.*", "Allow access to all jChat commands", PermissionDefault.OP);
@@ -135,6 +137,10 @@ public class jChat extends Plugin {
 
   public jChatConfiguration getjChatConfiguration() {
     return this.getjChatConfiguration();
+  }
+
+  public jChatHandler getHandler(Class<RefreshCommand> parentClass) {
+    return new jChatHandler(parentClass, this);
   }
 
 }
