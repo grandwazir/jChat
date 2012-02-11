@@ -83,6 +83,7 @@ public class jChat extends Plugin {
 
     try {
       this.loadConfiguration();
+      this.setPermission();
       this.registerListeners();
       this.registerPermissions();
       this.registerCommands();
