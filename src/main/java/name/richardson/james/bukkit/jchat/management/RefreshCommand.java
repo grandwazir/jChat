@@ -39,21 +39,23 @@ public class RefreshCommand extends PlayerCommand {
 
   public static final String NAME = "refresh";
   public static final String DESCRIPTION = "Refresh your display name.";
-  public static final String PERMISSION_DESCRIPTION = "Allow users to refresh their display names.";
   public static final String USAGE = "/jchat refresh [name]";
+  public static final String PERMISSION_DESCRIPTION = "Allow users to refresh their display names.";
   public static final PermissionDefault PERMISSION_DEFAULT = PermissionDefault.TRUE;
+  
   public static final Permission PERMISSION = new Permission("jchat.refresh", PERMISSION_DESCRIPTION, PERMISSION_DEFAULT);
   public static final Permission PERMISSION_OTHER = new Permission("jchat.refresh.others", "Allow users to refresh other player's display names.", PermissionDefault.OP);
-  
+
   private final jChatHandler handler;
   private final jChat plugin;
-  
+
   public RefreshCommand(jChat plugin) {
     super(plugin, NAME, DESCRIPTION, USAGE, PERMISSION_DESCRIPTION, PERMISSION);
     this.plugin = plugin;
     this.handler = plugin.getHandler(RefreshCommand.class);
     plugin.addPermission(PERMISSION, true);
-    // plugin.addPermission(PERMISSION_OTHER , jChat.getInstance().getRootPermission());
+    // plugin.addPermission(PERMISSION_OTHER ,
+    // jChat.getInstance().getRootPermission());
   }
 
   @Override
@@ -74,11 +76,11 @@ public class RefreshCommand extends PlayerCommand {
       sender.sendMessage(ChatColor.GREEN + "Your display name has been refreshed.");
     }
   }
-  
+
   @Override
   public Map<String, Object> parseArguments(final List<String> arguments) throws CommandArgumentException {
     HashMap<String, Object> map = new HashMap<String, Object>();
-    
+
     if (!arguments.isEmpty()) {
       final Player player = plugin.getServer().getPlayer(arguments.get(0));
       if (player != null) {

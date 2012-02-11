@@ -31,11 +31,11 @@ import name.richardson.james.bukkit.util.Logger;
 public final class jChatHandler extends Handler {
 
   public static final int LIST_NAME_LIMIT = 16;
-  
-  private final jChat plugin;
-  private final jChatConfiguration configuration;
-  
+
   protected final static Logger logger = new Logger(jChatHandler.class);
+  private final jChatConfiguration configuration;
+
+  private final jChat plugin;
 
   public jChatHandler(Class<?> owner, jChat plugin) {
     super(owner);

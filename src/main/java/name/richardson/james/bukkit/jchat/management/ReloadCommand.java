@@ -20,7 +20,6 @@ package name.richardson.james.bukkit.jchat.management;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,9 +37,10 @@ public class ReloadCommand extends PlayerCommand {
 
   public static final String NAME = "reload";
   public static final String DESCRIPTION = "Reload jChat.";
-  public static final String PERMISSION_DESCRIPTION = "Allow users to reload jChat.";
   public static final String USAGE = "/jchat reload";
   public static final PermissionDefault PERMISSION_DEFAULT = PermissionDefault.OP;
+  public static final String PERMISSION_DESCRIPTION = "Allow users to reload jChat.";
+  
   public static final Permission PERMISSION = new Permission("jchat.reload", PERMISSION_DESCRIPTION, PERMISSION_DEFAULT);
 
   private final jChatHandler handler;

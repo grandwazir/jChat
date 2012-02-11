@@ -1,4 +1,3 @@
-
 package name.richardson.james.bukkit.jchat;
 
 import java.io.IOException;
@@ -9,12 +8,10 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import name.richardson.james.bukkit.jchat.management.RefreshCommand;
 import name.richardson.james.bukkit.jchat.management.ReloadCommand;
@@ -22,31 +19,39 @@ import name.richardson.james.bukkit.jchat.messages.SystemMessageListener;
 import name.richardson.james.bukkit.util.Logger;
 import name.richardson.james.bukkit.util.Plugin;
 import name.richardson.james.bukkit.util.command.CommandManager;
-import name.richardson.james.bukkit.util.configuration.AbstractConfiguration;
 
 public class jChat extends Plugin {
 
   private final Logger logger = new Logger(jChat.class);
-  
-  private DisplayNameListener displayNameListener;
-  private SystemMessageListener entityListener;
   private final Set<Permission> permissions = new LinkedHashSet<Permission>();
-
-  private jChatHandler handler;
+  
+  private CommandManager commandManager;
   private jChatConfiguration configuration;
   private PluginDescriptionFile description;
+  private DisplayNameListener displayNameListener;
+  private jChatHandler handler;
   private PluginManager pluginManager;
-  private CommandManager commandManager;
   private Permission rootPermission;
-
   private SystemMessageListener systemMessageListener;
 
   public jChat() {
     this.logger.setPrefix("[jChat] ");
   }
 
+  public jChatHandler getHandler(Class<?> parentClass) {
+    return new jChatHandler(parentClass, this);
+  }
+
+  public jChatConfiguration getjChatConfiguration() {
+    return this.getjChatConfiguration();
+  }
+
   public Set<Permission> getPermissions() {
     return Collections.unmodifiableSet(permissions);
+  }
+
+  public Permission getRootPermission() {
+    return rootPermission;
   }
 
   public void onDisable() {
@@ -74,7 +79,8 @@ public class jChat extends Plugin {
       logger.severe(exception.getMessage());
       this.pluginManager.disablePlugin(this);
     } finally {
-      if (!this.pluginManager.isPluginEnabled(this)) return;
+      if (!this.pluginManager.isPluginEnabled(this))
+        return;
     }
 
     logger.info(String.format("%s is enabled.", description.getFullName()));
@@ -106,13 +112,7 @@ public class jChat extends Plugin {
     pluginManager.registerEvents(displayNameListener, this);
     pluginManager.registerEvents(systemMessageListener, this);
   }
-  
-  public Permission getRootPermission() {
-    return rootPermission;
-  }
 
-  
-  
   private void registerPermissions() {
     // register root permission
     rootPermission = new Permission("jchat.*", "Allow access to all jChat commands", PermissionDefault.OP);
@@ -132,14 +132,6 @@ public class jChat extends Plugin {
         permission.setDefault(PermissionDefault.TRUE);
       }
     }
-  }
-
-  public jChatConfiguration getjChatConfiguration() {
-    return this.getjChatConfiguration();
-  }
-
-  public jChatHandler getHandler(Class<?> parentClass) {
-    return new jChatHandler(parentClass, this);
   }
 
 }

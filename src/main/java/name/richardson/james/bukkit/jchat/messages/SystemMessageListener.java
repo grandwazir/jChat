@@ -30,7 +30,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import name.richardson.james.bukkit.jchat.jChat;
 import name.richardson.james.bukkit.jchat.jChatConfiguration;
-import name.richardson.james.bukkit.jchat.jChatHandler;
 
 public class SystemMessageListener implements Listener {
 
@@ -39,28 +38,7 @@ public class SystemMessageListener implements Listener {
   public SystemMessageListener(jChat plugin) {
     this.configuration = plugin.getjChatConfiguration();
   }
-  
-  @EventHandler(priority = EventPriority.LOW)
-  public void onPlayerDeath(PlayerDeathEvent event) {
-    if (!configuration.isColouringDeathMessages()) return;
-    final Player player = (Player) event.getEntity();
-    event.setDeathMessage((colourMessage(player, event.getDeathMessage())));
-  }
 
-  @EventHandler(priority = EventPriority.LOW)
-  public void onPlayerJoin(PlayerJoinEvent event) {
-    if (!configuration.isColouringJoinMessages()) return;
-    Player player = event.getPlayer();
-    event.setJoinMessage((colourMessage(player, event.getJoinMessage())));
-  }
-
-  @EventHandler(priority = EventPriority.LOW)
-  public void onPlayerQuit(PlayerQuitEvent event) {
-    if (!configuration.isColouringQuitMessages()) return;
-    Player player = event.getPlayer();
-    event.setQuitMessage((colourMessage(player, event.getQuitMessage())));
-  }
-  
   @EventHandler(priority = EventPriority.LOW)
   public void onEntityDeath(EntityDeathEvent event) {
     if (event instanceof PlayerDeathEvent && configuration.isColouringDeathMessages()) {
@@ -68,6 +46,30 @@ public class SystemMessageListener implements Listener {
       Player player = (Player) deathEvent.getEntity();
       deathEvent.setDeathMessage((colourMessage(player, deathEvent.getDeathMessage())));
     }
+  }
+
+  @EventHandler(priority = EventPriority.LOW)
+  public void onPlayerDeath(PlayerDeathEvent event) {
+    if (!configuration.isColouringDeathMessages())
+      return;
+    final Player player = (Player) event.getEntity();
+    event.setDeathMessage((colourMessage(player, event.getDeathMessage())));
+  }
+
+  @EventHandler(priority = EventPriority.LOW)
+  public void onPlayerJoin(PlayerJoinEvent event) {
+    if (!configuration.isColouringJoinMessages())
+      return;
+    Player player = event.getPlayer();
+    event.setJoinMessage((colourMessage(player, event.getJoinMessage())));
+  }
+
+  @EventHandler(priority = EventPriority.LOW)
+  public void onPlayerQuit(PlayerQuitEvent event) {
+    if (!configuration.isColouringQuitMessages())
+      return;
+    Player player = event.getPlayer();
+    event.setQuitMessage((colourMessage(player, event.getQuitMessage())));
   }
 
   private String colourMessage(Player player, String message) {

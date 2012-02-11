@@ -18,16 +18,11 @@
 
 package name.richardson.james.bukkit.jchat;
 
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-
 
 public class DisplayNameListener implements Listener {
 
@@ -36,12 +31,12 @@ public class DisplayNameListener implements Listener {
   public DisplayNameListener(jChat plugin) {
     this.handler = plugin.getHandler(DisplayNameListener.class);
   }
-  
+
   @EventHandler(priority = EventPriority.LOW)
   public void onPlayerJoin(PlayerJoinEvent event) {
     handler.setPlayerDisplayName(event.getPlayer());
   }
-  
+
   @EventHandler(priority = EventPriority.LOW)
   public void PlayerChangedWorld(PlayerChangedWorldEvent event) {
     handler.setPlayerDisplayName(event.getPlayer());

@@ -61,13 +61,13 @@ public class jChatConfiguration extends AbstractConfiguration {
   public boolean isColouringQuitMessages() {
     return configuration.getBoolean("colour-messages.quit");
   }
-  
-  public boolean isSupressListNameWarning() {
-    return configuration.getBoolean("surpress-list-name-too-long-warning");
-  }
 
   public boolean isDebugging() {
     return configuration.getBoolean("debugging");
+  }
+
+  public boolean isSupressListNameWarning() {
+    return configuration.getBoolean("surpress-list-name-too-long-warning");
   }
 
   public void logValues() {
