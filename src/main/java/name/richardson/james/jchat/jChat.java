@@ -16,6 +16,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import name.richardson.james.bukkit.util.command.CommandManager;
 import name.richardson.james.jchat.management.RefreshCommand;
 import name.richardson.james.jchat.management.ReloadCommand;
 import name.richardson.james.jchat.messages.EntityListener;
@@ -42,7 +43,6 @@ public class jChat extends JavaPlugin {
 
   public jChat() {
     jChat.instance = this;
-    commandManager = new CommandManager();
     entityListener = new EntityListener();
   }
 
@@ -99,6 +99,7 @@ public class jChat extends JavaPlugin {
   }
 
   private void registerCommands() {
+    commandManager = new CommandManager(this.getDescription());
     this.getCommand("jchat").setExecutor(this.commandManager);
     this.commandManager.registerCommand("refresh", new RefreshCommand());
     this.commandManager.registerCommand("reload", new ReloadCommand());
