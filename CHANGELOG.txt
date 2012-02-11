@@ -1,5 +1,6 @@
 Changelog for jChat (v1.4.2-SNAPSHOT)
 
+2012-02-11 13:17:40 +0000    added debugging information to registering prefix/suffix permissions (James Richardson)
 2012-02-11 13:16:05 +0000    accidently removed permission registration (James Richardson)
 2012-02-11 13:12:24 +0000    forgot to removing debugging testing name (James Richardson)
 2012-02-11 13:09:46 +0000    add surpress-list-name config value to logValues (James Richardson)
