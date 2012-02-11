@@ -38,7 +38,7 @@ public class RefreshCommand extends PlayerCommand {
 
   public static final String NAME = "refresh";
   public static final String DESCRIPTION = "Refresh your display name.";
-  public static final String USAGE = "/jchat refresh [name]";
+  public static final String USAGE = "[name]";
   public static final String PERMISSION_DESCRIPTION = "Allow users to refresh their display names.";
   public static final PermissionDefault PERMISSION_DEFAULT = PermissionDefault.TRUE;
 

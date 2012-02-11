@@ -36,7 +36,7 @@ public class ReloadCommand extends PlayerCommand {
 
   public static final String NAME = "reload";
   public static final String DESCRIPTION = "Reload jChat.";
-  public static final String USAGE = "/jchat reload";
+  public static final String USAGE = "";
   public static final PermissionDefault PERMISSION_DEFAULT = PermissionDefault.OP;
   public static final String PERMISSION_DESCRIPTION = "Allow users to reload jChat.";
 
