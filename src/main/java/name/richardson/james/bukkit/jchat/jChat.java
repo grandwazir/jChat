@@ -140,7 +140,7 @@ public class jChat extends Plugin {
       String permissionPath = "jchat." + titlePath;
       Permission permission = new Permission(permissionPath, "jChat permission node");
       logger.debug(String.format("Creating permission node: %s", permissionPath));
-      pluginManager.addPermission(permission);
+      this.addPermission(permission, false);
       permissions.add(permission);
       // if the default prefix make it a permission default
       if (permissionPath.contains(".default")) {
