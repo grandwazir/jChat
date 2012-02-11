@@ -18,40 +18,24 @@
 
 package name.richardson.james.jchat;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import name.richardson.james.jchat.util.Logger;
-import name.richardson.james.jchat.util.configuration.AbstractConfiguration;
+import name.richardson.james.bukkit.util.configuration.AbstractConfiguration;
 
 public class jChatConfiguration extends AbstractConfiguration {
 
   protected final static String FILE_NAME = "config.yml";
-  protected final static Logger logger = new Logger(jChatConfiguration.class);
-  private static jChatConfiguration instance;
 
   private Set<String> prefixPermissions;
   private Set<String> suffixPermissions;
 
-  protected final InputStream defaults = jChat.getInstance().getResource(FILE_NAME);
-
-  public jChatConfiguration() throws IOException {
-    super();
+  public jChatConfiguration(jChat plugin) throws IOException {
+    super(plugin, FILE_NAME);
     this.setPrefixPermissions();
     this.setSuffixPermissions();
-    jChatConfiguration.instance = this;
-  }
-
-  public static jChatConfiguration getInstance() {
-    return instance;
-  }
-
-  public File getFile() {
-    return new File(jChat.getInstance().getDataFolder() + "/" + FILE_NAME);
   }
 
   public Set<String> getPrefixPaths() {
@@ -77,6 +61,7 @@ public class jChatConfiguration extends AbstractConfiguration {
   public boolean isColouringQuitMessages() {
     return configuration.getBoolean("colour-messages.quit");
   }
+  
 
   public boolean isDebugging() {
     return configuration.getBoolean("debugging");
