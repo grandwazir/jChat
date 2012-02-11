@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 James Richardson.
+ * Copyright (c) 2012 James Richardson.
  * 
  * ReloadCommand.java is part of jChat.
  * 
@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License along with
  * jChat. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-
 package name.richardson.james.bukkit.jchat.management;
 
 import java.util.Arrays;
@@ -40,7 +39,7 @@ public class ReloadCommand extends PlayerCommand {
   public static final String USAGE = "/jchat reload";
   public static final PermissionDefault PERMISSION_DEFAULT = PermissionDefault.OP;
   public static final String PERMISSION_DESCRIPTION = "Allow users to reload jChat.";
-  
+
   public static final Permission PERMISSION = new Permission("jchat.reload", PERMISSION_DESCRIPTION, PERMISSION_DEFAULT);
 
   private final jChatHandler handler;

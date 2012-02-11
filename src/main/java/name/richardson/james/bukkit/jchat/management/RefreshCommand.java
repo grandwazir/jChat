@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 James Richardson.
+ * Copyright (c) 2012 James Richardson.
  * 
  * RefreshCommand.java is part of jChat.
  * 
@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License along with
  * jChat. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-
 package name.richardson.james.bukkit.jchat.management;
 
 import java.util.HashMap;
@@ -42,7 +41,7 @@ public class RefreshCommand extends PlayerCommand {
   public static final String USAGE = "/jchat refresh [name]";
   public static final String PERMISSION_DESCRIPTION = "Allow users to refresh their display names.";
   public static final PermissionDefault PERMISSION_DEFAULT = PermissionDefault.TRUE;
-  
+
   public static final Permission PERMISSION = new Permission("jchat.refresh", PERMISSION_DESCRIPTION, PERMISSION_DEFAULT);
   public static final Permission PERMISSION_OTHER = new Permission("jchat.refresh.others", "Allow users to refresh other player's display names.", PermissionDefault.OP);
 

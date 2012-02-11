@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2011 James Richardson.
+ * Copyright (c) 2012 James Richardson.
  * 
- * EntityListener.java is part of jChat.
+ * SystemMessageListener.java is part of jChat.
  * 
  * jChat is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License along with
  * jChat. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-
 package name.richardson.james.bukkit.jchat.messages;
 
 import org.bukkit.ChatColor;

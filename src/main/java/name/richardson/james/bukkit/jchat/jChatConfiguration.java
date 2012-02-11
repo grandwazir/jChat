@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 James Richardson.
+ * Copyright (c) 2012 James Richardson.
  * 
  * jChatConfiguration.java is part of jChat.
  * 
@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License along with
  * jChat. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-
 package name.richardson.james.bukkit.jchat;
 
 import java.io.IOException;
