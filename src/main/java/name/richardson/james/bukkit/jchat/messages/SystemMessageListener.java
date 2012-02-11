@@ -48,14 +48,6 @@ public class SystemMessageListener implements Listener {
   }
 
   @EventHandler(priority = EventPriority.LOW)
-  public void onPlayerDeath(PlayerDeathEvent event) {
-    if (!configuration.isColouringDeathMessages())
-      return;
-    final Player player = (Player) event.getEntity();
-    event.setDeathMessage((colourMessage(player, event.getDeathMessage())));
-  }
-
-  @EventHandler(priority = EventPriority.LOW)
   public void onPlayerJoin(PlayerJoinEvent event) {
     if (!configuration.isColouringJoinMessages())
       return;
