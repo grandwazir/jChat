@@ -16,23 +16,21 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import name.richardson.james.bukkit.util.Logger;
+import name.richardson.james.bukkit.util.Plugin;
 import name.richardson.james.bukkit.util.command.CommandManager;
 import name.richardson.james.jchat.management.RefreshCommand;
 import name.richardson.james.jchat.management.ReloadCommand;
 import name.richardson.james.jchat.messages.EntityListener;
 import name.richardson.james.jchat.messages.PlayerListener;
-import name.richardson.james.jchat.util.Logger;
 
-public class jChat extends JavaPlugin {
+public class jChat extends Plugin {
 
-  private final static Logger logger = new Logger(jChat.class);
-  
+  private final Logger logger = new Logger(jChat.class);
   
   private PlayerListener playerListener;
   private final EntityListener entityListener;
   private final Set<Permission> permissions = new LinkedHashSet<Permission>();
-
-  private static jChat instance;
 
   private jChatHandler handler;
   private jChatConfiguration configuration;
@@ -44,10 +42,7 @@ public class jChat extends JavaPlugin {
   public jChat() {
     jChat.instance = this;
     entityListener = new EntityListener();
-  }
-
-  public static jChat getInstance() {
-    return instance;
+    this.logger.setPrefix("[jChat] ");
   }
 
   public Set<Permission> getPermissions() {

@@ -24,8 +24,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
-import name.richardson.james.jchat.util.Handler;
-import name.richardson.james.jchat.util.Logger;
+import name.richardson.james.bukkit.util.Handler;
+import name.richardson.james.bukkit.util.Logger;
 
 public final class jChatHandler extends Handler {
 
