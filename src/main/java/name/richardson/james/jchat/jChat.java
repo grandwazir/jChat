@@ -139,7 +139,7 @@ public class jChat extends Plugin {
     return this.getjChatConfiguration();
   }
 
-  public jChatHandler getHandler(Class<RefreshCommand> parentClass) {
+  public jChatHandler getHandler(Class<?> parentClass) {
     return new jChatHandler(parentClass, this);
   }
 
