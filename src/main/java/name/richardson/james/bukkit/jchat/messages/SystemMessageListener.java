@@ -64,7 +64,7 @@ public class SystemMessageListener implements Listener {
   }
 
   private String colourMessage(Player player, String message) {
-    return message.replace(player.getName(), player.getDisplayName() + ChatColor.RED);
+    return message.replace(player.getName(), player.getDisplayName() + ChatColor.YELLOW);
   }
 
 }
