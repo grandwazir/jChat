@@ -16,7 +16,7 @@
  * jChat. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.jchat.management;
+package name.richardson.james.bukkit.jchat.management;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -30,9 +30,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import name.richardson.james.bukkit.jchat.jChat;
+import name.richardson.james.bukkit.jchat.jChatHandler;
 import name.richardson.james.bukkit.util.command.PlayerCommand;
-import name.richardson.james.jchat.jChat;
-import name.richardson.james.jchat.jChatHandler;
 
 public class ReloadCommand extends PlayerCommand {
 

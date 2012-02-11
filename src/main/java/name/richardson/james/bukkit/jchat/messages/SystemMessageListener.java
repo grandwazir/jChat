@@ -16,7 +16,7 @@
  * jChat. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.jchat.messages;
+package name.richardson.james.bukkit.jchat.messages;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -28,9 +28,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import name.richardson.james.jchat.jChat;
-import name.richardson.james.jchat.jChatConfiguration;
-import name.richardson.james.jchat.jChatHandler;
+import name.richardson.james.bukkit.jchat.jChat;
+import name.richardson.james.bukkit.jchat.jChatConfiguration;
+import name.richardson.james.bukkit.jchat.jChatHandler;
 
 public class SystemMessageListener implements Listener {
 

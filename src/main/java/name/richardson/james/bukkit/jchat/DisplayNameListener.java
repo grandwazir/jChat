@@ -16,7 +16,7 @@
  * jChat. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.jchat;
+package name.richardson.james.bukkit.jchat;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
