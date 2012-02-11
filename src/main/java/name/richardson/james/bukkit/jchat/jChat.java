@@ -84,6 +84,7 @@ public class jChat extends Plugin {
     try {
       this.loadConfiguration();
       this.setPermission();
+      this.registerPermissions();
       this.registerListeners();
       this.registerCommands();
       logger.debug("Setting display names for all online players...");
@@ -128,6 +129,24 @@ public class jChat extends Plugin {
     systemMessageListener = new SystemMessageListener(this);
     pluginManager.registerEvents(displayNameListener, this);
     pluginManager.registerEvents(systemMessageListener, this);
+  }
+  
+  private void registerPermissions() {
+    // register prefixes
+    Set<String> permissionNames = new LinkedHashSet<String>();
+    permissionNames.addAll(configuration.getPrefixPaths());
+    permissionNames.addAll(configuration.getSuffixPaths());
+    for (String titlePath : permissionNames) {
+      String permissionPath = "jchat." + titlePath;
+      Permission permission = new Permission(permissionPath, "jChat permission node");
+      logger.debug(String.format("Creating permission node: %s", permissionPath));
+      pluginManager.addPermission(permission);
+      permissions.add(permission);
+      // if the default prefix make it a permission default
+      if (permissionPath.contains(".default")) {
+        permission.setDefault(PermissionDefault.TRUE);
+      }
+    }
   }
 
 }
