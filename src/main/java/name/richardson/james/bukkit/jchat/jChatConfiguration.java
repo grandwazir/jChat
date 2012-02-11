@@ -74,6 +74,7 @@ public class jChatConfiguration extends AbstractConfiguration {
     logger.config(String.format("colour-messages.death : %b", this.isColouringDeathMessages()));
     logger.config(String.format("colour-messages.join : %b", this.isColouringJoinMessages()));
     logger.config(String.format("colour-messages.quit : %b", this.isColouringDeathMessages()));
+    logger.config(String.format("surpress-list-name-too-long-warning : %b", this.isSupressListNameWarning()));
     for (String path : getPrefixPaths()) {
       logger.config(String.format("%s : %s", path, this.getTitle(path)));
     }
