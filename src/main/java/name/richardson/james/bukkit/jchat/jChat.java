@@ -60,7 +60,7 @@ public class jChat extends Plugin {
   }
 
   public jChatConfiguration getjChatConfiguration() {
-    return this.getjChatConfiguration();
+    return this.configuration;
   }
 
   public Set<Permission> getPermissions() {
