@@ -28,6 +28,8 @@ Alternatively [older versions](http://repository.james.richardson.name/releases/
 
 ## Configuration
 
+### Read the documentation
+
 1. [Configure permissions](https://github.com/grandwazir/jChat/wiki/permissions) if necessary.
 2. Optionally configure your ban limits (config.yml) and assign them to moderators.
 
