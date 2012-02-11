@@ -23,7 +23,6 @@ import name.richardson.james.bukkit.util.configuration.AbstractConfiguration;
 import name.richardson.james.jchat.management.RefreshCommand;
 import name.richardson.james.jchat.management.ReloadCommand;
 import name.richardson.james.jchat.messages.SystemMessageListener;
-import name.richardson.james.jchat.messages.DisplayNameListener;
 
 public class jChat extends Plugin {
 

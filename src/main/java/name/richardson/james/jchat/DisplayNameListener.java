@@ -16,7 +16,7 @@
  * jChat. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.jchat.messages;
+package name.richardson.james.jchat;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -28,9 +28,6 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import name.richardson.james.jchat.jChat;
-import name.richardson.james.jchat.jChatConfiguration;
-import name.richardson.james.jchat.jChatHandler;
 
 public class DisplayNameListener implements Listener {
 
