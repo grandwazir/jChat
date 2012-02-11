@@ -85,9 +85,9 @@ public class jChat extends Plugin {
   }
 
   private void loadConfiguration() throws IOException {
-    this.configuration = new jChatConfiguration();
+    this.configuration = new jChatConfiguration(this);
     if (configuration.isDebugging()) {
-      Logger.enableDebugging();
+      Logger.enableDebugging(this.getDescription().getName().toLowerCase());
       configuration.logValues();
     }
   }
