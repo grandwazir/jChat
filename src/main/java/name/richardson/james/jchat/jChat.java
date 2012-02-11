@@ -22,15 +22,15 @@ import name.richardson.james.bukkit.util.command.CommandManager;
 import name.richardson.james.bukkit.util.configuration.AbstractConfiguration;
 import name.richardson.james.jchat.management.RefreshCommand;
 import name.richardson.james.jchat.management.ReloadCommand;
-import name.richardson.james.jchat.messages.EntityListener;
-import name.richardson.james.jchat.messages.PlayerListener;
+import name.richardson.james.jchat.messages.SystemMessageListener;
+import name.richardson.james.jchat.messages.DisplayNameListener;
 
 public class jChat extends Plugin {
 
   private final Logger logger = new Logger(jChat.class);
   
-  private PlayerListener playerListener;
-  private final EntityListener entityListener;
+  private DisplayNameListener playerListener;
+  private final SystemMessageListener entityListener;
   private final Set<Permission> permissions = new LinkedHashSet<Permission>();
 
   private jChatHandler handler;
@@ -41,7 +41,7 @@ public class jChat extends Plugin {
   private Permission rootPermission;
 
   public jChat() {
-    entityListener = new EntityListener();
+    entityListener = new SystemMessageListener();
     this.logger.setPrefix("[jChat] ");
   }
 
@@ -101,7 +101,7 @@ public class jChat extends Plugin {
   }
 
   private void registerListeners() {
-    playerListener = new PlayerListener();
+    playerListener = new DisplayNameListener();
     pluginManager.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Event.Priority.Monitor, this);
     if (configuration.isColouringDeathMessages()) pluginManager.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
     if (configuration.isColouringJoinMessages()) pluginManager.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
