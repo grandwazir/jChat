@@ -58,7 +58,7 @@ public final class jChatHandler extends Handler {
     String displayName = getPrefix(player) + player.getName() + getSuffix(player);
     player.setDisplayName(displayName);
     try {
-      player.setPlayerListName(ChatColor.RED + "sergeant_subtle");
+      player.setPlayerListName(displayName);
     } catch (IllegalArgumentException exception) {
       if (!configuration.isSupressListNameWarning()) {
         logger.warning(String.format("DisplayName is too long by %d characters to be used on the PlayerList: %s", displayName.length() - LIST_NAME_LIMIT, displayName));
