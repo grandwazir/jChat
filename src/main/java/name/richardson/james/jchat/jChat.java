@@ -40,7 +40,6 @@ public class jChat extends Plugin {
   private Permission rootPermission;
 
   public jChat() {
-    jChat.instance = this;
     entityListener = new EntityListener();
     this.logger.setPrefix("[jChat] ");
   }
@@ -68,10 +67,10 @@ public class jChat extends Plugin {
       handler = new jChatHandler(jChat.class);
       handler.setPlayerDisplayNames(this.getOnlinePlayers());
     } catch (final IOException exception) {
-      jChat.logger.severe("Unable to load configuration!");
+      logger.severe("Unable to load configuration!");
       this.pluginManager.disablePlugin(this);
     } catch (final IllegalStateException exception) {
-      jChat.logger.severe(exception.getMessage());
+      logger.severe(exception.getMessage());
       this.pluginManager.disablePlugin(this);
     } finally {
       if (!this.pluginManager.isPluginEnabled(this)) return;
