@@ -1,5 +1,6 @@
 Changelog for jChat (v1.4.2-SNAPSHOT)
 
+2012-02-11 13:07:36 +0000    fix issue where we are defining the same permission twice (James Richardson)
 2012-02-11 13:06:36 +0000    removed reference to delegated event class fixed issue registering root permission node (James Richardson)
 2012-02-11 13:04:57 +0000    set root permission onEnable (James Richardson)
 2012-02-11 13:03:59 +0000    fix loop causing by calling the same method within a method (James Richardson)

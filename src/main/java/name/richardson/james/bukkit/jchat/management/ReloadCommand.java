@@ -49,7 +49,6 @@ public class ReloadCommand extends PlayerCommand {
     super(plugin, NAME, DESCRIPTION, USAGE, PERMISSION_DESCRIPTION, PERMISSION);
     this.plugin = plugin;
     this.handler = plugin.getHandler(ReloadCommand.class);
-    plugin.addPermission(PERMISSION, true);
   }
 
   @Override
