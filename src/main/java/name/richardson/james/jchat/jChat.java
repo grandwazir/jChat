@@ -19,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import name.richardson.james.bukkit.util.Logger;
 import name.richardson.james.bukkit.util.Plugin;
 import name.richardson.james.bukkit.util.command.CommandManager;
+import name.richardson.james.bukkit.util.configuration.AbstractConfiguration;
 import name.richardson.james.jchat.management.RefreshCommand;
 import name.richardson.james.jchat.management.ReloadCommand;
 import name.richardson.james.jchat.messages.EntityListener;
@@ -130,6 +131,10 @@ public class jChat extends Plugin {
         permission.setDefault(PermissionDefault.TRUE);
       }
     }
+  }
+
+  public jChatConfiguration getjChatConfiguration() {
+    return this.getjChatConfiguration();
   }
 
 }

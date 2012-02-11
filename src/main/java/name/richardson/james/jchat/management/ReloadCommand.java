@@ -30,8 +30,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import name.richardson.james.bukkit.util.command.PlayerCommand;
 import name.richardson.james.jchat.jChat;
-import name.richardson.james.jchat.jChatConfiguration;
 import name.richardson.james.jchat.jChatHandler;
 
 public class ReloadCommand extends PlayerCommand {
@@ -44,48 +44,21 @@ public class ReloadCommand extends PlayerCommand {
   public static final Permission PERMISSION = new Permission("jchat.reload", PERMISSION_DESCRIPTION, PERMISSION_DEFAULT);
 
   private final jChatHandler handler = new jChatHandler(ReloadCommand.class);
+  private final jChat plugin;
 
-  public ReloadCommand() {
-    super();
-    this.registerPermission(PERMISSION, jChat.getInstance().getRootPermission());
+  public ReloadCommand(jChat plugin) {
+    super(plugin, NAME, DESCRIPTION, USAGE, PERMISSION_DESCRIPTION, PERMISSION);
+    this.plugin = plugin;
+    plugin.addPermission(PERMISSION, true);
   }
 
   @Override
-  public void execute(final CommandSender sender, final Map<String, Object> arguments) throws CommandPermissionException, CommandUsageException {
-    if (!sender.hasPermission(PERMISSION)) {
-      throw new CommandPermissionException(ReloadCommand.NAME, ReloadCommand.PERMISSION);
-    } else {
-      final Set<Player> players = new HashSet<Player>();
-      players.addAll(Arrays.asList(jChat.getInstance().getServer().getOnlinePlayers()));
-      jChatConfiguration.getInstance().load();
-      handler.setPlayerDisplayNames(players);
-      sender.sendMessage(ChatColor.GREEN + "jChat has been reloaded.");
-    }
-  }
-
-  @Override
-  public String getDescription() {
-    return ReloadCommand.DESCRIPTION;
-  }
-
-  @Override
-  public String getName() {
-    return ReloadCommand.NAME;
-  }
-
-  @Override
-  public Permission getPermission() {
-    return ReloadCommand.PERMISSION;
-  }
-
-  @Override
-  public String getUsage() {
-    return ReloadCommand.USAGE;
-  }
-
-  @Override
-  public Map<String, Object> parseArguments(final List<String> arguments) throws IllegalArgumentException {
-    return null;
+  public void execute(final CommandSender sender, final Map<String, Object> arguments) {
+    final Set<Player> players = new HashSet<Player>();
+    players.addAll(Arrays.asList(plugin.getServer().getOnlinePlayers()));
+    plugin.getjChatConfiguration().load();
+    handler.setPlayerDisplayNames(players);
+    sender.sendMessage(ChatColor.GREEN + "jChat has been reloaded.");
   }
 
 }
