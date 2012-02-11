@@ -4,7 +4,7 @@ author: James Richardson (grandwazir)
 description: Simple chat prefixes and suffixes.
 website: https://github.com/grandwazir/jChat 
 softdepend: [PermissionsBukkit]
-version: 1.4.1
+version: 1.4.2
 commands:
   jchat:
     description: The root jChat command

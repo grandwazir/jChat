@@ -29,11 +29,11 @@ import name.richardson.james.jchat.util.Logger;
 
 public final class jChatHandler extends Handler {
 
-  protected final static Logger logger = new Logger(jChatHandler.class);
-
-  private static final int LIST_NAME_LIMIT = 16;
-
+  public static final int LIST_NAME_LIMIT = 16;
+  
   private final jChatConfiguration configuration;
+  
+  protected final static Logger logger = new Logger(jChatHandler.class);
 
   public jChatHandler(Class<?> owner) {
     super(owner);
@@ -55,8 +55,10 @@ public final class jChatHandler extends Handler {
   public void setPlayerDisplayName(final Player player) {
     String displayName = getPrefix(player) + player.getName() + getSuffix(player);
     player.setDisplayName(displayName);
-    if (this.validateListDisplayName(displayName)) {
-      player.setPlayerListName(displayName);
+    try {
+      player.setPlayerListName(ChatColor.RED + "sergeant_subtle");
+    } catch (IllegalArgumentException exception) {
+      logger.warning(String.format("DisplayName is too long by %d characters to be used on the PlayerList: %s", displayName.length() - LIST_NAME_LIMIT, displayName));
     }
     logger.debug(String.format("%s's display name set to %s.", player.getName(), player.getDisplayName()));
   }
@@ -89,15 +91,6 @@ public final class jChatHandler extends Handler {
       }
     }
     return this.replaceChatColors(title);
-  }
-
-  private boolean validateListDisplayName(String displayName) {
-    if (displayName.length() > LIST_NAME_LIMIT) {
-      logger.warning(String.format("DisplayName is too long by %d characters to be used on the PlayerList: %s", displayName.length() - LIST_NAME_LIMIT, displayName));
-      return false;
-    } else {
-      return true;
-    }
   }
 
   private String replaceChatColors(String title) {
