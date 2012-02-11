@@ -52,7 +52,6 @@ public class RefreshCommand extends PlayerCommand {
     super(plugin, NAME, DESCRIPTION, USAGE, PERMISSION_DESCRIPTION, PERMISSION);
     this.plugin = plugin;
     this.handler = plugin.getHandler(RefreshCommand.class);
-    plugin.addPermission(PERMISSION, true);
     final Permission wildcard = new Permission(RefreshCommand.PERMISSION.getName() + ".*", "Allow a user to pardon all bans.", PermissionDefault.OP);
     this.plugin.addPermission(wildcard, true);
     RefreshCommand.PERMISSION_OTHER.addParent(wildcard, true);
