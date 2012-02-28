@@ -1,5 +1,6 @@
 Changelog for jChat (v1.4.3-SNAPSHOT)
 
+2012-02-28 20:35:33 +0000    add CommandManager and PluginCommand localisation (James Richardson)
 2012-02-28 20:34:28 +0000    fix not loading ResourceBundle (James Richardson)
 2012-02-28 20:31:20 +0000    code cleanup (James Richardson)
 2012-02-28 20:30:38 +0000    updated to bukkitutilities 2.0.2 added localisation support (James Richardson)
