@@ -101,7 +101,8 @@ public class jChat extends SimplePlugin {
 
   private void loadConfiguration() throws IOException {
     this.configuration = new jChatConfiguration(this);
-    if (configuration.isDebugging()) Logger.setDebugging(this, true);
+    if (configuration.isDebugging())
+      Logger.setDebugging(this, true);
   }
 
   private void registerCommands() {
@@ -117,7 +118,7 @@ public class jChat extends SimplePlugin {
     pluginManager.registerEvents(displayNameListener, this);
     pluginManager.registerEvents(systemMessageListener, this);
   }
-  
+
   private void registerPermissions() {
     // register prefixes
     Set<String> permissionNames = new LinkedHashSet<String>();

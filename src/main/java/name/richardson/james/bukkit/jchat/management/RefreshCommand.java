@@ -38,7 +38,7 @@ public class RefreshCommand extends PluginCommand {
   private final jChatHandler handler;
   private final jChat plugin;
   private final Server server;
-  
+
   // The player who is the target of this command
   private Player player;
 
@@ -48,6 +48,48 @@ public class RefreshCommand extends PluginCommand {
     this.plugin = plugin;
     this.handler = plugin.getHandler(RefreshCommand.class);
     this.registerPermissions();
+  }
+
+  public void execute(CommandSender sender) throws CommandArgumentException, CommandPermissionException, CommandUsageException {
+
+    if (sender.hasPermission(this.getPermission(1)) && player.getName().equalsIgnoreCase(sender.getName())) {
+      handler.setPlayerDisplayName(player);
+      sender.sendMessage(ChatColor.GREEN + this.plugin.getMessage("display-name-refreshed"));
+    } else if (player.getName().equalsIgnoreCase(sender.getName())) {
+      throw new CommandPermissionException(null, this.getPermission(1));
+    }
+
+    if (sender.hasPermission(this.getPermission(2)) && !player.getName().equalsIgnoreCase(sender.getName())) {
+      handler.setPlayerDisplayName(player);
+      sender.sendMessage(ChatColor.GREEN + this.plugin.getSimpleFormattedMessage("another-display-name-refreshed", player.getName()));
+    } else if (!player.getName().equalsIgnoreCase(sender.getName())) {
+      throw new CommandPermissionException(null, this.getPermission(2));
+    }
+
+  }
+
+  public void parseArguments(final String[] arguments, CommandSender sender) throws CommandArgumentException {
+
+    if (arguments.length == 0) {
+      player = (Player) sender;
+    } else {
+      String playerName = matchPlayerName(arguments[0]);
+      player = this.server.getPlayerExact(playerName);
+    }
+
+    // check to see if we have a target player
+    if (player == null)
+      throw new CommandArgumentException(this.plugin.getMessage("player-not-online"), this.plugin.getMessage("player-name-matching"));
+
+  }
+
+  private String matchPlayerName(String playerName) {
+    List<Player> matches = this.server.matchPlayer(playerName);
+    if (matches.isEmpty()) {
+      return playerName;
+    } else {
+      return matches.get(0).getName();
+    }
   }
 
   private void registerPermissions() {
@@ -65,49 +107,6 @@ public class RefreshCommand extends PluginCommand {
     Permission others = new Permission(prefix + this.getName() + "." + plugin.getMessage("refreshcommand-permission-others"), plugin.getMessage("refreshcommand-permission-others-description"), PermissionDefault.OP);
     others.addParent(wildcard, true);
     this.addPermission(others);
-  }
-
-
-  public void parseArguments(final String[] arguments, CommandSender sender) throws CommandArgumentException {
-
-    if (arguments.length == 0) {
-      player = (Player) sender;
-    } else {
-      String playerName = matchPlayerName(arguments[0]);
-      player = this.server.getPlayerExact(playerName);
-    }
-    
-    // check to see if we have a target player
-    if (player == null) throw new CommandArgumentException(this.plugin.getMessage("player-not-online"), this.plugin.getMessage("player-name-matching"));
-    
-  }
-
-  public void execute(CommandSender sender) throws CommandArgumentException, CommandPermissionException, CommandUsageException {
-    
-    if (sender.hasPermission(this.getPermission(1)) && player.getName().equalsIgnoreCase(sender.getName())) {
-      handler.setPlayerDisplayName(player);
-      sender.sendMessage(ChatColor.GREEN + this.plugin.getMessage("display-name-refreshed"));
-    } else if (player.getName().equalsIgnoreCase(sender.getName())) {
-      throw new CommandPermissionException(null, this.getPermission(1));
-    }
-    
-    if (sender.hasPermission(this.getPermission(2)) && !player.getName().equalsIgnoreCase(sender.getName())) {
-      handler.setPlayerDisplayName(player);
-      sender.sendMessage(ChatColor.GREEN + this.plugin.getSimpleFormattedMessage("another-display-name-refreshed", player.getName()));
-    } else if (!player.getName().equalsIgnoreCase(sender.getName())) {
-      throw new CommandPermissionException(null, this.getPermission(2));
-    }
-    
-  }
-  
-
-  private String matchPlayerName(String playerName) {
-    List<Player> matches = this.server.matchPlayer(playerName);
-    if (matches.isEmpty()) {
-      return playerName;
-    } else {
-      return matches.get(0).getName();
-    }
   }
 
 }

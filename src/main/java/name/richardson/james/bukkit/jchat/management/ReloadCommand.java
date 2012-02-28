@@ -44,13 +44,6 @@ public class ReloadCommand extends PluginCommand {
     this.registerPermissions();
   }
 
-  private void registerPermissions() {
-    final String prefix = plugin.getDescription().getName().toLowerCase() + ".";
-    // create the base permission
-    Permission base = new Permission(prefix + this.getName(), plugin.getMessage("reloadcommand-permission-description"), PermissionDefault.TRUE);
-    this.addPermission(base);
-  }
-
   public void execute(final CommandSender sender) {
     final Set<Player> players = new HashSet<Player>();
     players.addAll(Arrays.asList(plugin.getServer().getOnlinePlayers()));
@@ -61,6 +54,13 @@ public class ReloadCommand extends PluginCommand {
 
   public void parseArguments(String[] arguments, CommandSender sender) throws CommandArgumentException {
     return;
+  }
+
+  private void registerPermissions() {
+    final String prefix = plugin.getDescription().getName().toLowerCase() + ".";
+    // create the base permission
+    Permission base = new Permission(prefix + this.getName(), plugin.getMessage("reloadcommand-permission-description"), PermissionDefault.TRUE);
+    this.addPermission(base);
   }
 
 }
