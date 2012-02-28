@@ -72,6 +72,7 @@ public class jChat extends SimplePlugin {
     pluginManager = getServer().getPluginManager();
 
     try {
+      this.setResourceBundle();
       this.loadConfiguration();
       this.setRootPermission();
       this.registerPermissions();
