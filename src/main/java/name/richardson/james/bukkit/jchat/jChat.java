@@ -19,7 +19,6 @@ package name.richardson.james.bukkit.jchat;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -33,11 +32,11 @@ import org.bukkit.plugin.PluginManager;
 import name.richardson.james.bukkit.jchat.management.RefreshCommand;
 import name.richardson.james.bukkit.jchat.management.ReloadCommand;
 import name.richardson.james.bukkit.jchat.messages.SystemMessageListener;
-import name.richardson.james.bukkit.util.Logger;
-import name.richardson.james.bukkit.util.Plugin;
-import name.richardson.james.bukkit.util.command.CommandManager;
+import name.richardson.james.bukkit.utilities.command.CommandManager;
+import name.richardson.james.bukkit.utilities.internals.Logger;
+import name.richardson.james.bukkit.utilities.plugin.SimplePlugin;
 
-public class jChat extends Plugin {
+public class jChat extends SimplePlugin {
 
   private final Logger logger = new Logger(jChat.class);
   private final Set<Permission> permissions = new LinkedHashSet<Permission>();
@@ -48,7 +47,6 @@ public class jChat extends Plugin {
   private DisplayNameListener displayNameListener;
   private jChatHandler handler;
   private PluginManager pluginManager;
-  private Permission rootPermission;
   private SystemMessageListener systemMessageListener;
 
   public jChat() {
@@ -63,18 +61,10 @@ public class jChat extends Plugin {
     return this.configuration;
   }
 
-  public Set<Permission> getPermissions() {
-    return Collections.unmodifiableSet(permissions);
-  }
-
-  public Permission getRootPermission() {
-    return rootPermission;
-  }
-
   public void onDisable() {
     logger.debug("Reverting display names for all online players...");
     handler.revertPlayerDisplayNames(this.getOnlinePlayers());
-    logger.info("jChat is disabled.");
+    logger.info(this.getSimpleFormattedMessage("plugin-disabled", description.getFullName()));
   }
 
   public void onEnable() {
@@ -83,7 +73,7 @@ public class jChat extends Plugin {
 
     try {
       this.loadConfiguration();
-      this.setPermission();
+      this.setRootPermission();
       this.registerPermissions();
       this.registerListeners();
       this.registerCommands();
@@ -91,7 +81,7 @@ public class jChat extends Plugin {
       handler = new jChatHandler(jChat.class, this);
       handler.setPlayerDisplayNames(this.getOnlinePlayers());
     } catch (final IOException exception) {
-      logger.severe("Unable to load configuration!");
+      logger.severe(this.getMessage("configuration-missing"));
       this.pluginManager.disablePlugin(this);
     } catch (final IllegalStateException exception) {
       logger.severe(exception.getMessage());
@@ -101,7 +91,7 @@ public class jChat extends Plugin {
         return;
     }
 
-    logger.info(String.format("%s is enabled.", description.getFullName()));
+    logger.info(this.getSimpleFormattedMessage("plugin-enabled", description.getFullName()));
 
   }
 
@@ -111,17 +101,14 @@ public class jChat extends Plugin {
 
   private void loadConfiguration() throws IOException {
     this.configuration = new jChatConfiguration(this);
-    if (configuration.isDebugging()) {
-      Logger.enableDebugging(this.getDescription().getName().toLowerCase());
-      configuration.logValues();
-    }
+    if (configuration.isDebugging()) Logger.setDebugging(this, true);
   }
 
   private void registerCommands() {
-    commandManager = new CommandManager(this.getDescription());
+    commandManager = new CommandManager(this);
     this.getCommand("jchat").setExecutor(this.commandManager);
-    this.commandManager.registerCommand("refresh", new RefreshCommand(this));
-    this.commandManager.registerCommand("reload", new ReloadCommand(this));
+    this.commandManager.addCommand(new RefreshCommand(this));
+    this.commandManager.addCommand(new ReloadCommand(this));
   }
 
   private void registerListeners() {
@@ -138,11 +125,11 @@ public class jChat extends Plugin {
     permissionNames.addAll(configuration.getSuffixPaths());
     for (String titlePath : permissionNames) {
       String permissionPath = "jchat." + titlePath;
-      Permission permission = new Permission(permissionPath, "jChat permission node");
+      Permission permission = new Permission(permissionPath, this.getSimpleFormattedMessage("jchat-permission-node", this.getDescription().getName()));
       if (permissionPath.contains(".default")) {
         permission.setDefault(PermissionDefault.TRUE);
       }
-      this.addPermission(permission, false);
+      this.addPermission(permission);
       permissions.add(permission);
     }
   }

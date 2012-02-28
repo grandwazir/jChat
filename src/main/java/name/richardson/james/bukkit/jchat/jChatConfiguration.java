@@ -22,11 +22,11 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import name.richardson.james.bukkit.util.configuration.AbstractConfiguration;
+import name.richardson.james.bukkit.utilities.configuration.AbstractConfiguration;
 
 public class jChatConfiguration extends AbstractConfiguration {
 
-  protected final static String FILE_NAME = "config.yml";
+  public final static String FILE_NAME = "config.yml";
 
   private Set<String> prefixPermissions;
   private Set<String> suffixPermissions;

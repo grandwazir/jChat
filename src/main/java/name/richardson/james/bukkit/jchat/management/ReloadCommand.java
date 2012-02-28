@@ -19,7 +19,6 @@ package name.richardson.james.bukkit.jchat.management;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.ChatColor;
@@ -30,34 +29,38 @@ import org.bukkit.permissions.PermissionDefault;
 
 import name.richardson.james.bukkit.jchat.jChat;
 import name.richardson.james.bukkit.jchat.jChatHandler;
-import name.richardson.james.bukkit.util.command.PlayerCommand;
+import name.richardson.james.bukkit.utilities.command.CommandArgumentException;
+import name.richardson.james.bukkit.utilities.command.PluginCommand;
 
-public class ReloadCommand extends PlayerCommand {
-
-  public static final String NAME = "reload";
-  public static final String DESCRIPTION = "Reload jChat.";
-  public static final String USAGE = "";
-  public static final PermissionDefault PERMISSION_DEFAULT = PermissionDefault.OP;
-  public static final String PERMISSION_DESCRIPTION = "Allow users to reload jChat.";
-
-  public static final Permission PERMISSION = new Permission("jchat.reload", PERMISSION_DESCRIPTION, PERMISSION_DEFAULT);
+public class ReloadCommand extends PluginCommand {
 
   private final jChatHandler handler;
   private final jChat plugin;
 
   public ReloadCommand(jChat plugin) {
-    super(plugin, NAME, DESCRIPTION, USAGE, PERMISSION_DESCRIPTION, PERMISSION);
+    super(plugin);
     this.plugin = plugin;
     this.handler = plugin.getHandler(ReloadCommand.class);
+    this.registerPermissions();
   }
 
-  @Override
-  public void execute(final CommandSender sender, final Map<String, Object> arguments) {
+  private void registerPermissions() {
+    final String prefix = plugin.getDescription().getName().toLowerCase() + ".";
+    // create the base permission
+    Permission base = new Permission(prefix + this.getName(), plugin.getMessage("reloadcommand-permission-description"), PermissionDefault.TRUE);
+    this.addPermission(base);
+  }
+
+  public void execute(final CommandSender sender) {
     final Set<Player> players = new HashSet<Player>();
     players.addAll(Arrays.asList(plugin.getServer().getOnlinePlayers()));
     plugin.getjChatConfiguration().load();
     handler.setPlayerDisplayNames(players);
-    sender.sendMessage(ChatColor.GREEN + "jChat has been reloaded.");
+    sender.sendMessage(ChatColor.GREEN + this.plugin.getSimpleFormattedMessage("reloadcommand-complete", this.plugin.getDescription().getName()));
+  }
+
+  public void parseArguments(String[] arguments, CommandSender sender) throws CommandArgumentException {
+    return;
   }
 
 }

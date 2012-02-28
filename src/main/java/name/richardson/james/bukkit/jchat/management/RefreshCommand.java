@@ -17,11 +17,10 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.jchat.management;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -29,67 +28,86 @@ import org.bukkit.permissions.PermissionDefault;
 
 import name.richardson.james.bukkit.jchat.jChat;
 import name.richardson.james.bukkit.jchat.jChatHandler;
-import name.richardson.james.bukkit.util.command.CommandArgumentException;
-import name.richardson.james.bukkit.util.command.CommandPermissionException;
-import name.richardson.james.bukkit.util.command.CommandUsageException;
-import name.richardson.james.bukkit.util.command.PlayerCommand;
+import name.richardson.james.bukkit.utilities.command.CommandArgumentException;
+import name.richardson.james.bukkit.utilities.command.CommandPermissionException;
+import name.richardson.james.bukkit.utilities.command.CommandUsageException;
+import name.richardson.james.bukkit.utilities.command.PluginCommand;
 
-public class RefreshCommand extends PlayerCommand {
-
-  public static final String NAME = "refresh";
-  public static final String DESCRIPTION = "Refresh your display name.";
-  public static final String USAGE = "[name]";
-  public static final String PERMISSION_DESCRIPTION = "Allow users to refresh their display names.";
-  public static final PermissionDefault PERMISSION_DEFAULT = PermissionDefault.TRUE;
-
-  public static final Permission PERMISSION = new Permission("jchat.refresh", PERMISSION_DESCRIPTION, PERMISSION_DEFAULT);
-  public static final Permission PERMISSION_OTHER = new Permission("jchat.refresh.others", "Allow users to refresh other player's display names.", PermissionDefault.OP);
+public class RefreshCommand extends PluginCommand {
 
   private final jChatHandler handler;
   private final jChat plugin;
+  private final Server server;
+  
+  // The player who is the target of this command
+  private Player player;
 
   public RefreshCommand(jChat plugin) {
-    super(plugin, NAME, DESCRIPTION, USAGE, PERMISSION_DESCRIPTION, PERMISSION);
+    super(plugin);
+    this.server = plugin.getServer();
     this.plugin = plugin;
     this.handler = plugin.getHandler(RefreshCommand.class);
-    final Permission wildcard = new Permission(RefreshCommand.PERMISSION.getName() + ".*", "Allow a user to pardon all bans.", PermissionDefault.OP);
-    this.plugin.addPermission(wildcard, true);
-    RefreshCommand.PERMISSION_OTHER.addParent(wildcard, true);
-    this.plugin.addPermission(RefreshCommand.PERMISSION_OTHER, false);
+    this.registerPermissions();
   }
 
-  @Override
-  public void execute(final CommandSender sender, final Map<String, Object> arguments) throws CommandPermissionException, CommandUsageException {
-    if (!(sender instanceof Player) && arguments.isEmpty()) {
-      throw new CommandUsageException("You must specify a player to use this from the console.");
-    } else if (!arguments.isEmpty()) {
-      if (sender.hasPermission(PERMISSION_OTHER) || arguments.get("player").equals(sender)) {
-        final Player player = (Player) arguments.get("player");
-        handler.setPlayerDisplayName(player);
-        sender.sendMessage(ChatColor.GREEN + player.getName() + "'s display name has been refreshed.");
-      } else {
-        throw new CommandPermissionException("You do not have permission to do this.", PERMISSION_OTHER);
-      }
+  private void registerPermissions() {
+    final String prefix = plugin.getDescription().getName().toLowerCase() + ".";
+    final String wildcardDescription = String.format(plugin.getMessage("wildcard-permission-description"), this.getName());
+    // create the wildcard permission
+    Permission wildcard = new Permission(prefix + this.getName() + ".*", wildcardDescription, PermissionDefault.OP);
+    wildcard.addParent(plugin.getRootPermission(), true);
+    this.addPermission(wildcard);
+    // create the base permission
+    Permission base = new Permission(prefix + this.getName(), plugin.getMessage("refreshcommand-permission-description"), PermissionDefault.TRUE);
+    base.addParent(wildcard, true);
+    this.addPermission(base);
+    // add ability to set other user's homes
+    Permission others = new Permission(prefix + this.getName() + "." + plugin.getMessage("refreshcommand-permission-others"), plugin.getMessage("refreshcommand-permission-others-description"), PermissionDefault.OP);
+    others.addParent(wildcard, true);
+    this.addPermission(others);
+  }
+
+
+  public void parseArguments(final String[] arguments, CommandSender sender) throws CommandArgumentException {
+
+    if (arguments.length == 0) {
+      player = (Player) sender;
     } else {
-      final Player player = (Player) sender;
-      handler.setPlayerDisplayName(player);
-      sender.sendMessage(ChatColor.GREEN + "Your display name has been refreshed.");
+      String playerName = matchPlayerName(arguments[0]);
+      player = this.server.getPlayerExact(playerName);
     }
+    
+    // check to see if we have a target player
+    if (player == null) throw new CommandArgumentException(this.plugin.getMessage("player-not-online"), this.plugin.getMessage("player-name-matching"));
+    
   }
 
-  @Override
-  public Map<String, Object> parseArguments(final List<String> arguments) throws CommandArgumentException {
-    HashMap<String, Object> map = new HashMap<String, Object>();
-
-    if (!arguments.isEmpty()) {
-      final Player player = plugin.getServer().getPlayer(arguments.get(0));
-      if (player != null) {
-        map.put("player", player);
-      } else {
-        throw new CommandArgumentException("You must specify a player who is online.", "You only need to type in part of the name.");
-      }
+  public void execute(CommandSender sender) throws CommandArgumentException, CommandPermissionException, CommandUsageException {
+    
+    if (sender.hasPermission(this.getPermission(1)) && player.getName().equalsIgnoreCase(sender.getName())) {
+      handler.setPlayerDisplayName(player);
+      sender.sendMessage(ChatColor.GREEN + this.plugin.getMessage("display-name-refreshed"));
+    } else if (player.getName().equalsIgnoreCase(sender.getName())) {
+      throw new CommandPermissionException(null, this.getPermission(1));
     }
-    return map;
+    
+    if (sender.hasPermission(this.getPermission(2)) && !player.getName().equalsIgnoreCase(sender.getName())) {
+      handler.setPlayerDisplayName(player);
+      sender.sendMessage(ChatColor.GREEN + this.plugin.getSimpleFormattedMessage("another-display-name-refreshed", player.getName()));
+    } else if (!player.getName().equalsIgnoreCase(sender.getName())) {
+      throw new CommandPermissionException(null, this.getPermission(2));
+    }
+    
+  }
+  
+
+  private String matchPlayerName(String playerName) {
+    List<Player> matches = this.server.matchPlayer(playerName);
+    if (matches.isEmpty()) {
+      return playerName;
+    } else {
+      return matches.get(0).getName();
+    }
   }
 
 }

@@ -23,9 +23,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
-import name.richardson.james.bukkit.util.Colour;
-import name.richardson.james.bukkit.util.Handler;
-import name.richardson.james.bukkit.util.Logger;
+import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
+import name.richardson.james.bukkit.utilities.internals.Handler;
+import name.richardson.james.bukkit.utilities.internals.Logger;
 
 public final class jChatHandler extends Handler {
 
@@ -94,6 +94,6 @@ public final class jChatHandler extends Handler {
         break;
       }
     }
-    return Colour.replace("&", title);
+    return ColourFormatter.replace("&", title);
   }
 }
