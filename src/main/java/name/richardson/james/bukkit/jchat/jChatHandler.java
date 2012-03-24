@@ -57,11 +57,13 @@ public final class jChatHandler extends Handler {
   public void setPlayerDisplayName(final Player player) {
     String displayName = getPrefix(player) + player.getName() + getSuffix(player);
     player.setDisplayName(displayName);
-    try {
-      player.setPlayerListName(displayName);
-    } catch (IllegalArgumentException exception) {
-      if (!configuration.isSupressListNameWarning()) {
-        logger.warning(String.format("DisplayName is too long by %d characters to be used on the PlayerList: %s", displayName.length() - LIST_NAME_LIMIT, displayName));
+    if (configuration.isColouringListNames()) {
+      try {
+        player.setPlayerListName(displayName);
+      } catch (IllegalArgumentException exception) {
+        if (!configuration.isSupressListNameWarning()) {
+          logger.warning(String.format("DisplayName is too long by %d characters to be used on the PlayerList: %s", displayName.length() - LIST_NAME_LIMIT, displayName));
+        }
       }
     }
     logger.debug(String.format("%s's display name set to %s.", player.getName(), player.getDisplayName()));

@@ -52,9 +52,13 @@ public class jChatConfiguration extends AbstractConfiguration {
   public boolean isColouringDeathMessages() {
     return configuration.getBoolean("colour-messages.death");
   }
-
+  
   public boolean isColouringJoinMessages() {
     return configuration.getBoolean("colour-messages.join");
+  }
+
+  public boolean isColouringListNames() {
+    return configuration.getBoolean("colour-messages.list");
   }
 
   public boolean isColouringQuitMessages() {

@@ -3,4 +3,5 @@ surpress-list-name-too-long-warning: false
 colour-messages:
   death: true
   join: true
+  list: true
   quit: true
