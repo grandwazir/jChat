@@ -18,6 +18,8 @@
 package name.richardson.james.bukkit.jchat;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -74,6 +76,7 @@ public class jChat extends SimplePlugin {
     try {
       this.setResourceBundle();
       this.loadConfiguration();
+      this.update();
       this.setRootPermission();
       this.registerPermissions();
       this.registerListeners();
@@ -135,5 +138,16 @@ public class jChat extends SimplePlugin {
       permissions.add(permission);
     }
   }
+
+  
+  public String getArtifactID() {
+    return "jchat";
+  }
+  
+
+  public String getGroupID() {
+    return "name.richardson.james.bukkit";
+  }
+
 
 }
