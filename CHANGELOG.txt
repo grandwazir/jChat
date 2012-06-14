@@ -1,5 +1,12 @@
-Changelog for jChat (v1.4.6-SNAPSHOT)
+Changelog for jChat (v1.4.8-SNAPSHOT)
 
+2012-06-14 05:08:20 +0100    sealing BukkitUtilities to prevent conflicts between versions (James Richardson)
+
+v1.4.7
+2012-06-14 04:46:20 +0100    build against the latest version of BukkitUtilities (James Richardson)
+
+v1.4.6
+2012-06-14 04:38:35 +0100    preparing to release (James Richardson)
 2012-06-14 04:34:36 +0100    add option to enable or disable automatic updates (James Richardson)
 2012-06-14 04:25:08 +0100    Add automatic updating (James Richardson)
 
