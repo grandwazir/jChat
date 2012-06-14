@@ -1,4 +1,7 @@
 debugging: false
+automatic-updates:
+  enabled: true
+  action: install
 surpress-list-name-too-long-warning: false
 colour-messages:
   death: true

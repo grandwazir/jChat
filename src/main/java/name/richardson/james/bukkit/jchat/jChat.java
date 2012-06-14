@@ -18,8 +18,6 @@
 package name.richardson.james.bukkit.jchat;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -76,7 +74,7 @@ public class jChat extends SimplePlugin {
     try {
       this.setResourceBundle();
       this.loadConfiguration();
-      this.update();
+      if (configuration.isCheckingForUpdates()) this.update(configuration.isAutomaticallyUpdating());
       this.setRootPermission();
       this.registerPermissions();
       this.registerListeners();
@@ -91,8 +89,7 @@ public class jChat extends SimplePlugin {
       logger.severe(exception.getMessage());
       this.pluginManager.disablePlugin(this);
     } finally {
-      if (!this.pluginManager.isPluginEnabled(this))
-        return;
+      if (!this.pluginManager.isPluginEnabled(this)) return;
     }
 
     logger.info(this.getSimpleFormattedMessage("plugin-enabled", description.getFullName()));
@@ -105,8 +102,7 @@ public class jChat extends SimplePlugin {
 
   private void loadConfiguration() throws IOException {
     this.configuration = new jChatConfiguration(this);
-    if (configuration.isDebugging())
-      Logger.setDebugging(this, true);
+    if (configuration.isDebugging()) Logger.setDebugging(this, true);
   }
 
   private void registerCommands() {
@@ -139,15 +135,12 @@ public class jChat extends SimplePlugin {
     }
   }
 
-  
   public String getArtifactID() {
     return "jchat";
   }
-  
 
   public String getGroupID() {
     return "name.richardson.james.bukkit";
   }
-
 
 }

@@ -52,7 +52,7 @@ public class jChatConfiguration extends AbstractConfiguration {
   public boolean isColouringDeathMessages() {
     return configuration.getBoolean("colour-messages.death");
   }
-  
+
   public boolean isColouringJoinMessages() {
     return configuration.getBoolean("colour-messages.join");
   }
@@ -71,6 +71,15 @@ public class jChatConfiguration extends AbstractConfiguration {
 
   public boolean isSupressListNameWarning() {
     return configuration.getBoolean("surpress-list-name-too-long-warning");
+  }
+
+  public boolean isCheckingForUpdates() {
+    return configuration.getBoolean("automatic-updates.enabled");
+  }
+
+  public boolean isAutomaticallyUpdating() {
+    if (configuration.getString("automatic-updates.action").equalsIgnoreCase("install")) return true;
+    return false;
   }
 
   public void logValues() {
