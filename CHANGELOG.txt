@@ -1,5 +1,7 @@
 Changelog for jChat (v1.4.6-SNAPSHOT)
 
+2012-06-14 04:34:36 +0100    add option to enable or disable automatic updates (James Richardson)
+2012-06-14 04:25:08 +0100    Add automatic updating (James Richardson)
 
 v1.4.5
 2012-03-24 23:54:10 +0000    build against latest version of BukkitUtilities fixes MethodNotFound exception (James Richardson)
