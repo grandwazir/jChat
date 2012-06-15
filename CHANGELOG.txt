@@ -1,5 +1,7 @@
 Changelog for jChat (v1.4.9-SNAPSHOT)
 
+2012-06-15 20:50:56 +0100    Updated localisation (James Richardson)
+2012-06-15 20:45:34 +0100    integrating with BukkitUtil 3.1.0 (James Richardson)
 
 v1.4.8
 2012-06-14 05:20:59 +0100    build against latest BukkitUtilities (James Richardson)

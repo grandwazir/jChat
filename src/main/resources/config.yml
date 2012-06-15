@@ -1,7 +1,8 @@
 debugging: false
 automatic-updates:
   enabled: true
-  action: install
+  method: automatic
+  branch: stable
 surpress-list-name-too-long-warning: false
 colour-messages:
   death: true

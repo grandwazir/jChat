@@ -22,6 +22,7 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -31,8 +32,10 @@ import name.richardson.james.bukkit.jchat.jChatHandler;
 import name.richardson.james.bukkit.utilities.command.CommandArgumentException;
 import name.richardson.james.bukkit.utilities.command.CommandPermissionException;
 import name.richardson.james.bukkit.utilities.command.CommandUsageException;
+import name.richardson.james.bukkit.utilities.command.ConsoleCommand;
 import name.richardson.james.bukkit.utilities.command.PluginCommand;
 
+@ConsoleCommand
 public class RefreshCommand extends PluginCommand {
 
   private final jChatHandler handler;
@@ -69,8 +72,10 @@ public class RefreshCommand extends PluginCommand {
   }
 
   public void parseArguments(final String[] arguments, CommandSender sender) throws CommandArgumentException {
-
-    if (arguments.length == 0) {
+    
+    if (sender instanceof ConsoleCommandSender) {
+      player = null;
+    } else if (arguments.length == 0) {
       player = (Player) sender;
     } else {
       String playerName = matchPlayerName(arguments[0]);
