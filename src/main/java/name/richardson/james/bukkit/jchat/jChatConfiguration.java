@@ -22,17 +22,15 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import name.richardson.james.bukkit.utilities.configuration.AbstractConfiguration;
+import name.richardson.james.bukkit.utilities.configuration.PluginConfiguration;
 
-public class jChatConfiguration extends AbstractConfiguration {
-
-  public final static String FILE_NAME = "config.yml";
+public class jChatConfiguration extends PluginConfiguration {
 
   private Set<String> prefixPermissions;
   private Set<String> suffixPermissions;
 
   public jChatConfiguration(jChat plugin) throws IOException {
-    super(plugin, FILE_NAME);
+    super(plugin);
     this.setPrefixPermissions();
     this.setSuffixPermissions();
   }
@@ -65,21 +63,8 @@ public class jChatConfiguration extends AbstractConfiguration {
     return configuration.getBoolean("colour-messages.quit");
   }
 
-  public boolean isDebugging() {
-    return configuration.getBoolean("debugging");
-  }
-
   public boolean isSupressListNameWarning() {
     return configuration.getBoolean("surpress-list-name-too-long-warning");
-  }
-
-  public boolean isCheckingForUpdates() {
-    return configuration.getBoolean("automatic-updates.enabled");
-  }
-
-  public boolean isAutomaticallyUpdating() {
-    if (configuration.getString("automatic-updates.action").equalsIgnoreCase("install")) return true;
-    return false;
   }
 
   public void logValues() {

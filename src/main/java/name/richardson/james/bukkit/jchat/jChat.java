@@ -26,15 +26,12 @@ import java.util.Set;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 
 import name.richardson.james.bukkit.jchat.management.RefreshCommand;
 import name.richardson.james.bukkit.jchat.management.ReloadCommand;
 import name.richardson.james.bukkit.jchat.messages.SystemMessageListener;
 import name.richardson.james.bukkit.utilities.command.CommandManager;
 import name.richardson.james.bukkit.utilities.internals.Logger;
-import name.richardson.james.bukkit.utilities.plugin.SimplePlugin;
 import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
 public class jChat extends SkeletonPlugin {
@@ -70,28 +67,28 @@ public class jChat extends SkeletonPlugin {
     return new HashSet<Player>(Arrays.asList(this.getServer().getOnlinePlayers()));
   }
 
-  private void loadConfiguration() throws IOException {
+  protected void loadConfiguration() throws IOException {
     this.configuration = new jChatConfiguration(this);
     logger.debug("Setting display names for all online players...");
     handler = new jChatHandler(jChat.class, this);
     handler.setPlayerDisplayNames(this.getOnlinePlayers());
   }
 
-  private void registerCommands() {
+  protected void registerCommands() {
     commandManager = new CommandManager(this);
     this.getCommand("jchat").setExecutor(this.commandManager);
     this.commandManager.addCommand(new RefreshCommand(this));
     this.commandManager.addCommand(new ReloadCommand(this));
   }
 
-  private void registerListeners() {
+  protected void registerListeners() {
     displayNameListener = new DisplayNameListener(this);
     this.getServer().getPluginManager().registerEvents(displayNameListener, this);
     systemMessageListener = new SystemMessageListener(this);
     this.getServer().getPluginManager().registerEvents(systemMessageListener, this);
   }
 
-  private void registerPermissions() {
+  protected void registerPermissions() {
     // register prefixes
     Set<String> permissionNames = new LinkedHashSet<String>();
     permissionNames.addAll(configuration.getPrefixPaths());
