@@ -30,8 +30,10 @@ import org.bukkit.permissions.PermissionDefault;
 import name.richardson.james.bukkit.jchat.jChat;
 import name.richardson.james.bukkit.jchat.jChatHandler;
 import name.richardson.james.bukkit.utilities.command.CommandArgumentException;
+import name.richardson.james.bukkit.utilities.command.ConsoleCommand;
 import name.richardson.james.bukkit.utilities.command.PluginCommand;
 
+@ConsoleCommand
 public class ReloadCommand extends PluginCommand {
 
   private final jChatHandler handler;

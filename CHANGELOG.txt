@@ -1,5 +1,6 @@
 Changelog for jChat (v1.4.9-SNAPSHOT)
 
+2012-06-15 21:07:39 +0100    removed failed manifest experiment (James Richardson)
 2012-06-15 21:04:56 +0100    Allow using commands from the console (James Richardson)
 2012-06-15 20:50:56 +0100    Updated localisation (James Richardson)
 2012-06-15 20:45:34 +0100    integrating with BukkitUtil 3.1.0 (James Richardson)
