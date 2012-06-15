@@ -1,5 +1,8 @@
-Changelog for jChat (v1.4.8-SNAPSHOT)
+Changelog for jChat (v1.4.9-SNAPSHOT)
 
+
+v1.4.8
+2012-06-14 05:20:59 +0100    build against latest BukkitUtilities (James Richardson)
 2012-06-14 05:08:20 +0100    sealing BukkitUtilities to prevent conflicts between versions (James Richardson)
 
 v1.4.7

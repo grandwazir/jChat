@@ -35,18 +35,17 @@ import name.richardson.james.bukkit.jchat.messages.SystemMessageListener;
 import name.richardson.james.bukkit.utilities.command.CommandManager;
 import name.richardson.james.bukkit.utilities.internals.Logger;
 import name.richardson.james.bukkit.utilities.plugin.SimplePlugin;
+import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
-public class jChat extends SimplePlugin {
+public class jChat extends SkeletonPlugin {
 
   private final Logger logger = new Logger(jChat.class);
   private final Set<Permission> permissions = new LinkedHashSet<Permission>();
 
   private CommandManager commandManager;
   private jChatConfiguration configuration;
-  private PluginDescriptionFile description;
   private DisplayNameListener displayNameListener;
   private jChatHandler handler;
-  private PluginManager pluginManager;
   private SystemMessageListener systemMessageListener;
 
   public jChat() {
@@ -64,36 +63,7 @@ public class jChat extends SimplePlugin {
   public void onDisable() {
     logger.debug("Reverting display names for all online players...");
     handler.revertPlayerDisplayNames(this.getOnlinePlayers());
-    logger.info(this.getSimpleFormattedMessage("plugin-disabled", description.getFullName()));
-  }
-
-  public void onEnable() {
-    description = getDescription();
-    pluginManager = getServer().getPluginManager();
-
-    try {
-      this.setResourceBundle();
-      this.loadConfiguration();
-      if (configuration.isCheckingForUpdates()) this.update(configuration.isAutomaticallyUpdating());
-      this.setRootPermission();
-      this.registerPermissions();
-      this.registerListeners();
-      this.registerCommands();
-      logger.debug("Setting display names for all online players...");
-      handler = new jChatHandler(jChat.class, this);
-      handler.setPlayerDisplayNames(this.getOnlinePlayers());
-    } catch (final IOException exception) {
-      logger.severe(this.getMessage("configuration-missing"));
-      this.pluginManager.disablePlugin(this);
-    } catch (final IllegalStateException exception) {
-      logger.severe(exception.getMessage());
-      this.pluginManager.disablePlugin(this);
-    } finally {
-      if (!this.pluginManager.isPluginEnabled(this)) return;
-    }
-
-    logger.info(this.getSimpleFormattedMessage("plugin-enabled", description.getFullName()));
-
+    logger.info(this.getSimpleFormattedMessage("plugin-disabled", this.getName()));
   }
 
   private Set<Player> getOnlinePlayers() {
@@ -102,7 +72,9 @@ public class jChat extends SimplePlugin {
 
   private void loadConfiguration() throws IOException {
     this.configuration = new jChatConfiguration(this);
-    if (configuration.isDebugging()) Logger.setDebugging(this, true);
+    logger.debug("Setting display names for all online players...");
+    handler = new jChatHandler(jChat.class, this);
+    handler.setPlayerDisplayNames(this.getOnlinePlayers());
   }
 
   private void registerCommands() {
@@ -114,9 +86,9 @@ public class jChat extends SimplePlugin {
 
   private void registerListeners() {
     displayNameListener = new DisplayNameListener(this);
+    this.getServer().getPluginManager().registerEvents(displayNameListener, this);
     systemMessageListener = new SystemMessageListener(this);
-    pluginManager.registerEvents(displayNameListener, this);
-    pluginManager.registerEvents(systemMessageListener, this);
+    this.getServer().getPluginManager().registerEvents(systemMessageListener, this);
   }
 
   private void registerPermissions() {
