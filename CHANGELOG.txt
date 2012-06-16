@@ -1,5 +1,9 @@
-Changelog for jChat (v1.4.9-SNAPSHOT)
+Changelog for jChat (v1.5.1-SNAPSHOT)
 
+2012-06-16 01:33:23 +0100    RegisterEvents not RegisterListeners - doh (James Richardson)
+
+v1.5.0
+2012-06-16 00:55:40 +0100    Allow the reload command when using the console (James Richardson)
 2012-06-15 21:07:39 +0100    removed failed manifest experiment (James Richardson)
 2012-06-15 21:04:56 +0100    Allow using commands from the console (James Richardson)
 2012-06-15 20:50:56 +0100    Updated localisation (James Richardson)
