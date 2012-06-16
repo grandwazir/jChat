@@ -45,10 +45,6 @@ public class jChat extends SkeletonPlugin {
   private jChatHandler handler;
   private SystemMessageListener systemMessageListener;
 
-  public jChat() {
-    this.logger.setPrefix("[jChat] ");
-  }
-
   public jChatHandler getHandler(Class<?> parentClass) {
     return new jChatHandler(parentClass, this);
   }
@@ -81,7 +77,7 @@ public class jChat extends SkeletonPlugin {
     this.commandManager.addCommand(new ReloadCommand(this));
   }
 
-  protected void registerListeners() {
+  protected void registerEvents() {
     displayNameListener = new DisplayNameListener(this);
     this.getServer().getPluginManager().registerEvents(displayNameListener, this);
     systemMessageListener = new SystemMessageListener(this);
