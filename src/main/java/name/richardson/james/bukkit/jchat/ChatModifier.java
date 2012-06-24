@@ -40,7 +40,7 @@ public class ChatModifier implements Callable<Object> {
     return (jChat) Bukkit.getServer().getPluginManager().getPlugin("jChat");
   }
 
-  private final Player player;
+  private final String playerName;
 
   private final Type type;
 
@@ -48,7 +48,7 @@ public class ChatModifier implements Callable<Object> {
     if (ChatModifier.plugin == null) {
       ChatModifier.getPlugin();
     }
-    this.player = player;
+    this.playerName = player.getName();
     this.type = type;
   }
 
@@ -57,7 +57,7 @@ public class ChatModifier implements Callable<Object> {
   }
 
   private String calcuateTitle() {
-    String title = ChatModifier.plugin.getTitle(this.player, this.type);
+    String title = ChatModifier.plugin.getTitle(this.playerName, this.type);
     if (this.type.equals(Type.SUFFIX)) {
       title = title + ChatColor.WHITE;
     }

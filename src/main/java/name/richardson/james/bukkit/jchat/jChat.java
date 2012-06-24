@@ -148,8 +148,9 @@ public class jChat extends SkeletonPlugin {
     player.setMetadata("chatSuffix", value);
   }
 
-  protected String getTitle(final Player player, final Type type) {
+  protected String getTitle(final String playerName, final Type type) {
     String title = "";
+    final Player player = this.getServer().getPlayerExact(playerName);
     for (final Permission permission : this.getPermissions()) {
       this.logger.debug(String.format("Checking to see if %s has the permission node: %s", player.getName(), permission.getName()));
       if (player.hasPermission(permission) && permission.getName().contains(type.toString().toLowerCase())) {
