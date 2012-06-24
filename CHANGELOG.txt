@@ -1,5 +1,6 @@
-Changelog for jChat (v1.5.2-SNAPSHOT)
+Changelog for jChat (v1.6.0-SNAPSHOT)
 
+2012-06-24 14:53:23 +0100    added metadata support (James Richardson)
 2012-06-24 02:23:52 +0100    clean up (James Richardson)
 
 v1.5.1
