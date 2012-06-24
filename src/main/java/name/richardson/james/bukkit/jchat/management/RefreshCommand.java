@@ -28,7 +28,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import name.richardson.james.bukkit.jchat.jChat;
-import name.richardson.james.bukkit.jchat.jChatHandler;
 import name.richardson.james.bukkit.utilities.command.CommandArgumentException;
 import name.richardson.james.bukkit.utilities.command.CommandPermissionException;
 import name.richardson.james.bukkit.utilities.command.CommandUsageException;
@@ -38,7 +37,6 @@ import name.richardson.james.bukkit.utilities.command.PluginCommand;
 @ConsoleCommand
 public class RefreshCommand extends PluginCommand {
 
-  private final jChatHandler handler;
   private final jChat plugin;
   private final Server server;
 
@@ -49,22 +47,23 @@ public class RefreshCommand extends PluginCommand {
     super(plugin);
     this.server = plugin.getServer();
     this.plugin = plugin;
-    this.handler = plugin.getHandler(RefreshCommand.class);
     this.registerPermissions();
   }
 
   public void execute(CommandSender sender) throws CommandArgumentException, CommandPermissionException, CommandUsageException {
 
     if (sender.hasPermission(this.getPermission(1)) && player.getName().equalsIgnoreCase(sender.getName())) {
-      handler.setPlayerDisplayName(player);
-      sender.sendMessage(ChatColor.GREEN + this.plugin.getMessage("display-name-refreshed"));
+      plugin.invalidatePlayerMetaData(player);
+      plugin.setPlayerDisplayName(player);
+      sender.sendMessage(ChatColor.GREEN + this.getMessage("display-name-refreshed"));
     } else if (player.getName().equalsIgnoreCase(sender.getName())) {
       throw new CommandPermissionException(null, this.getPermission(1));
     }
 
     if (sender.hasPermission(this.getPermission(2)) && !player.getName().equalsIgnoreCase(sender.getName())) {
-      handler.setPlayerDisplayName(player);
-      sender.sendMessage(ChatColor.GREEN + this.plugin.getSimpleFormattedMessage("another-display-name-refreshed", player.getName()));
+      plugin.invalidatePlayerMetaData(player);
+      plugin.setPlayerDisplayName(player);
+      sender.sendMessage(ChatColor.GREEN + this.getSimpleFormattedMessage("another-display-name-refreshed", player.getName()));
     } else if (!player.getName().equalsIgnoreCase(sender.getName())) {
       throw new CommandPermissionException(null, this.getPermission(2));
     }

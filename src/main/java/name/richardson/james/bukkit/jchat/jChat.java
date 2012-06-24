@@ -18,124 +18,222 @@
 package name.richardson.james.bukkit.jchat;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.LazyMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import name.richardson.james.bukkit.jchat.ChatModifier.Type;
 import name.richardson.james.bukkit.jchat.management.RefreshCommand;
 import name.richardson.james.bukkit.jchat.management.ReloadCommand;
 import name.richardson.james.bukkit.jchat.messages.SystemMessageListener;
 import name.richardson.james.bukkit.utilities.command.CommandManager;
-import name.richardson.james.bukkit.utilities.internals.Logger;
+import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
 import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
 public class jChat extends SkeletonPlugin {
 
   /** The jChat configuration. Contains prefixes and suffixes. */
   private jChatConfiguration configuration;
-  
-  /** The API handler for jChat. */
-  private jChatHandler handler;
 
-  /* (non-Javadoc)
-   * @see name.richardson.james.bukkit.utilities.updater.Updatable#getArtifactID()
+  /*
+   * (non-Javadoc)
+   * @see
+   * name.richardson.james.bukkit.utilities.updater.Updatable#getArtifactID()
    */
   public String getArtifactID() {
     return "jchat";
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
    * @see name.richardson.james.bukkit.utilities.updater.Updatable#getGroupID()
    */
   public String getGroupID() {
     return "name.richardson.james.bukkit";
   }
 
-  /**
-   * Gets, and returns, a new jChat API handler.
-   *
-   * @param parentClass the parent class
-   * @return the handler
-   */
-  public jChatHandler getHandler(Class<?> parentClass) {
-    return new jChatHandler(parentClass, this);
+  public void invalidatePlayerMetaData(final Player player) {
+    final String[] keys = { "chatPrefix", "chatSuffix" };
+    for (final String key : keys) {
+      for (final MetadataValue value : player.getMetadata(key)) {
+        value.invalidate();
+      }
+    }
   }
 
-  /**
-   * Gets the jChat configuration.
-   *
-   * @return the jChat configuration
+  /*
+   * (non-Javadoc)
+   * @see
+   * name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#onDisable()
    */
-  public jChatConfiguration getjChatConfiguration() {
-    return this.configuration;
-  }
-
-  /* (non-Javadoc)
-   * @see name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#onDisable()
-   */
+  @Override
   public void onDisable() {
-    logger.debug("Reverting display names for all online players...");
-    handler.revertPlayerDisplayNames(this.getOnlinePlayers());
-    logger.info(this.getSimpleFormattedMessage("plugin-disabled", this.getName()));
+    this.logger.debug("Reverting display names for all online players...");
+    this.revertPlayerDisplayName(this.getServer().getOnlinePlayers());
+    this.logger.info(this.getSimpleFormattedMessage("plugin-disabled", this.getName()));
+  }
+
+  public void reload() throws IOException {
+    this.loadConfiguration();
+    this.establishPlayerDisplayNames();
   }
 
   /**
-   * Gets a set containing all online players.
+   * Revert player display name.
    *
-   * @return online players
+   * @param players the player
    */
-  private Set<Player> getOnlinePlayers() {
-    return new HashSet<Player>(Arrays.asList(this.getServer().getOnlinePlayers()));
+  public void revertPlayerDisplayName(final Player player) {
+    player.setDisplayName(player.getName());
+    player.setPlayerListName(player.getName());
+    logger.debug(String.format("%s's display name has been reset.", player.getName()));
   }
 
-  /* (non-Javadoc)
-   * @see name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#loadConfiguration()
+  /**
+   * Revert player display names.
+   *
+   * @param players the players
    */
+  public void revertPlayerDisplayName(final Player[] players) {
+    for (Player player : players) {
+      revertPlayerDisplayName(player);
+    }
+  }
+
+
+  public void setPlayerDisplayName(final Player player) {
+    final StringBuilder displayNameBuilder = new StringBuilder();
+    displayNameBuilder.append(player.getMetadata("chatPrefix").get(0).asString());
+    displayNameBuilder.append(player.getName());
+    displayNameBuilder.append(player.getMetadata("chatSuffix").get(0).asString());
+    final String displayName = ColourFormatter.replace("&", displayNameBuilder.toString());
+    player.setDisplayName(displayName);
+  }
+
+  /**
+   * Sets the player display names.
+   *
+   * @param players the new player display names
+   */
+  public void setPlayerDisplayName(final Player[] players) {
+    for (Player player : players) {
+      setPlayerDisplayName(player);
+    }
+  }
+
+  private void establishPlayerDisplayNames() {
+    // register initial prefixes
+    this.logger.debug("Setting display names for all online players...");
+    Player[] players = this.getServer().getOnlinePlayers();
+    this.setPlayerMetaData(players);
+    this.setPlayerDisplayName(players);
+  }
+
+  private void setPlayerPrefix(final Player player) {
+    final Callable<Object> title = new ChatModifier(player, ChatModifier.Type.PREFIX);
+    final LazyMetadataValue value = new LazyMetadataValue(this, title);
+    player.setMetadata("chatPrefix", value);
+  }
+
+  private void setPlayerSuffix(final Player player) {
+    final Callable<Object> title = new ChatModifier(player, ChatModifier.Type.SUFFIX);
+    final LazyMetadataValue value = new LazyMetadataValue(this, title);
+    player.setMetadata("chatSuffix", value);
+  }
+
+  protected String getTitle(Player player, Type type) {
+    String title = "";
+    for (final Permission permission : this.getPermissions()) {
+      this.logger.debug(String.format("Checking to see if %s has the permission node: %s", player.getName(), permission.getName()));
+      if (player.hasPermission(permission) && permission.getName().contains(type.toString().toLowerCase())) {
+        title = this.configuration.getTitle(permission.getName().replaceFirst("jchat.", ""));
+        break;
+      }
+    }
+    return ColourFormatter.replace("&", title);     
+  }
+  
+  /*
+   * (non-Javadoc)
+   * @see
+   * name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#loadConfiguration
+   * ()
+   */
+  @Override
   protected void loadConfiguration() throws IOException {
     this.configuration = new jChatConfiguration(this);
-    logger.debug("Setting display names for all online players...");
-    handler = new jChatHandler(jChat.class, this);
-    handler.setPlayerDisplayNames(this.getOnlinePlayers());
   }
 
-  /* (non-Javadoc)
-   * @see name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#registerCommands()
+  /*
+   * (non-Javadoc)
+   * @see
+   * name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#registerCommands
+   * ()
    */
+  @Override
   protected void registerCommands() {
-    CommandManager commandManager = new CommandManager(this);
+    final CommandManager commandManager = new CommandManager(this);
     this.getCommand("jchat").setExecutor(commandManager);
     commandManager.addCommand(new RefreshCommand(this));
     commandManager.addCommand(new ReloadCommand(this));
   }
-
-  /* (non-Javadoc)
-   * @see name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#registerEvents()
+  
+  /*
+   * (non-Javadoc)
+   * @see
+   * name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#registerEvents
+   * ()
    */
+  @Override
   protected void registerEvents() {
     this.getServer().getPluginManager().registerEvents(new DisplayNameListener(this), this);
-    this.getServer().getPluginManager().registerEvents(new SystemMessageListener(this), this);
+    this.getServer().getPluginManager().registerEvents(new SystemMessageListener(this.configuration), this);
   }
-
-  /* (non-Javadoc)
-   * @see name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#registerPermissions()
+  
+  /*
+   * (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#
+   * registerPermissions()
    */
+  @Override
   protected void registerPermissions() {
     // register prefixes
-    Set<String> permissionNames = new LinkedHashSet<String>();
-    permissionNames.addAll(configuration.getPrefixPaths());
-    permissionNames.addAll(configuration.getSuffixPaths());
-    for (String titlePath : permissionNames) {
-      String permissionPath = "jchat." + titlePath;
-      Permission permission = new Permission(permissionPath, this.getSimpleFormattedMessage("jchat-permission-node", this.getDescription().getName()));
+    final Set<String> permissionNames = new LinkedHashSet<String>();
+    permissionNames.addAll(this.configuration.getPrefixPaths());
+    permissionNames.addAll(this.configuration.getSuffixPaths());
+    for (final String titlePath : permissionNames) {
+      final String permissionPath = "jchat." + titlePath;
+      final Permission permission = new Permission(permissionPath, this.getSimpleFormattedMessage("jchat-permission-node", this.getDescription().getName()));
       if (permissionPath.contains(".default")) {
         permission.setDefault(PermissionDefault.TRUE);
       }
       this.addPermission(permission);
+    }
+    this.establishPlayerDisplayNames();
+  }
+  
+  protected void removePlayerMetaData(final Player player) {
+    final String[] keys = { "chatPrefix", "chatSuffix" };
+    for (final String key : keys) {
+      player.removeMetadata(key, this);
+    }
+  }
+
+  
+  protected void setPlayerMetaData(final Player player) {
+    if (!player.hasMetadata("chatPrefix")) this.setPlayerPrefix(player);
+    if (!player.hasMetadata("chatSuffix")) this.setPlayerSuffix(player);
+  }
+  
+  protected void setPlayerMetaData(final Player[] players) {
+    for (Player player : players) {
+      this.setPlayerMetaData(player);
     }
   }
 

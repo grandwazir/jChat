@@ -34,8 +34,8 @@ public class SystemMessageListener implements Listener {
 
   private final jChatConfiguration configuration;
 
-  public SystemMessageListener(jChat plugin) {
-    this.configuration = plugin.getjChatConfiguration();
+  public SystemMessageListener(jChatConfiguration configuration) {
+    this.configuration = configuration;
   }
 
   @EventHandler(priority = EventPriority.LOW)

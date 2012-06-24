@@ -17,18 +17,14 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.jchat.management;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.IOException;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import name.richardson.james.bukkit.jchat.jChat;
-import name.richardson.james.bukkit.jchat.jChatHandler;
 import name.richardson.james.bukkit.utilities.command.CommandArgumentException;
 import name.richardson.james.bukkit.utilities.command.ConsoleCommand;
 import name.richardson.james.bukkit.utilities.command.PluginCommand;
@@ -36,22 +32,22 @@ import name.richardson.james.bukkit.utilities.command.PluginCommand;
 @ConsoleCommand
 public class ReloadCommand extends PluginCommand {
 
-  private final jChatHandler handler;
   private final jChat plugin;
 
   public ReloadCommand(jChat plugin) {
     super(plugin);
     this.plugin = plugin;
-    this.handler = plugin.getHandler(ReloadCommand.class);
     this.registerPermissions();
   }
 
   public void execute(final CommandSender sender) {
-    final Set<Player> players = new HashSet<Player>();
-    players.addAll(Arrays.asList(plugin.getServer().getOnlinePlayers()));
-    plugin.getjChatConfiguration().load();
-    handler.setPlayerDisplayNames(players);
-    sender.sendMessage(ChatColor.GREEN + this.plugin.getSimpleFormattedMessage("reloadcommand-complete", this.plugin.getDescription().getName()));
+    try {
+      plugin.reload();
+      plugin.setPlayerDisplayName(plugin.getServer().getOnlinePlayers());
+      sender.sendMessage(ChatColor.GREEN + this.plugin.getSimpleFormattedMessage("reloadcommand-complete", this.plugin.getDescription().getName()));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public void parseArguments(String[] arguments, CommandSender sender) throws CommandArgumentException {
