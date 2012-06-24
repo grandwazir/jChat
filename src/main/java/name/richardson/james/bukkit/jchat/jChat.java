@@ -36,33 +36,66 @@ import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
 
 public class jChat extends SkeletonPlugin {
 
-  private final Logger logger = new Logger(jChat.class);
-  private final Set<Permission> permissions = new LinkedHashSet<Permission>();
-
-  private CommandManager commandManager;
+  /** The jChat configuration. Contains prefixes and suffixes. */
   private jChatConfiguration configuration;
-  private DisplayNameListener displayNameListener;
+  
+  /** The API handler for jChat. */
   private jChatHandler handler;
-  private SystemMessageListener systemMessageListener;
 
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.updater.Updatable#getArtifactID()
+   */
+  public String getArtifactID() {
+    return "jchat";
+  }
+
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.updater.Updatable#getGroupID()
+   */
+  public String getGroupID() {
+    return "name.richardson.james.bukkit";
+  }
+
+  /**
+   * Gets, and returns, a new jChat API handler.
+   *
+   * @param parentClass the parent class
+   * @return the handler
+   */
   public jChatHandler getHandler(Class<?> parentClass) {
     return new jChatHandler(parentClass, this);
   }
 
+  /**
+   * Gets the jChat configuration.
+   *
+   * @return the jChat configuration
+   */
   public jChatConfiguration getjChatConfiguration() {
     return this.configuration;
   }
 
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#onDisable()
+   */
   public void onDisable() {
     logger.debug("Reverting display names for all online players...");
     handler.revertPlayerDisplayNames(this.getOnlinePlayers());
     logger.info(this.getSimpleFormattedMessage("plugin-disabled", this.getName()));
   }
 
+  /**
+   * Gets a set containing all online players.
+   *
+   * @return online players
+   */
   private Set<Player> getOnlinePlayers() {
     return new HashSet<Player>(Arrays.asList(this.getServer().getOnlinePlayers()));
   }
 
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#loadConfiguration()
+   */
   protected void loadConfiguration() throws IOException {
     this.configuration = new jChatConfiguration(this);
     logger.debug("Setting display names for all online players...");
@@ -70,20 +103,27 @@ public class jChat extends SkeletonPlugin {
     handler.setPlayerDisplayNames(this.getOnlinePlayers());
   }
 
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#registerCommands()
+   */
   protected void registerCommands() {
-    commandManager = new CommandManager(this);
-    this.getCommand("jchat").setExecutor(this.commandManager);
-    this.commandManager.addCommand(new RefreshCommand(this));
-    this.commandManager.addCommand(new ReloadCommand(this));
+    CommandManager commandManager = new CommandManager(this);
+    this.getCommand("jchat").setExecutor(commandManager);
+    commandManager.addCommand(new RefreshCommand(this));
+    commandManager.addCommand(new ReloadCommand(this));
   }
 
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#registerEvents()
+   */
   protected void registerEvents() {
-    displayNameListener = new DisplayNameListener(this);
-    this.getServer().getPluginManager().registerEvents(displayNameListener, this);
-    systemMessageListener = new SystemMessageListener(this);
-    this.getServer().getPluginManager().registerEvents(systemMessageListener, this);
+    this.getServer().getPluginManager().registerEvents(new DisplayNameListener(this), this);
+    this.getServer().getPluginManager().registerEvents(new SystemMessageListener(this), this);
   }
 
+  /* (non-Javadoc)
+   * @see name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#registerPermissions()
+   */
   protected void registerPermissions() {
     // register prefixes
     Set<String> permissionNames = new LinkedHashSet<String>();
@@ -96,16 +136,7 @@ public class jChat extends SkeletonPlugin {
         permission.setDefault(PermissionDefault.TRUE);
       }
       this.addPermission(permission);
-      permissions.add(permission);
     }
-  }
-
-  public String getArtifactID() {
-    return "jchat";
-  }
-
-  public String getGroupID() {
-    return "name.richardson.james.bukkit";
   }
 
 }
