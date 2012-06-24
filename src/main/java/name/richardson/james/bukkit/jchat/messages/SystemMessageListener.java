@@ -33,36 +33,38 @@ public class SystemMessageListener implements Listener {
 
   private final jChatConfiguration configuration;
 
-  public SystemMessageListener(jChatConfiguration configuration) {
+  public SystemMessageListener(final jChatConfiguration configuration) {
     this.configuration = configuration;
   }
 
   @EventHandler(priority = EventPriority.LOW)
-  public void onEntityDeath(EntityDeathEvent event) {
-    if (event instanceof PlayerDeathEvent && configuration.isColouringDeathMessages()) {
-      PlayerDeathEvent deathEvent = (PlayerDeathEvent) event;
-      Player player = (Player) deathEvent.getEntity();
-      deathEvent.setDeathMessage((colourMessage(player, deathEvent.getDeathMessage())));
+  public void onEntityDeath(final EntityDeathEvent event) {
+    if ((event instanceof PlayerDeathEvent) && this.configuration.isColouringDeathMessages()) {
+      final PlayerDeathEvent deathEvent = (PlayerDeathEvent) event;
+      final Player player = deathEvent.getEntity();
+      deathEvent.setDeathMessage((this.colourMessage(player, deathEvent.getDeathMessage())));
     }
   }
 
   @EventHandler(priority = EventPriority.LOW)
-  public void onPlayerJoin(PlayerJoinEvent event) {
-    if (!configuration.isColouringJoinMessages())
+  public void onPlayerJoin(final PlayerJoinEvent event) {
+    if (!this.configuration.isColouringJoinMessages()) {
       return;
-    Player player = event.getPlayer();
-    event.setJoinMessage((colourMessage(player, event.getJoinMessage())));
+    }
+    final Player player = event.getPlayer();
+    event.setJoinMessage((this.colourMessage(player, event.getJoinMessage())));
   }
 
   @EventHandler(priority = EventPriority.LOW)
-  public void onPlayerQuit(PlayerQuitEvent event) {
-    if (!configuration.isColouringQuitMessages())
+  public void onPlayerQuit(final PlayerQuitEvent event) {
+    if (!this.configuration.isColouringQuitMessages()) {
       return;
-    Player player = event.getPlayer();
-    event.setQuitMessage((colourMessage(player, event.getQuitMessage())));
+    }
+    final Player player = event.getPlayer();
+    event.setQuitMessage((this.colourMessage(player, event.getQuitMessage())));
   }
 
-  private String colourMessage(Player player, String message) {
+  private String colourMessage(final Player player, final String message) {
     return message.replace(player.getName(), player.getDisplayName() + ChatColor.YELLOW);
   }
 

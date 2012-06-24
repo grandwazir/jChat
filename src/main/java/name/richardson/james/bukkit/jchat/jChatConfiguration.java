@@ -29,94 +29,94 @@ public class jChatConfiguration extends PluginConfiguration {
   private Set<String> prefixPermissions;
   private Set<String> suffixPermissions;
 
-  public jChatConfiguration(jChat plugin) throws IOException {
+  public jChatConfiguration(final jChat plugin) throws IOException {
     super(plugin);
     this.setPrefixPermissions();
     this.setSuffixPermissions();
   }
 
   public Set<String> getPrefixPaths() {
-    return Collections.unmodifiableSet(prefixPermissions);
+    return Collections.unmodifiableSet(this.prefixPermissions);
   }
 
   public Set<String> getSuffixPaths() {
-    return Collections.unmodifiableSet(suffixPermissions);
+    return Collections.unmodifiableSet(this.suffixPermissions);
   }
 
-  public String getTitle(String path) {
-    return configuration.getString(path);
+  public String getTitle(final String path) {
+    return this.configuration.getString(path);
   }
 
   public boolean isColouringDeathMessages() {
-    return configuration.getBoolean("colour-messages.death");
+    return this.configuration.getBoolean("colour-messages.death");
   }
 
   public boolean isColouringJoinMessages() {
-    return configuration.getBoolean("colour-messages.join");
+    return this.configuration.getBoolean("colour-messages.join");
   }
 
   public boolean isColouringListNames() {
-    return configuration.getBoolean("colour-messages.list");
+    return this.configuration.getBoolean("colour-messages.list");
   }
 
   public boolean isColouringQuitMessages() {
-    return configuration.getBoolean("colour-messages.quit");
+    return this.configuration.getBoolean("colour-messages.quit");
   }
 
   public boolean isSupressListNameWarning() {
-    return configuration.getBoolean("surpress-list-name-too-long-warning");
+    return this.configuration.getBoolean("surpress-list-name-too-long-warning");
   }
 
   public void logValues() {
-    logger.config(String.format("debugging : %b", this.isDebugging()));
-    logger.config(String.format("colour-messages.death : %b", this.isColouringDeathMessages()));
-    logger.config(String.format("colour-messages.join : %b", this.isColouringJoinMessages()));
-    logger.config(String.format("colour-messages.quit : %b", this.isColouringDeathMessages()));
-    logger.config(String.format("surpress-list-name-too-long-warning : %b", this.isSupressListNameWarning()));
-    for (String path : getPrefixPaths()) {
-      logger.config(String.format("%s : %s", path, this.getTitle(path)));
+    this.logger.config(String.format("debugging : %b", this.isDebugging()));
+    this.logger.config(String.format("colour-messages.death : %b", this.isColouringDeathMessages()));
+    this.logger.config(String.format("colour-messages.join : %b", this.isColouringJoinMessages()));
+    this.logger.config(String.format("colour-messages.quit : %b", this.isColouringDeathMessages()));
+    this.logger.config(String.format("surpress-list-name-too-long-warning : %b", this.isSupressListNameWarning()));
+    for (final String path : this.getPrefixPaths()) {
+      this.logger.config(String.format("%s : %s", path, this.getTitle(path)));
     }
-    for (String path : getSuffixPaths()) {
-      logger.config(String.format("%s : %s", path, this.getTitle(path)));
+    for (final String path : this.getSuffixPaths()) {
+      this.logger.config(String.format("%s : %s", path, this.getTitle(path)));
     }
   }
 
   @Override
   public void setDefaults() throws IOException {
-    logger.debug(String.format("Apply default configuration."));
+    this.logger.debug(String.format("Apply default configuration."));
     final org.bukkit.configuration.file.YamlConfiguration defaults = this.getDefaults();
-    configuration.setDefaults(defaults);
-    configuration.options().copyDefaults(true);
+    this.configuration.setDefaults(defaults);
+    this.configuration.options().copyDefaults(true);
     // check if the default prefix and suffix is there.
     // we do this to avoid reordering the list
-    if (!configuration.isConfigurationSection("prefix")) {
-      configuration.createSection("prefix");
-      configuration.getConfigurationSection("prefix").set("default", "&DARK_BLUE");
+    if (!this.configuration.isConfigurationSection("prefix")) {
+      this.configuration.createSection("prefix");
+      this.configuration.getConfigurationSection("prefix").set("default", "&DARK_BLUE");
     }
     // now check the suffixes
-    if (!configuration.isConfigurationSection("suffix")) {
-      configuration.createSection("suffix");
-      configuration.getConfigurationSection("suffix").set("default", "");
+    if (!this.configuration.isConfigurationSection("suffix")) {
+      this.configuration.createSection("suffix");
+      this.configuration.getConfigurationSection("suffix").set("default", "");
     }
     this.save();
   }
 
   private void setPrefixPermissions() {
-    Set<String> set = new LinkedHashSet<String>();
-    for (String prefix : configuration.getConfigurationSection("prefix").getKeys(true)) {
-      String title = "prefix." + prefix;
+    final Set<String> set = new LinkedHashSet<String>();
+    for (final String prefix : this.configuration.getConfigurationSection("prefix").getKeys(true)) {
+      final String title = "prefix." + prefix;
       set.add(title);
     }
-    prefixPermissions = set;
+    this.prefixPermissions = set;
   }
 
   private void setSuffixPermissions() {
-    Set<String> set = new LinkedHashSet<String>();
-    for (String suffix : configuration.getConfigurationSection("suffix").getKeys(true)) {
-      String title = "suffix." + suffix;
+    final Set<String> set = new LinkedHashSet<String>();
+    for (final String suffix : this.configuration.getConfigurationSection("suffix").getKeys(true)) {
+      final String title = "suffix." + suffix;
       set.add(title);
     }
-    suffixPermissions = set;
+    this.suffixPermissions = set;
   }
 
 }

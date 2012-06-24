@@ -34,7 +34,7 @@ public class ReloadCommand extends PluginCommand {
 
   private final jChat plugin;
 
-  public ReloadCommand(jChat plugin) {
+  public ReloadCommand(final jChat plugin) {
     super(plugin);
     this.plugin = plugin;
     this.registerPermissions();
@@ -42,22 +42,22 @@ public class ReloadCommand extends PluginCommand {
 
   public void execute(final CommandSender sender) {
     try {
-      plugin.reload();
-      plugin.setPlayerDisplayName(plugin.getServer().getOnlinePlayers());
+      this.plugin.reload();
+      this.plugin.setPlayerDisplayName(this.plugin.getServer().getOnlinePlayers());
       sender.sendMessage(ChatColor.GREEN + this.plugin.getSimpleFormattedMessage("reloadcommand-complete", this.plugin.getDescription().getName()));
-    } catch (IOException e) {
+    } catch (final IOException e) {
       e.printStackTrace();
     }
   }
 
-  public void parseArguments(String[] arguments, CommandSender sender) throws CommandArgumentException {
+  public void parseArguments(final String[] arguments, final CommandSender sender) throws CommandArgumentException {
     return;
   }
 
   private void registerPermissions() {
-    final String prefix = plugin.getDescription().getName().toLowerCase() + ".";
+    final String prefix = this.plugin.getDescription().getName().toLowerCase() + ".";
     // create the base permission
-    Permission base = new Permission(prefix + this.getName(), plugin.getMessage("reloadcommand-permission-description"), PermissionDefault.TRUE);
+    final Permission base = new Permission(prefix + this.getName(), this.plugin.getMessage("reloadcommand-permission-description"), PermissionDefault.TRUE);
     this.addPermission(base);
   }
 

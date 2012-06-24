@@ -75,7 +75,9 @@ public class jChat extends SkeletonPlugin {
   @Override
   public void onDisable() {
     this.logger.debug("Reverting display names for all online players...");
-    this.revertPlayerDisplayName(this.getServer().getOnlinePlayers());
+    Player[] players = this.getServer().getOnlinePlayers();
+    this.revertPlayerDisplayName(players);
+    this.removePlayerMetaData(players);
     this.logger.info(this.getSimpleFormattedMessage("plugin-disabled", this.getName()));
   }
 
@@ -86,26 +88,25 @@ public class jChat extends SkeletonPlugin {
 
   /**
    * Revert player display name.
-   *
+   * 
    * @param players the player
    */
   public void revertPlayerDisplayName(final Player player) {
     player.setDisplayName(player.getName());
     player.setPlayerListName(player.getName());
-    logger.debug(String.format("%s's display name has been reset.", player.getName()));
+    this.logger.debug(String.format("%s's display name has been reset.", player.getName()));
   }
 
   /**
    * Revert player display names.
-   *
+   * 
    * @param players the players
    */
   public void revertPlayerDisplayName(final Player[] players) {
-    for (Player player : players) {
-      revertPlayerDisplayName(player);
+    for (final Player player : players) {
+      this.revertPlayerDisplayName(player);
     }
   }
-
 
   public void setPlayerDisplayName(final Player player) {
     final StringBuilder displayNameBuilder = new StringBuilder();
@@ -118,19 +119,19 @@ public class jChat extends SkeletonPlugin {
 
   /**
    * Sets the player display names.
-   *
+   * 
    * @param players the new player display names
    */
   public void setPlayerDisplayName(final Player[] players) {
-    for (Player player : players) {
-      setPlayerDisplayName(player);
+    for (final Player player : players) {
+      this.setPlayerDisplayName(player);
     }
   }
 
   private void establishPlayerDisplayNames() {
     // register initial prefixes
     this.logger.debug("Setting display names for all online players...");
-    Player[] players = this.getServer().getOnlinePlayers();
+    final Player[] players = this.getServer().getOnlinePlayers();
     this.setPlayerMetaData(players);
     this.setPlayerDisplayName(players);
   }
@@ -147,7 +148,7 @@ public class jChat extends SkeletonPlugin {
     player.setMetadata("chatSuffix", value);
   }
 
-  protected String getTitle(Player player, Type type) {
+  protected String getTitle(final Player player, final Type type) {
     String title = "";
     for (final Permission permission : this.getPermissions()) {
       this.logger.debug(String.format("Checking to see if %s has the permission node: %s", player.getName(), permission.getName()));
@@ -156,9 +157,9 @@ public class jChat extends SkeletonPlugin {
         break;
       }
     }
-    return ColourFormatter.replace("&", title);     
+    return ColourFormatter.replace("&", title);
   }
-  
+
   /*
    * (non-Javadoc)
    * @see
@@ -183,7 +184,7 @@ public class jChat extends SkeletonPlugin {
     commandManager.addCommand(new RefreshCommand(this));
     commandManager.addCommand(new ReloadCommand(this));
   }
-  
+
   /*
    * (non-Javadoc)
    * @see
@@ -195,7 +196,7 @@ public class jChat extends SkeletonPlugin {
     this.getServer().getPluginManager().registerEvents(new DisplayNameListener(this), this);
     this.getServer().getPluginManager().registerEvents(new SystemMessageListener(this.configuration), this);
   }
-  
+
   /*
    * (non-Javadoc)
    * @see name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#
@@ -217,22 +218,31 @@ public class jChat extends SkeletonPlugin {
     }
     this.establishPlayerDisplayNames();
   }
-  
+
   protected void removePlayerMetaData(final Player player) {
     final String[] keys = { "chatPrefix", "chatSuffix" };
     for (final String key : keys) {
       player.removeMetadata(key, this);
     }
   }
-
   
-  protected void setPlayerMetaData(final Player player) {
-    if (!player.hasMetadata("chatPrefix")) this.setPlayerPrefix(player);
-    if (!player.hasMetadata("chatSuffix")) this.setPlayerSuffix(player);
+  protected void removePlayerMetaData(final Player[] players) {
+    for (final Player player : players) {
+      removePlayerMetaData(player);
+    }
   }
-  
+
+  protected void setPlayerMetaData(final Player player) {
+    if (!player.hasMetadata("chatPrefix")) {
+      this.setPlayerPrefix(player);
+    }
+    if (!player.hasMetadata("chatSuffix")) {
+      this.setPlayerSuffix(player);
+    }
+  }
+
   protected void setPlayerMetaData(final Player[] players) {
-    for (Player player : players) {
+    for (final Player player : players) {
       this.setPlayerMetaData(player);
     }
   }

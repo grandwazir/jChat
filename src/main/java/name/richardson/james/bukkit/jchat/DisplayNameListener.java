@@ -31,44 +31,43 @@ import org.bukkit.event.player.PlayerJoinEvent;
  * component's <code>addDisplayNameListener<code> method. When
  * the displayName event occurs, that object's appropriate
  * method is invoked.
- *
+ * 
  * @see DisplayNameEvent
  */
 public class DisplayNameListener implements Listener {
 
   /** The jChat plugin */
   private final jChat plugin;
-  
+
   /**
    * Instantiates a new listener.
-   *
+   * 
    * @param plugin the plugin
    */
-  public DisplayNameListener(jChat plugin) {
+  public DisplayNameListener(final jChat plugin) {
     this.plugin = plugin;
   }
 
   /**
    * Update the player's display name when they join the server.
-   *
+   * 
    * @param event the event
    */
   @EventHandler(priority = EventPriority.LOW)
-  public void onPlayerJoin(PlayerJoinEvent event) {
-    plugin.setPlayerMetaData(event.getPlayer());
-    plugin.setPlayerDisplayName(event.getPlayer());
+  public void onPlayerJoin(final PlayerJoinEvent event) {
+    this.plugin.setPlayerMetaData(event.getPlayer());
+    this.plugin.setPlayerDisplayName(event.getPlayer());
   }
 
   /**
    * Update the player's display name when they change worlds.
-   *
+   * 
    * @param event the event
    */
   @EventHandler(priority = EventPriority.LOW)
-  public void PlayerChangedWorld(PlayerChangedWorldEvent event) {
-    plugin.invalidatePlayerMetaData(event.getPlayer());
-    plugin.setPlayerDisplayName(event.getPlayer());
+  public void PlayerChangedWorld(final PlayerChangedWorldEvent event) {
+    this.plugin.invalidatePlayerMetaData(event.getPlayer());
+    this.plugin.setPlayerDisplayName(event.getPlayer());
   }
-
 
 }
