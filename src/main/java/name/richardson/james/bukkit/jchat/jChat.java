@@ -50,14 +50,6 @@ public class jChat extends SkeletonPlugin {
     return "jchat";
   }
 
-  /*
-   * (non-Javadoc)
-   * @see name.richardson.james.bukkit.utilities.updater.Updatable#getGroupID()
-   */
-  public String getGroupID() {
-    return "name.richardson.james.bukkit";
-  }
-
   public void invalidatePlayerMetaData(final Player player) {
     final String[] keys = { "chatPrefix", "chatSuffix" };
     for (final String key : keys) {
@@ -248,4 +240,8 @@ public class jChat extends SkeletonPlugin {
     }
   }
 
+  protected void setupMetrics() throws IOException {
+    if (this.configuration.isCollectingStats()) new MetricsListener(this);
+  }
+  
 }
