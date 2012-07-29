@@ -1,5 +1,6 @@
 Changelog for jChat (v1.6.1-SNAPSHOT)
 
+2012-06-24 16:50:39 +0100    fix a possible memory leak (James Richardson)
 
 v1.6.0
 2012-06-24 15:35:57 +0100    updating pom and changelog (James Richardson)
