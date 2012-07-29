@@ -1,5 +1,7 @@
 Changelog for jChat (v1.6.1-SNAPSHOT)
 
+2012-07-29 17:48:34 +0100    implement metrics (James Richardson)
+2012-07-29 17:46:40 +0100    update to use latest bukkitutilities (James Richardson)
 2012-06-24 16:50:39 +0100    fix a possible memory leak (James Richardson)
 
 v1.6.0

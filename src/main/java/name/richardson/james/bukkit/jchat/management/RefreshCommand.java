@@ -19,7 +19,6 @@ package name.richardson.james.bukkit.jchat.management;
 
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -55,7 +54,7 @@ public class RefreshCommand extends PluginCommand {
     if (sender.hasPermission(this.getPermission(1)) && this.player.getName().equalsIgnoreCase(sender.getName())) {
       this.plugin.invalidatePlayerMetaData(this.player);
       this.plugin.setPlayerDisplayName(this.player);
-      sender.sendMessage(ChatColor.GREEN + this.getMessage("display-name-refreshed"));
+      sender.sendMessage(this.getMessage("display-name-refreshed"));
     } else if (this.player.getName().equalsIgnoreCase(sender.getName())) {
       throw new CommandPermissionException(null, this.getPermission(1));
     }
@@ -63,7 +62,7 @@ public class RefreshCommand extends PluginCommand {
     if (sender.hasPermission(this.getPermission(2)) && !this.player.getName().equalsIgnoreCase(sender.getName())) {
       this.plugin.invalidatePlayerMetaData(this.player);
       this.plugin.setPlayerDisplayName(this.player);
-      sender.sendMessage(ChatColor.GREEN + this.getSimpleFormattedMessage("another-display-name-refreshed", this.player.getName()));
+      sender.sendMessage(this.getSimpleFormattedMessage("another-display-name-refreshed", this.player.getName()));
     } else if (!this.player.getName().equalsIgnoreCase(sender.getName())) {
       throw new CommandPermissionException(null, this.getPermission(2));
     }
@@ -83,7 +82,7 @@ public class RefreshCommand extends PluginCommand {
 
     // check to see if we have a target player
     if (this.player == null) {
-      throw new CommandArgumentException(this.plugin.getMessage("player-not-online"), this.plugin.getMessage("player-name-matching"));
+      throw new CommandArgumentException(this.getMessage("player-not-online"), this.getMessage("player-name-matching"));
     }
 
   }
@@ -99,17 +98,17 @@ public class RefreshCommand extends PluginCommand {
 
   private void registerPermissions() {
     final String prefix = this.plugin.getDescription().getName().toLowerCase() + ".";
-    final String wildcardDescription = String.format(this.plugin.getMessage("wildcard-permission-description"), this.getName());
+    final String wildcardDescription = String.format(this.plugin.getMessage("plugincommand.wildcard-permission-description"), this.getName());
     // create the wildcard permission
     final Permission wildcard = new Permission(prefix + this.getName() + ".*", wildcardDescription, PermissionDefault.OP);
     wildcard.addParent(this.plugin.getRootPermission(), true);
     this.addPermission(wildcard);
     // create the base permission
-    final Permission base = new Permission(prefix + this.getName(), this.plugin.getMessage("refreshcommand-permission-description"), PermissionDefault.TRUE);
+    final Permission base = new Permission(prefix + this.getName(), this.getMessage("permission-description"), PermissionDefault.TRUE);
     base.addParent(wildcard, true);
     this.addPermission(base);
     // add ability to set other user's homes
-    final Permission others = new Permission(prefix + this.getName() + "." + this.plugin.getMessage("refreshcommand-permission-others"), this.plugin.getMessage("refreshcommand-permission-others-description"), PermissionDefault.OP);
+    final Permission others = new Permission(prefix + this.getName() + "." + this.getMessage("permission-others"), this.getMessage("permission-others-description"), PermissionDefault.OP);
     others.addParent(wildcard, true);
     this.addPermission(others);
   }

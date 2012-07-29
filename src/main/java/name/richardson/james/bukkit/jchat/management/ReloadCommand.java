@@ -44,7 +44,7 @@ public class ReloadCommand extends PluginCommand {
     try {
       this.plugin.reload();
       this.plugin.setPlayerDisplayName(this.plugin.getServer().getOnlinePlayers());
-      sender.sendMessage(ChatColor.GREEN + this.plugin.getSimpleFormattedMessage("reloadcommand-complete", this.plugin.getDescription().getName()));
+      sender.sendMessage(ChatColor.GREEN + this.getSimpleFormattedMessage("complete", this.plugin.getDescription().getName()));
     } catch (final IOException e) {
       e.printStackTrace();
     }
@@ -57,7 +57,7 @@ public class ReloadCommand extends PluginCommand {
   private void registerPermissions() {
     final String prefix = this.plugin.getDescription().getName().toLowerCase() + ".";
     // create the base permission
-    final Permission base = new Permission(prefix + this.getName(), this.plugin.getMessage("reloadcommand-permission-description"), PermissionDefault.TRUE);
+    final Permission base = new Permission(prefix + this.getName(), this.getMessage("permission-description"), PermissionDefault.OP);
     this.addPermission(base);
   }
 
