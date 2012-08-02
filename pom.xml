@@ -5,7 +5,7 @@
   <name>jChat</name>
   <description>Simple chat prefix and suffixes</description>
   <url>http://grandwazir.github.com/${project.name}/</url>
-  
+
   <parent>
      <groupId>name.richardson.james.bukkit</groupId>
      <artifactId>parent-pom</artifactId>
