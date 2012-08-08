@@ -18,7 +18,9 @@
 package name.richardson.james.bukkit.jchat;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -34,13 +36,15 @@ import name.richardson.james.bukkit.jchat.management.ReloadCommand;
 import name.richardson.james.bukkit.jchat.messages.SystemMessageListener;
 import name.richardson.james.bukkit.utilities.command.CommandManager;
 import name.richardson.james.bukkit.utilities.formatters.ColourFormatter;
-import name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin;
+import name.richardson.james.bukkit.utilities.plugin.AbstractPlugin;
 
-public class jChat extends SkeletonPlugin {
+public class jChat extends AbstractPlugin {
 
   /** The jChat configuration. Contains prefixes and suffixes. */
   private jChatConfiguration configuration;
 
+  private final List<Permission> permissions = new ArrayList<Permission>();
+  
   /*
    * (non-Javadoc)
    * @see
@@ -66,11 +70,9 @@ public class jChat extends SkeletonPlugin {
    */
   @Override
   public void onDisable() {
-    this.logger.debug("Reverting display names for all online players...");
     Player[] players = this.getServer().getOnlinePlayers();
     this.revertPlayerDisplayName(players);
     this.removePlayerMetaData(players);
-    this.logger.info(this.getSimpleFormattedMessage("plugin-disabled", this.getName()));
   }
 
   public void reload() throws IOException {
@@ -86,7 +88,6 @@ public class jChat extends SkeletonPlugin {
   public void revertPlayerDisplayName(final Player player) {
     player.setDisplayName(player.getName());
     player.setPlayerListName(player.getName());
-    this.logger.debug(String.format("%s's display name has been reset.", player.getName()));
   }
 
   /**
@@ -121,21 +122,19 @@ public class jChat extends SkeletonPlugin {
   }
 
   private void establishPlayerDisplayNames() {
-    // register initial prefixes
-    this.logger.debug("Setting display names for all online players...");
     final Player[] players = this.getServer().getOnlinePlayers();
     this.setPlayerMetaData(players);
     this.setPlayerDisplayName(players);
   }
 
   private void setPlayerPrefix(final Player player) {
-    final Callable<Object> title = new ChatModifier(player, ChatModifier.Type.PREFIX);
+    final Callable<Object> title = new ChatModifier(this, player, ChatModifier.Type.PREFIX);
     final LazyMetadataValue value = new LazyMetadataValue(this, title);
     player.setMetadata("chatPrefix", value);
   }
 
   private void setPlayerSuffix(final Player player) {
-    final Callable<Object> title = new ChatModifier(player, ChatModifier.Type.SUFFIX);
+    final Callable<Object> title = new ChatModifier(this, player, ChatModifier.Type.SUFFIX);
     final LazyMetadataValue value = new LazyMetadataValue(this, title);
     player.setMetadata("chatSuffix", value);
   }
@@ -143,14 +142,13 @@ public class jChat extends SkeletonPlugin {
   protected String getTitle(final String playerName, final Type type) {
     String title = "";
     final Player player = this.getServer().getPlayerExact(playerName);
-    for (final Permission permission : this.getPermissions()) {
-      this.logger.debug(String.format("Checking to see if %s has the permission node: %s", player.getName(), permission.getName()));
-      if (player.hasPermission(permission) && permission.getName().contains(type.toString().toLowerCase())) {
+    for (final Permission permission : this.permissions) {
+      if (this.getPermissionManager().hasPlayerPermission(player, permission) && permission.getName().contains(type.toString().toLowerCase())) {
         title = this.configuration.getTitle(permission.getName().replaceFirst("jchat.", ""));
         break;
       }
     }
-    return ColourFormatter.replace("&", title);
+    return ColourFormatter.replace(title);
   }
 
   /*
@@ -161,7 +159,24 @@ public class jChat extends SkeletonPlugin {
    */
   @Override
   protected void loadConfiguration() throws IOException {
+    super.loadConfiguration();
     this.configuration = new jChatConfiguration(this);
+    // register prefixes
+    final List<String> permissionNames = new ArrayList<String>();
+    permissionNames.addAll(this.configuration.getPrefixPaths());
+    permissionNames.addAll(this.configuration.getSuffixPaths());
+    for (final String titlePath : permissionNames) {
+      final String permissionPath = "jchat." + titlePath;
+      final Permission permission = new Permission(
+          permissionPath, 
+          this.getLocalisation().getMessage(this, "permission-description"),
+          PermissionDefault.FALSE
+      );
+      if (permissionPath.contains(".default")) permission.setDefault(PermissionDefault.TRUE);
+      this.permissions.add(permission);
+      this.getPermissionManager().addPermission(permission, false);
+    }
+    this.establishPlayerDisplayNames();
   }
 
   /*
@@ -185,9 +200,9 @@ public class jChat extends SkeletonPlugin {
    * ()
    */
   @Override
-  protected void registerEvents() {
-    this.getServer().getPluginManager().registerEvents(new DisplayNameListener(this), this);
-    this.getServer().getPluginManager().registerEvents(new SystemMessageListener(this.configuration), this);
+  protected void registerListeners() {
+    new DisplayNameListener(this);
+    new SystemMessageListener(this, this.configuration);
   }
 
   /*
@@ -195,22 +210,6 @@ public class jChat extends SkeletonPlugin {
    * @see name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#
    * registerPermissions()
    */
-  @Override
-  protected void registerPermissions() {
-    // register prefixes
-    final Set<String> permissionNames = new LinkedHashSet<String>();
-    permissionNames.addAll(this.configuration.getPrefixPaths());
-    permissionNames.addAll(this.configuration.getSuffixPaths());
-    for (final String titlePath : permissionNames) {
-      final String permissionPath = "jchat." + titlePath;
-      final Permission permission = new Permission(permissionPath, this.getSimpleFormattedMessage("jchat-permission-node", this.getDescription().getName()));
-      if (permissionPath.contains(".default")) {
-        permission.setDefault(PermissionDefault.TRUE);
-      }
-      this.addPermission(permission);
-    }
-    this.establishPlayerDisplayNames();
-  }
 
   protected void removePlayerMetaData(final Player player) {
     final String[] keys = { "chatPrefix", "chatSuffix" };
@@ -238,10 +237,6 @@ public class jChat extends SkeletonPlugin {
     for (final Player player : players) {
       this.setPlayerMetaData(player);
     }
-  }
-
-  protected void setupMetrics() throws IOException {
-    if (this.configuration.isCollectingStats()) new MetricsListener(this);
   }
   
 }

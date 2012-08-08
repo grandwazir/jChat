@@ -46,6 +46,7 @@ public class DisplayNameListener implements Listener {
    */
   public DisplayNameListener(final jChat plugin) {
     this.plugin = plugin;
+    this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
   /**

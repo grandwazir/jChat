@@ -4,7 +4,6 @@ automatic-updates:
   enabled: true
   method: notify
   branch: stable
-surpress-list-name-too-long-warning: false
 colour-messages:
   death: true
   join: true

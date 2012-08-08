@@ -27,50 +27,55 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import name.richardson.james.bukkit.jchat.jChat;
+import name.richardson.james.bukkit.utilities.command.AbstractCommand;
 import name.richardson.james.bukkit.utilities.command.CommandArgumentException;
 import name.richardson.james.bukkit.utilities.command.CommandPermissionException;
 import name.richardson.james.bukkit.utilities.command.CommandUsageException;
 import name.richardson.james.bukkit.utilities.command.ConsoleCommand;
-import name.richardson.james.bukkit.utilities.command.PluginCommand;
 
 @ConsoleCommand
-public class RefreshCommand extends PluginCommand {
+public class RefreshCommand extends AbstractCommand {
 
   private final jChat plugin;
+  
   private final Server server;
+  
+  private Permission own;
+
+  private Permission others;
+
 
   // The player who is the target of this command
   private Player player;
 
   public RefreshCommand(final jChat plugin) {
-    super(plugin);
+    super(plugin, false);
     this.server = plugin.getServer();
     this.plugin = plugin;
-    this.registerPermissions();
   }
 
   public void execute(final CommandSender sender) throws CommandArgumentException, CommandPermissionException, CommandUsageException {
-
-    if (sender.hasPermission(this.getPermission(1)) && this.player.getName().equalsIgnoreCase(sender.getName())) {
-      this.plugin.invalidatePlayerMetaData(this.player);
-      this.plugin.setPlayerDisplayName(this.player);
-      sender.sendMessage(this.getMessage("display-name-refreshed"));
-    } else if (this.player.getName().equalsIgnoreCase(sender.getName())) {
-      throw new CommandPermissionException(null, this.getPermission(1));
+    try {
+      if (sender.hasPermission(own) && this.player.getName().equalsIgnoreCase(sender.getName())) {
+        this.plugin.invalidatePlayerMetaData(this.player);
+        this.plugin.setPlayerDisplayName(this.player);
+        sender.sendMessage(this.getLocalisation().getMessage(this, ("display-name-refreshed")));
+      } else if (this.player.getName().equalsIgnoreCase(sender.getName())) {
+        throw new CommandPermissionException(null, own);
+      }
+      if (sender.hasPermission(others) && !this.player.getName().equalsIgnoreCase(sender.getName())) {
+        this.plugin.invalidatePlayerMetaData(this.player);
+        this.plugin.setPlayerDisplayName(this.player);
+        sender.sendMessage(this.getLocalisation().getMessage(this, "another-display-name-refreshed", this.player.getName()));
+      } else if (!this.player.getName().equalsIgnoreCase(sender.getName())) {
+        throw new CommandPermissionException(null, others);
+      }
+    } finally {
+      this.player = null;
     }
-
-    if (sender.hasPermission(this.getPermission(2)) && !this.player.getName().equalsIgnoreCase(sender.getName())) {
-      this.plugin.invalidatePlayerMetaData(this.player);
-      this.plugin.setPlayerDisplayName(this.player);
-      sender.sendMessage(this.getSimpleFormattedMessage("another-display-name-refreshed", this.player.getName()));
-    } else if (!this.player.getName().equalsIgnoreCase(sender.getName())) {
-      throw new CommandPermissionException(null, this.getPermission(2));
-    }
-
   }
 
   public void parseArguments(final String[] arguments, final CommandSender sender) throws CommandArgumentException {
-
     if (sender instanceof ConsoleCommandSender) {
       this.player = null;
     } else if (arguments.length == 0) {
@@ -79,12 +84,10 @@ public class RefreshCommand extends PluginCommand {
       final String playerName = this.matchPlayerName(arguments[0]);
       this.player = this.server.getPlayerExact(playerName);
     }
-
     // check to see if we have a target player
     if (this.player == null) {
-      throw new CommandArgumentException(this.getMessage("player-not-online"), this.getMessage("player-name-matching"));
+      throw new CommandArgumentException(this.getLocalisation().getMessage(this, "player-not-online"), null);
     }
-
   }
 
   private String matchPlayerName(final String playerName) {
@@ -96,21 +99,18 @@ public class RefreshCommand extends PluginCommand {
     }
   }
 
-  private void registerPermissions() {
-    final String prefix = this.plugin.getDescription().getName().toLowerCase() + ".";
-    final String wildcardDescription = String.format(this.plugin.getMessage("plugincommand.wildcard-permission-description"), this.getName());
-    // create the wildcard permission
-    final Permission wildcard = new Permission(prefix + this.getName() + ".*", wildcardDescription, PermissionDefault.OP);
-    wildcard.addParent(this.plugin.getRootPermission(), true);
-    this.addPermission(wildcard);
-    // create the base permission
-    final Permission base = new Permission(prefix + this.getName(), this.getMessage("permission-description"), PermissionDefault.TRUE);
-    base.addParent(wildcard, true);
-    this.addPermission(base);
-    // add ability to set other user's homes
-    final Permission others = new Permission(prefix + this.getName() + "." + this.getMessage("permission-others"), this.getMessage("permission-others-description"), PermissionDefault.OP);
-    others.addParent(wildcard, true);
-    this.addPermission(others);
+  @Override
+  protected void registerPermissions(boolean wildcard) {
+    super.registerPermissions(wildcard);
+    final String prefix = this.getRootPermission().getName().replace("*", "");
+    // add ability to refresh their own display name
+    own = new Permission(prefix + "." + this.getLocalisation().getMessage(this, "own-permission-name"), this.getLocalisation().getMessage(this, "own-permission-description"), PermissionDefault.TRUE);
+    own.addParent(this.getRootPermission(), true);
+    this.getPermissionManager().addPermission(own, false);
+    // add ability to refresh others
+    others = new Permission(prefix + "." + this.getLocalisation().getMessage(this, "others-permission-name"), this.getLocalisation().getMessage(this, "others-permission-description"), PermissionDefault.OP);
+    others.addParent(this.getRootPermission(), true);
+    this.getPermissionManager().addPermission(others, false);
   }
 
 }

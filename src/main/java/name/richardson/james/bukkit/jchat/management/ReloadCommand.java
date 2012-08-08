@@ -19,32 +19,28 @@ package name.richardson.james.bukkit.jchat.management;
 
 import java.io.IOException;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 
 import name.richardson.james.bukkit.jchat.jChat;
+import name.richardson.james.bukkit.utilities.command.AbstractCommand;
 import name.richardson.james.bukkit.utilities.command.CommandArgumentException;
 import name.richardson.james.bukkit.utilities.command.ConsoleCommand;
-import name.richardson.james.bukkit.utilities.command.PluginCommand;
 
 @ConsoleCommand
-public class ReloadCommand extends PluginCommand {
+public class ReloadCommand extends AbstractCommand {
 
   private final jChat plugin;
 
   public ReloadCommand(final jChat plugin) {
-    super(plugin);
+    super(plugin, false);
     this.plugin = plugin;
-    this.registerPermissions();
   }
 
   public void execute(final CommandSender sender) {
     try {
       this.plugin.reload();
       this.plugin.setPlayerDisplayName(this.plugin.getServer().getOnlinePlayers());
-      sender.sendMessage(ChatColor.GREEN + this.getSimpleFormattedMessage("complete", this.plugin.getDescription().getName()));
+      sender.sendMessage(this.getLocalisation().getMessage(this, "complete"));
     } catch (final IOException e) {
       e.printStackTrace();
     }
@@ -52,13 +48,6 @@ public class ReloadCommand extends PluginCommand {
 
   public void parseArguments(final String[] arguments, final CommandSender sender) throws CommandArgumentException {
     return;
-  }
-
-  private void registerPermissions() {
-    final String prefix = this.plugin.getDescription().getName().toLowerCase() + ".";
-    // create the base permission
-    final Permission base = new Permission(prefix + this.getName(), this.getMessage("permission-description"), PermissionDefault.OP);
-    this.addPermission(base);
   }
 
 }

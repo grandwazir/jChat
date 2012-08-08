@@ -31,8 +31,22 @@ public class jChatConfiguration extends PluginConfiguration {
 
   public jChatConfiguration(final jChat plugin) throws IOException {
     super(plugin);
+    this.setDefaultSettings();
     this.setPrefixPermissions();
     this.setSuffixPermissions();
+  }
+
+  private void setDefaultSettings() {
+    if (!this.getConfiguration().isConfigurationSection("prefix")) {
+      this.getConfiguration().createSection("prefix");
+      this.getConfiguration().getConfigurationSection("prefix").set("default", "&DARK_BLUE");
+    }
+    // now check the suffixes
+    if (!this.getConfiguration().isConfigurationSection("suffix")) {
+      this.getConfiguration().createSection("suffix");
+      this.getConfiguration().getConfigurationSection("suffix").set("default", "");
+    }
+    this.save();
   }
 
   public Set<String> getPrefixPaths() {
@@ -44,66 +58,28 @@ public class jChatConfiguration extends PluginConfiguration {
   }
 
   public String getTitle(final String path) {
-    return this.configuration.getString(path);
+    return this.getConfiguration().getString(path);
   }
 
   public boolean isColouringDeathMessages() {
-    return this.configuration.getBoolean("colour-messages.death");
+    return this.getConfiguration().getBoolean("colour-messages.death");
   }
 
   public boolean isColouringJoinMessages() {
-    return this.configuration.getBoolean("colour-messages.join");
+    return this.getConfiguration().getBoolean("colour-messages.join");
   }
 
   public boolean isColouringListNames() {
-    return this.configuration.getBoolean("colour-messages.list");
+    return this.getConfiguration().getBoolean("colour-messages.list");
   }
 
   public boolean isColouringQuitMessages() {
-    return this.configuration.getBoolean("colour-messages.quit");
-  }
-
-  public boolean isSupressListNameWarning() {
-    return this.configuration.getBoolean("surpress-list-name-too-long-warning");
-  }
-
-  public void logValues() {
-    this.logger.config(String.format("debugging : %b", this.isDebugging()));
-    this.logger.config(String.format("colour-messages.death : %b", this.isColouringDeathMessages()));
-    this.logger.config(String.format("colour-messages.join : %b", this.isColouringJoinMessages()));
-    this.logger.config(String.format("colour-messages.quit : %b", this.isColouringDeathMessages()));
-    this.logger.config(String.format("surpress-list-name-too-long-warning : %b", this.isSupressListNameWarning()));
-    for (final String path : this.getPrefixPaths()) {
-      this.logger.config(String.format("%s : %s", path, this.getTitle(path)));
-    }
-    for (final String path : this.getSuffixPaths()) {
-      this.logger.config(String.format("%s : %s", path, this.getTitle(path)));
-    }
-  }
-
-  @Override
-  public void setDefaults() throws IOException {
-    this.logger.debug(String.format("Apply default configuration."));
-    final org.bukkit.configuration.file.YamlConfiguration defaults = this.getDefaults();
-    this.configuration.setDefaults(defaults);
-    this.configuration.options().copyDefaults(true);
-    // check if the default prefix and suffix is there.
-    // we do this to avoid reordering the list
-    if (!this.configuration.isConfigurationSection("prefix")) {
-      this.configuration.createSection("prefix");
-      this.configuration.getConfigurationSection("prefix").set("default", "&DARK_BLUE");
-    }
-    // now check the suffixes
-    if (!this.configuration.isConfigurationSection("suffix")) {
-      this.configuration.createSection("suffix");
-      this.configuration.getConfigurationSection("suffix").set("default", "");
-    }
-    this.save();
+    return this.getConfiguration().getBoolean("colour-messages.quit");
   }
 
   private void setPrefixPermissions() {
     final Set<String> set = new LinkedHashSet<String>();
-    for (final String prefix : this.configuration.getConfigurationSection("prefix").getKeys(true)) {
+    for (final String prefix : this.getConfiguration().getConfigurationSection("prefix").getKeys(true)) {
       final String title = "prefix." + prefix;
       set.add(title);
     }
@@ -112,7 +88,7 @@ public class jChatConfiguration extends PluginConfiguration {
 
   private void setSuffixPermissions() {
     final Set<String> set = new LinkedHashSet<String>();
-    for (final String suffix : this.configuration.getConfigurationSection("suffix").getKeys(true)) {
+    for (final String suffix : this.getConfiguration().getConfigurationSection("suffix").getKeys(true)) {
       final String title = "suffix." + suffix;
       set.add(title);
     }

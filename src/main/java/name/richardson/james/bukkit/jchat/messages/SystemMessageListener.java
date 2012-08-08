@@ -27,14 +27,16 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import name.richardson.james.bukkit.jchat.jChat;
 import name.richardson.james.bukkit.jchat.jChatConfiguration;
 
 public class SystemMessageListener implements Listener {
 
   private final jChatConfiguration configuration;
 
-  public SystemMessageListener(final jChatConfiguration configuration) {
+  public SystemMessageListener(jChat plugin, final jChatConfiguration configuration) {
     this.configuration = configuration;
+    plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
   @EventHandler(priority = EventPriority.LOW)
