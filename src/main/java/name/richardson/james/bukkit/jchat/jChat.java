@@ -19,9 +19,7 @@ package name.richardson.james.bukkit.jchat;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.bukkit.entity.Player;
@@ -157,24 +155,21 @@ public class jChat extends AbstractPlugin {
    * name.richardson.james.bukkit.utilities.plugin.SkeletonPlugin#loadConfiguration
    * ()
    */
-  @Override
   protected void loadConfiguration() throws IOException {
     super.loadConfiguration();
-    this.configuration = new jChatConfiguration(this);
-    // register prefixes
+  }
+  
+  @Override
+  protected void setPermissions() {
+    super.setPermissions();
     final List<String> permissionNames = new ArrayList<String>();
     permissionNames.addAll(this.configuration.getPrefixPaths());
     permissionNames.addAll(this.configuration.getSuffixPaths());
     for (final String titlePath : permissionNames) {
-      final String permissionPath = "jchat." + titlePath;
-      final Permission permission = new Permission(
-          permissionPath, 
-          this.getLocalisation().getMessage(this, "permission-description"),
-          PermissionDefault.FALSE
-      );
-      if (permissionPath.contains(".default")) permission.setDefault(PermissionDefault.TRUE);
+      final Permission permission = new Permission("jchat." + titlePath, this.getLocalisation().getMessage(this, "permission-description", PermissionDefault.FALSE));
+      if (titlePath.contains(".default")) permission.setDefault(PermissionDefault.TRUE);
       this.permissions.add(permission);
-      this.getPermissionManager().addPermission(permission, false);
+      this.getPermissionManager().addPermission(permission);
     }
     this.establishPlayerDisplayNames();
   }

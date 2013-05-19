@@ -17,9 +17,13 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.jchat.management;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.bukkit.Server;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -39,36 +43,32 @@ public class RefreshCommand extends AbstractCommand {
   private final jChat plugin;
   
   private final Server server;
-  
-  private Permission own;
-
-  private Permission others;
-
 
   // The player who is the target of this command
   private Player player;
 
   public RefreshCommand(final jChat plugin) {
-    super(plugin, false);
+    super(plugin);
     this.server = plugin.getServer();
     this.plugin = plugin;
+    this.registerPermissions();
   }
 
   public void execute(final CommandSender sender) throws CommandArgumentException, CommandPermissionException, CommandUsageException {
     try {
-      if (sender.hasPermission(own) && this.player.getName().equalsIgnoreCase(sender.getName())) {
+      if (this.getPermissionManager().hasPlayerPermission(sender, this.getPermissions().get(1)) && (this.player.getName().equalsIgnoreCase(sender.getName()))) {
         this.plugin.invalidatePlayerMetaData(this.player);
         this.plugin.setPlayerDisplayName(this.player);
         sender.sendMessage(this.getLocalisation().getMessage(this, ("display-name-refreshed")));
       } else if (this.player.getName().equalsIgnoreCase(sender.getName())) {
-        throw new CommandPermissionException(null, own);
+        throw new CommandPermissionException(null, this.getPermissions().get(1));
       }
-      if (sender.hasPermission(others) && !this.player.getName().equalsIgnoreCase(sender.getName())) {
+      if (this.getPermissionManager().hasPlayerPermission(sender, this.getPermissions().get(2))  && !(this.player.getName().equalsIgnoreCase(sender.getName()))) {
         this.plugin.invalidatePlayerMetaData(this.player);
         this.plugin.setPlayerDisplayName(this.player);
         sender.sendMessage(this.getLocalisation().getMessage(this, "another-display-name-refreshed", this.player.getName()));
       } else if (!this.player.getName().equalsIgnoreCase(sender.getName())) {
-        throw new CommandPermissionException(null, others);
+        throw new CommandPermissionException(null, this.getPermissions().get(2));
       }
     } finally {
       this.player = null;
@@ -81,7 +81,7 @@ public class RefreshCommand extends AbstractCommand {
     } else if (arguments.length == 0) {
       this.player = (Player) sender;
     } else {
-      final String playerName = this.matchPlayerName(arguments[0]);
+      final String playerName = arguments[0];
       this.player = this.server.getPlayerExact(playerName);
     }
     // check to see if we have a target player
@@ -90,27 +90,27 @@ public class RefreshCommand extends AbstractCommand {
     }
   }
 
-  private String matchPlayerName(final String playerName) {
-    final List<Player> matches = this.server.matchPlayer(playerName);
-    if (matches.isEmpty()) {
-      return playerName;
-    } else {
-      return matches.get(0).getName();
-    }
+  private void registerPermissions() {
+    Permission own = this.getPermissionManager().createPermission(this, "own", PermissionDefault.TRUE, this.getPermissions().get(0), true);
+    this.addPermission(own);
+    Permission others = this.getPermissionManager().createPermission(this, "others", PermissionDefault.OP, this.getPermissions().get(0), true);
+    this.addPermission(others);
   }
 
-  @Override
-  protected void registerPermissions(boolean wildcard) {
-    super.registerPermissions(wildcard);
-    final String prefix = this.getRootPermission().getName().replace("*", "");
-    // add ability to refresh their own display name
-    own = new Permission(prefix + "." + this.getLocalisation().getMessage(this, "own-permission-name"), this.getLocalisation().getMessage(this, "own-permission-description"), PermissionDefault.TRUE);
-    own.addParent(this.getRootPermission(), true);
-    this.getPermissionManager().addPermission(own, false);
-    // add ability to refresh others
-    others = new Permission(prefix + "." + this.getLocalisation().getMessage(this, "others-permission-name"), this.getLocalisation().getMessage(this, "others-permission-description"), PermissionDefault.OP);
-    others.addParent(this.getRootPermission(), true);
-    this.getPermissionManager().addPermission(others, false);
+  public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] arguments) {
+    List<String> list = new ArrayList<String>();
+    Set<String> temp = new TreeSet<String>();
+    if (arguments.length <= 1) {
+      for (Player player : this.server.getOnlinePlayers()) {
+        if (arguments.length < 1) {
+          temp.add(player.getName());
+        } else if (player.getName().startsWith(arguments[0])) {
+          temp.add(player.getName());
+        }
+      } 
+    }
+    list.addAll(temp);
+    return list;
   }
 
 }

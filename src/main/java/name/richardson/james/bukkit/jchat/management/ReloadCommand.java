@@ -18,7 +18,9 @@
 package name.richardson.james.bukkit.jchat.management;
 
 import java.io.IOException;
+import java.util.List;
 
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import name.richardson.james.bukkit.jchat.jChat;
@@ -32,7 +34,7 @@ public class ReloadCommand extends AbstractCommand {
   private final jChat plugin;
 
   public ReloadCommand(final jChat plugin) {
-    super(plugin, false);
+    super(plugin);
     this.plugin = plugin;
   }
 
@@ -48,6 +50,10 @@ public class ReloadCommand extends AbstractCommand {
 
   public void parseArguments(final String[] arguments, final CommandSender sender) throws CommandArgumentException {
     return;
+  }
+
+  public List<String> onTabComplete(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
+    return null;
   }
 
 }

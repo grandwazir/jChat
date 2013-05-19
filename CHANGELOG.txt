@@ -1,5 +1,8 @@
-Changelog for jChat (v1.6.2-SNAPSHOT)
+Changelog for jChat (v1.6.3-SNAPSHOT)
 
+
+v1.6.2
+2012-08-08 06:18:43 +0100    prepare for release (James Richardson)
 
 v1.6.1
 2012-08-02 10:52:18 +0100    parent pom changes (James Richardson)
