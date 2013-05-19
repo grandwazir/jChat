@@ -157,11 +157,7 @@ public class jChat extends AbstractPlugin {
    */
   protected void loadConfiguration() throws IOException {
     super.loadConfiguration();
-  }
-  
-  @Override
-  protected void setPermissions() {
-    super.setPermissions();
+    this.configuration = new jChatConfiguration(this);
     final List<String> permissionNames = new ArrayList<String>();
     permissionNames.addAll(this.configuration.getPrefixPaths());
     permissionNames.addAll(this.configuration.getSuffixPaths());
