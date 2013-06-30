@@ -1,11 +1,7 @@
-debugging: false
-send-anonymous-statistics: true
+logging: INFO
 automatic-updates:
-  enabled: true
-  method: notify
-  branch: stable
-colour-messages:
-  death: true
-  join: true
-  list: true
-  quit: true
+  type: MAVEN
+  method: NOTIFY
+  branch: STABLE
+send-anonymous-statistics: true
+scoreboard-enabled: false
