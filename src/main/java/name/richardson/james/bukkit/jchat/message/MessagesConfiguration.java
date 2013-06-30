@@ -25,5 +25,4 @@ public class MessagesConfiguration extends YAMLStorage {
 		return this.getConfiguration().getBoolean("quit");
 	}
 
-
 }

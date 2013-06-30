@@ -1,11 +1,6 @@
 package name.richardson.james.bukkit.jchat.title;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.bukkit.configuration.ConfigurationSection;
-
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 
 public class TitleConfigurationEntry implements Comparable<TitleConfigurationEntry> {
 

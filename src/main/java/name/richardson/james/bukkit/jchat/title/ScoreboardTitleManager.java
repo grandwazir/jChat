@@ -48,7 +48,6 @@ public class ScoreboardTitleManager extends TitleManager {
 		this.updateScoreboard(event.getPlayer());
 	}
 
-
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
 		super.onPlayerChangedWorld(event);
@@ -58,7 +57,7 @@ public class ScoreboardTitleManager extends TitleManager {
 	@Override
 	public void refreshAll() {
 		super.refreshAll();
-		for(Player player : server.getOnlinePlayers()) {
+		for (Player player : server.getOnlinePlayers()) {
 			updateScoreboard(player);
 		}
 	}
@@ -72,9 +71,5 @@ public class ScoreboardTitleManager extends TitleManager {
 			}
 		}
 	}
-
-
-
-
 
 }
