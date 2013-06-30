@@ -1,5 +1,5 @@
 name: jChat
-main: name.richardson.james.bukkit.jchat.jChat
+main: name.richardson.james.bukkit.jchat.jChatPlugin
 author: James Richardson (grandwazir)
 description: Simple chat prefixes and suffixes.
 website: https://github.com/grandwazir/jChat 

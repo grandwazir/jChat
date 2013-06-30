@@ -1,19 +1,19 @@
 /*******************************************************************************
  * Copyright (c) 2012 James Richardson.
  * 
- * ReloadCommand.java is part of jChat.
+ * ReloadCommand.java is part of jChatPlugin.
  * 
- * jChat is free software: you can redistribute it and/or modify it under the
+ * jChatPlugin is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or (at your option) any later
  * version.
  * 
- * jChat is distributed in the hope that it will be useful, but WITHOUT ANY
+ * jChatPlugin is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License along with
- * jChat. If not, see <http://www.gnu.org/licenses/>.
+ * jChatPlugin. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 package name.richardson.james.bukkit.jchat.management;
 
@@ -23,7 +23,8 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import name.richardson.james.bukkit.jchat.jChat;
+import name.richardson.james.bukkit.jchat.jChatPlugin;
+
 import name.richardson.james.bukkit.utilities.command.AbstractCommand;
 import name.richardson.james.bukkit.utilities.command.CommandArgumentException;
 import name.richardson.james.bukkit.utilities.command.ConsoleCommand;
@@ -31,9 +32,9 @@ import name.richardson.james.bukkit.utilities.command.ConsoleCommand;
 @ConsoleCommand
 public class ReloadCommand extends AbstractCommand {
 
-  private final jChat plugin;
+  private final jChatPlugin plugin;
 
-  public ReloadCommand(final jChat plugin) {
+  public ReloadCommand(final jChatPlugin plugin) {
     super(plugin);
     this.plugin = plugin;
   }
