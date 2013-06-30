@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 James Richardson.
  *
- * jChatPlugin.java is part of jChatPlugin.
+ * jChat.java is part of jChatPlugin.
  *
  * jChatPlugin is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
@@ -29,13 +29,12 @@ import name.richardson.james.bukkit.utilities.plugin.Reloadable;
 import name.richardson.james.bukkit.jchat.title.*;
 
 @Permissions(permissions = "jchat")
-public class jChatPlugin extends AbstractPlugin implements Reloadable {
+public class jChat extends AbstractPlugin implements Reloadable {
 
 	public static final String TITLE_CONFIG_NAME = "titles.yml";
-
 	private PluginConfiguration configuration;
-	private TitleManager titleManager;
 	private TitleConfiguration titleConfiguration;
+	private TitleManager titleManager;
 	private Set<? extends TitleConfigurationEntry> titles;
 
 	@Override
@@ -87,9 +86,9 @@ public class jChatPlugin extends AbstractPlugin implements Reloadable {
 
 	private void registerListeners() {
 		if (this.configuration.isScoreboardEnabled()) {
-			titleManager = new ScoreboardTitleManager(this, this.getServer().getPluginManager(), (Set<ScoreboardTitleConfigurationEntry>) titles, this.getServer().getScoreboardManager().getMainScoreboard());
+			titleManager = new ScoreboardTitleManager(this, this.getServer().getPluginManager(), this.getServer(), (Set<ScoreboardTitleConfigurationEntry>) titles, this.getServer().getScoreboardManager().getMainScoreboard());
 		} else {
-			titleManager = new TitleManager(this, this.getServer().getPluginManager(), titles);
+			titleManager = new TitleManager(this, this.getServer().getPluginManager(), this.getServer(), titles);
 		}
 		titleManager.refreshAll();
 	}

@@ -30,7 +30,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import name.richardson.james.bukkit.jchat.jChatPlugin;
+import name.richardson.james.bukkit.jchat.jChat;
+
 import name.richardson.james.bukkit.utilities.command.AbstractCommand;
 import name.richardson.james.bukkit.utilities.command.CommandArgumentException;
 import name.richardson.james.bukkit.utilities.command.CommandPermissionException;
@@ -40,14 +41,14 @@ import name.richardson.james.bukkit.utilities.command.ConsoleCommand;
 @ConsoleCommand
 public class RefreshCommand extends AbstractCommand {
 
-  private final jChatPlugin plugin;
+  private final jChat plugin;
   
   private final Server server;
 
   // The player who is the target of this command
   private Player player;
 
-  public RefreshCommand(final jChatPlugin plugin) {
+  public RefreshCommand(final jChat plugin) {
     super(plugin);
     this.server = plugin.getServer();
     this.plugin = plugin;

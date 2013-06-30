@@ -23,7 +23,7 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import name.richardson.james.bukkit.jchat.jChatPlugin;
+import name.richardson.james.bukkit.jchat.jChat;
 
 import name.richardson.james.bukkit.utilities.command.AbstractCommand;
 import name.richardson.james.bukkit.utilities.command.CommandArgumentException;
@@ -32,9 +32,9 @@ import name.richardson.james.bukkit.utilities.command.ConsoleCommand;
 @ConsoleCommand
 public class ReloadCommand extends AbstractCommand {
 
-  private final jChatPlugin plugin;
+  private final jChat plugin;
 
-  public ReloadCommand(final jChatPlugin plugin) {
+  public ReloadCommand(final jChat plugin) {
     super(plugin);
     this.plugin = plugin;
   }
