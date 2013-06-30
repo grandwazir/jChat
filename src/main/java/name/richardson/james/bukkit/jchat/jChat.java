@@ -79,8 +79,13 @@ public class jChat extends AbstractPlugin implements Reloadable {
 	private void loadTitleConfiguration()
 	throws IOException {
 		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + TITLE_CONFIG_NAME);
-		final InputStream defaults = this.getResource(TITLE_CONFIG_NAME);
-		this.titleConfiguration = new TitleConfiguration(file, defaults);
+		if (this.configuration.isScoreboardEnabled()) {
+			final InputStream defaults = this.getResource("scoreboard-" + TITLE_CONFIG_NAME);
+			this.titleConfiguration = new ScoreboardTitleConfiguration(file, defaults);
+		} else {
+			final InputStream defaults = this.getResource(TITLE_CONFIG_NAME);
+			this.titleConfiguration = new TitleConfiguration(file, defaults);
+		}
 		this.titles = titleConfiguration.getTitles();
 	}
 
