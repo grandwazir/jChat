@@ -1,4 +1,4 @@
-package name.richardson.james.bukkit.jchat.messages;
+package name.richardson.james.bukkit.jchat.message;
 
 import java.io.File;
 import java.io.IOException;

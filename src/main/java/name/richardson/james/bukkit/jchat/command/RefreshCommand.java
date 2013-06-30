@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License along with
  * jChatPlugin. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.jchat.management;
+package name.richardson.james.bukkit.jchat.command;
 
 import java.util.ArrayList;
 import java.util.List;

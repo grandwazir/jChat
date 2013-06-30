@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License along with
  * jChatPlugin. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package name.richardson.james.bukkit.jchat.messages;
+package name.richardson.james.bukkit.jchat.message;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
