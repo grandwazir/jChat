@@ -50,9 +50,7 @@ public class MessagesManager extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
-		if (!this.configuration.isColouringJoinMessages()) {
-			return;
-		}
+		if (!this.configuration.isColouringJoinMessages()) return;
 		final Player player = event.getPlayer();
 		event.setJoinMessage((this.colourMessage(player, event.getJoinMessage())));
 	}
