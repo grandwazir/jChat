@@ -22,17 +22,28 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
 
-import name.richardson.james.bukkit.utilities.command.Permissions;
+import org.bukkit.command.PluginCommand;
+
+import name.richardson.james.bukkit.utilities.command.DefaultCommandInvoker;
+import name.richardson.james.bukkit.utilities.command.HelpCommand;
+import name.richardson.james.bukkit.utilities.command.ReloadCommand;
+import name.richardson.james.bukkit.utilities.permissions.Permissions;
 import name.richardson.james.bukkit.utilities.plugin.AbstractPlugin;
 import name.richardson.james.bukkit.utilities.plugin.Reloadable;
 
+import name.richardson.james.bukkit.jchat.message.MessagesConfiguration;
+import name.richardson.james.bukkit.jchat.message.MessagesManager;
 import name.richardson.james.bukkit.jchat.title.*;
 
 @Permissions(permissions = "jchat")
 public class jChat extends AbstractPlugin implements Reloadable {
 
+	public static final String COMMAND_LABEL = "jchat";
+	public static final String MESSAGES_CONFIG_NAME = "messages.yml";
 	public static final String TITLE_CONFIG_NAME = "titles.yml";
+
 	private PluginConfiguration configuration;
+	private MessagesConfiguration messagesConfiguration;
 	private TitleConfiguration titleConfiguration;
 	private TitleManager titleManager;
 	private Set<? extends TitleConfigurationEntry> titles;
@@ -52,20 +63,45 @@ public class jChat extends AbstractPlugin implements Reloadable {
 		try {
 			this.loadConfiguration();
 			this.loadTitleConfiguration();
+			this.loadMessageConfiguration();
 			this.registerListeners();
+			this.registerCommands();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	private void registerCommands() {
+		PluginCommand rootCommand = getCommand(COMMAND_LABEL);
+		HelpCommand helpCommand = new HelpCommand(COMMAND_LABEL, getDescription());
+		DefaultCommandInvoker commandInvoker = new DefaultCommandInvoker(helpCommand);
+		ReloadCommand reloadCommand = new ReloadCommand(this);
+		RefreshCommand refreshCommand = new RefreshCommand(getServer(), getServer().getPluginManager());
+		commandInvoker.addCommand(refreshCommand);
+		helpCommand.addCommand(refreshCommand);
+		commandInvoker.addCommand(reloadCommand);
+		helpCommand.addCommand(reloadCommand);
+		rootCommand.setExecutor(commandInvoker);
+	}
+
 	@Override
 	public boolean reload() {
 		try {
+			loadConfiguration();
 			loadTitleConfiguration();
+			loadMessageConfiguration();
+			registerListeners();
 		} catch (IOException e) {
 			return false;
 		}
 		return true;
+	}
+
+	private void loadMessageConfiguration()
+	throws IOException {
+		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + MESSAGES_CONFIG_NAME);
+		final InputStream defaults = this.getResource(MESSAGES_CONFIG_NAME);
+		this.messagesConfiguration = new MessagesConfiguration(file, defaults);
 	}
 
 	protected void loadConfiguration()
@@ -95,6 +131,7 @@ public class jChat extends AbstractPlugin implements Reloadable {
 		} else {
 			titleManager = new TitleManager(this, this.getServer().getPluginManager(), this.getServer(), titles);
 		}
+		new MessagesManager(this, this.getServer().getPluginManager(), messagesConfiguration);
 		titleManager.refreshAll();
 	}
 

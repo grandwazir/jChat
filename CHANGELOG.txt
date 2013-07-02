@@ -1,5 +1,15 @@
-Changelog for jChat (v1.6.3-SNAPSHOT)
+Changelog for jChat (v2.0.0-SNAPSHOT)
 
+2013-06-30 15:47:55 +0100    create the right configuration depending on settings (James Richardson)
+2013-06-30 15:46:04 +0100    update default configurations (James Richardson)
+2013-06-30 15:40:06 +0100    code reorganisation (James Richardson)
+2013-06-30 15:37:51 +0100    fix compile bug (James Richardson)
+2013-06-30 15:35:51 +0100    change a couple of package names (James Richardson)
+2013-06-30 15:33:13 +0100    refactoring plugin (James Richardson)
+2013-05-19 19:27:10 +0100    to avoid build failures when attempting to upload to github (James Richardson)
+
+v1.6.3
+2013-05-19 19:25:57 +0100    finish updating (James Richardson)
 2013-05-19 19:17:29 +0100    update to use latest bukkitutilities (James Richardson)
 
 v1.6.2
