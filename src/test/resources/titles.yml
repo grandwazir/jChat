@@ -1,0 +1,4 @@
+default:
+  prefix: "&BLUE"
+  suffix: ''
+  weight: 0

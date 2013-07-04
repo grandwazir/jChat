@@ -1,0 +1,11 @@
+name: jChat
+main: name.richardson.james.bukkit.jchat.jChat
+author: James Richardson (grandwazir)
+description: Simple chat prefixes and suffixes.
+website: https://github.com/grandwazir/jChat 
+softdepend: [PermissionsBukkit]
+version: ${project.version}
+commands:
+  jchat:
+    description: The root jChat command
+    usage: There was an error enabling jChat.

@@ -20,15 +20,15 @@ public class TitleConfigurationEntry implements Comparable<TitleConfigurationEnt
 
 	public TitleConfigurationEntry(String sectionKey, ConfigurationSection section) {
 		name = sectionKey;
-		prefix = section.getString(PREFIX_KEY, "");
-		suffix = section.getString(SUFFIX_KEY, "");
-		weight = section.getInt(WEIGHT, 0);
+		prefix = section.getString(PREFIX_KEY);
+		suffix = section.getString(SUFFIX_KEY);
+		weight = section.getInt(WEIGHT);
 	}
 
 	@Override
 	public int compareTo(TitleConfigurationEntry titleConfigurationEntry) {
-		if (titleConfigurationEntry.getWeight() > getWeight()) return 1;
-		if (titleConfigurationEntry.getWeight() < getWeight()) return -1;
+		if (titleConfigurationEntry.getWeight() > getWeight()) return -1;
+		if (titleConfigurationEntry.getWeight() < getWeight()) return 1;
 		return 0;
 	}
 

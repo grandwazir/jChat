@@ -57,9 +57,7 @@ public class MessagesManager extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerQuit(final PlayerQuitEvent event) {
-		if (!this.configuration.isColouringQuitMessages()) {
-			return;
-		}
+		if (!this.configuration.isColouringQuitMessages()) return;
 		final Player player = event.getPlayer();
 		event.setQuitMessage((this.colourMessage(player, event.getQuitMessage())));
 	}

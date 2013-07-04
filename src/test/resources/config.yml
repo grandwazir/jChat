@@ -1,0 +1,7 @@
+logging: INFO
+automatic-updates:
+  type: MAVEN
+  method: NOTIFY
+  branch: STABLE
+send-anonymous-statistics: true
+scoreboard-enabled: false
