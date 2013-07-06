@@ -19,6 +19,7 @@ package name.richardson.james.bukkit.jchat;
 
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -43,6 +44,7 @@ public class RefreshCommand extends AbstractCommand {
 		this.pluginManager = pluginManager;
 		Matcher matcher = new OnlinePlayerMatcher(server);
 		addMatcher(matcher);
+		pluginManager.getPermission("jchat.refresh.self").setDefault(PermissionDefault.TRUE);
 	}
 
 	@Override
