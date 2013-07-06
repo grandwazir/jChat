@@ -60,9 +60,6 @@ public class TitleManagerTest extends TestCase {
 	private Server server;
 
 	@Mock
-	private Player playerWithoutMetaData;
-
-	@Mock
 	private Player playerWithMetaData;
 
 	@Mock
@@ -71,14 +68,9 @@ public class TitleManagerTest extends TestCase {
 	@Test
 	public void testRefreshAll()
 	throws Exception {
-		List<MetadataValue> list = new LinkedList<MetadataValue>();
-		list.add(metadataValue);
-		when(playerWithMetaData.getMetadata(TitleManager.METADATA_PREFIX_KEY)).thenReturn(list);
-		when(playerWithMetaData.getMetadata(TitleManager.METADATA_SUFFIX_KEY)).thenReturn(list);
-		when(playerWithMetaData.getName()).thenReturn("grandwazir");
-		when(metadataValue.asString()).thenReturn("test");
 		Player[] players = {playerWithMetaData};
 		when(server.getOnlinePlayers()).thenReturn(players);
+		when(playerWithMetaData.hasMetadata(anyString())).thenReturn(false);
 		manager.refreshAll();
 		verify(metadataValue, Mockito.times(2)).asString();
 		verify(playerWithMetaData).setDisplayName("testgrandwazirtest§r");
@@ -89,12 +81,6 @@ public class TitleManagerTest extends TestCase {
 	public void testOnPlayerChangedWorld()
 	throws Exception {
 		PlayerChangedWorldEvent event = new PlayerChangedWorldEvent(playerWithMetaData, null);
-		List<MetadataValue> list = new LinkedList<MetadataValue>();
-		list.add(metadataValue);
-		when(playerWithMetaData.getMetadata(TitleManager.METADATA_PREFIX_KEY)).thenReturn(list);
-		when(playerWithMetaData.getMetadata(TitleManager.METADATA_SUFFIX_KEY)).thenReturn(list);
-		when(playerWithMetaData.getName()).thenReturn("grandwazir");
-		when(metadataValue.asString()).thenReturn("test");
 		manager.onPlayerChangedWorld(event);
 		verify(metadataValue, Mockito.times(2)).asString();
 		verify(playerWithMetaData).setDisplayName("testgrandwazirtest§r");
@@ -103,16 +89,18 @@ public class TitleManagerTest extends TestCase {
 	@Test
 	public void testOnPlayerJoin()
 	throws Exception {
-		PlayerJoinEvent event = new PlayerJoinEvent(playerWithoutMetaData, "");
-		List<MetadataValue> list = new LinkedList<MetadataValue>();
-		list.add(metadataValue);
-		when(playerWithoutMetaData.getMetadata(TitleManager.METADATA_PREFIX_KEY)).thenReturn(list);
-		when(playerWithoutMetaData.getMetadata(TitleManager.METADATA_SUFFIX_KEY)).thenReturn(list);
-		when(playerWithoutMetaData.getName()).thenReturn("grandwazir");
-		when(metadataValue.asString()).thenReturn("test");
+		PlayerJoinEvent event = new PlayerJoinEvent(playerWithMetaData, "");
 		manager.onPlayerJoin(event);
 		verify(metadataValue, Mockito.times(2)).asString();
-		verify(playerWithoutMetaData).setDisplayName("testgrandwazirtest§r");
+		verify(playerWithMetaData).setDisplayName("testgrandwazirtest§r");
+	}
+
+	@Test
+	public void testOnTitleRequestInvalidation() {
+		TitleRequestInvalidationEvent event = new TitleRequestInvalidationEvent(playerWithMetaData);
+		manager.onTitleRequestInvalidation(event);
+		verify(metadataValue, Mockito.times(2)).asString();
+		verify(playerWithMetaData).setDisplayName("testgrandwazirtest§r");
 	}
 
 
@@ -123,10 +111,13 @@ public class TitleManagerTest extends TestCase {
 		InputStream defaults = TitleConfigurationTest.class.getClassLoader().getResourceAsStream("titles.yml");
 		configuration = new TitleConfiguration(temporaryFile, defaults);
 		manager = new TitleManager(plugin, pluginManager, server, configuration.getTitles());
-		when(playerWithoutMetaData.hasPermission(anyString())).thenReturn(true);
+		List<MetadataValue> list = new LinkedList<MetadataValue>();
+		list.add(metadataValue);
+		when(metadataValue.asString()).thenReturn("test");
+		when(playerWithMetaData.getMetadata(TitleManager.METADATA_PREFIX_KEY)).thenReturn(list);
+		when(playerWithMetaData.getMetadata(TitleManager.METADATA_SUFFIX_KEY)).thenReturn(list);
+		when(playerWithMetaData.getName()).thenReturn("grandwazir");
 		when(playerWithMetaData.hasPermission(anyString())).thenReturn(true);
-		when(playerWithMetaData.hasMetadata(anyString())).thenReturn(true);
-		when(playerWithoutMetaData.hasMetadata(anyString())).thenReturn(false);
 	}
 
 }
