@@ -19,17 +19,16 @@ package name.richardson.james.bukkit.jchat;
 
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
 import org.apache.commons.lang.ObjectUtils;
 
 import name.richardson.james.bukkit.utilities.command.AbstractCommand;
-import name.richardson.james.bukkit.utilities.command.AbstractRestrictedCommand;
 import name.richardson.james.bukkit.utilities.command.Context;
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
 import name.richardson.james.bukkit.utilities.command.matcher.OnlinePlayerMatcher;
 import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
+import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 import name.richardson.james.bukkit.utilities.permissions.Permissions;
 
 import name.richardson.james.bukkit.jchat.title.TitleRequestInvalidationEvent;
@@ -40,7 +39,8 @@ public class RefreshCommand extends AbstractCommand {
 	private final PluginManager pluginManager;
 	private Player player;
 
-	public RefreshCommand(Server server, PluginManager pluginManager) {
+	public RefreshCommand(PermissionManager permissionManager, Server server, PluginManager pluginManager) {
+		super(permissionManager);
 		this.pluginManager = pluginManager;
 		Matcher matcher = new OnlinePlayerMatcher(server);
 		addMatcher(matcher);

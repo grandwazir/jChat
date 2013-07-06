@@ -41,29 +41,29 @@ public class TitleManager extends AbstractListener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		LOGGER.log(Level.FINEST, "Recieved " + event.getClass().getSimpleName());
-		this.updateDisplayName(event.getPlayer());
+		this.updateDisplayName(event.getPlayer(), false);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
 		LOGGER.log(Level.FINEST, "Recieved " + event.getClass().getSimpleName());
-		this.updateDisplayName(event.getPlayer());
+		this.updateDisplayName(event.getPlayer(), false);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onTitleRequestInvalidation(TitleRequestInvalidationEvent event) {
 		LOGGER.log(Level.FINEST, "Recieved " + event.getClass().getSimpleName());
-		this.updateDisplayName(event.getPlayer());
+		this.updateDisplayName(event.getPlayer(), false);
 	}
 
 	public void refreshAll() {
 		for (Player player : server.getOnlinePlayers()) {
-			updateDisplayName(player);
+			updateDisplayName(player, true);
 		}
 	}
 
-	private void updateDisplayName(Player player) {
-		this.setMetaData(player);
+	private void updateDisplayName(Player player, boolean recreateMetaData) {
+		this.setMetaData(player, recreateMetaData);
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(player.getMetadata(METADATA_PREFIX_KEY).get(0).asString());
 		stringBuilder.append(player.getName());
@@ -73,8 +73,8 @@ public class TitleManager extends AbstractListener {
 		player.setDisplayName(stringBuilder.toString());
 	}
 
-	private void setMetaData(Player player) {
-		if (player.hasMetadata(METADATA_PREFIX_KEY)) {
+	private void setMetaData(Player player, boolean recreateMetaData) {
+		if (player.hasMetadata(METADATA_PREFIX_KEY) && !recreateMetaData) {
 			player.getMetadata(METADATA_PREFIX_KEY).get(0).invalidate();
 			LOGGER.log(Level.FINER, "Invalidating existing metadata for " + player.getName());
 		} else {
@@ -83,7 +83,7 @@ public class TitleManager extends AbstractListener {
 			player.setMetadata(METADATA_PREFIX_KEY, metadataValue);
 			LOGGER.log(Level.FINER, "Created metadata for " + player.getName());
 		}
-		if (player.hasMetadata(METADATA_SUFFIX_KEY)) {
+		if (player.hasMetadata(METADATA_SUFFIX_KEY) && !recreateMetaData) {
 			player.getMetadata(METADATA_SUFFIX_KEY).get(0).invalidate();
 		} else {
 			PlayerTitle playerTitle = new PlayerTitle(TitleConfigurationEntry.TitleType.SUFFIX, player);

@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import name.richardson.james.bukkit.utilities.command.CommandContext;
+import name.richardson.james.bukkit.utilities.permissions.PermissionManager;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -35,6 +36,9 @@ public class RefreshCommandTest extends TestCase {
 
 	@Mock
 	private Player player;
+
+	@Mock
+	private PermissionManager permissionManager;
 
 
 	@Test
@@ -82,7 +86,7 @@ public class RefreshCommandTest extends TestCase {
 	throws Exception {
 		Permission permission = mock(Permission.class);
 		when(pluginManager.getPermission(anyString())).thenReturn(permission);
-		command = new RefreshCommand(server, pluginManager);
+		command = new RefreshCommand(permissionManager, server, pluginManager);
 		when(player.getName()).thenReturn("grandwazir");
 	}
 

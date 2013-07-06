@@ -15,7 +15,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import junit.framework.TestCase;
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -106,8 +105,8 @@ public class TitleManagerTest extends TestCase {
 		InputStream defaults = TitleConfigurationTest.class.getClassLoader().getResourceAsStream("titles.yml");
 		configuration = new TitleConfiguration(temporaryFile, defaults);
 		manager = new TitleManager(plugin, pluginManager, server, configuration.getTitles());
-		when(playerWithoutMetaData.hasPermission((String) EasyMock.anyObject())).thenReturn(true);
-		when(playerWithMetaData.hasPermission((String) EasyMock.anyObject())).thenReturn(true);
+		when(playerWithoutMetaData.hasPermission(anyString())).thenReturn(true);
+		when(playerWithMetaData.hasPermission(anyString())).thenReturn(true);
 		when(playerWithMetaData.hasMetadata(anyString())).thenReturn(true);
 		when(playerWithoutMetaData.hasMetadata(anyString())).thenReturn(false);
 	}

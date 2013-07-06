@@ -20,10 +20,12 @@ package name.richardson.james.bukkit.jchat;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.command.PluginCommand;
 
+import name.richardson.james.bukkit.utilities.command.Command;
 import name.richardson.james.bukkit.utilities.command.DefaultCommandInvoker;
 import name.richardson.james.bukkit.utilities.command.HelpCommand;
 import name.richardson.james.bukkit.utilities.permissions.Permissions;
@@ -60,6 +62,7 @@ public class jChat extends AbstractPlugin implements Reloadable {
 	@Override
 	public void onEnable() {
 		try {
+			super.onEnable();
 			this.loadConfiguration();
 			this.loadTitleConfiguration();
 			this.loadMessageConfiguration();
@@ -72,14 +75,18 @@ public class jChat extends AbstractPlugin implements Reloadable {
 
 	private void registerCommands() {
 		PluginCommand rootCommand = getCommand(COMMAND_LABEL);
-		HelpCommand helpCommand = new HelpCommand(COMMAND_LABEL, getDescription());
+		HelpCommand helpCommand = new HelpCommand(getPermissionManager(), COMMAND_LABEL, getDescription());
 		DefaultCommandInvoker commandInvoker = new DefaultCommandInvoker(helpCommand);
-		ReloadCommand reloadCommand = new ReloadCommand(this);
-		RefreshCommand refreshCommand = new RefreshCommand(getServer(), getServer().getPluginManager());
-		commandInvoker.addCommand(refreshCommand);
-		helpCommand.addCommand(refreshCommand);
-		commandInvoker.addCommand(reloadCommand);
-		helpCommand.addCommand(reloadCommand);
+		// Create actual commands
+		Set<Command> commands = new HashSet<Command>();
+		commands.add(new ReloadCommand(getPermissionManager(), this));
+		commands.add(new RefreshCommand(getPermissionManager(), getServer(), getServer().getPluginManager()));
+		// Set commands with help and the invoker
+		for (Command command : commands) {
+			commandInvoker.addCommand(command);
+			helpCommand.addCommand(command);
+		}
+		// Bind the invoker to the root command
 		rootCommand.setExecutor(commandInvoker);
 	}
 
@@ -103,9 +110,8 @@ public class jChat extends AbstractPlugin implements Reloadable {
 		this.messagesConfiguration = new MessagesConfiguration(file, defaults);
 	}
 
-	protected void loadConfiguration()
+	private void loadConfiguration()
 	throws IOException {
-		super.loadConfiguration();
 		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + AbstractPlugin.CONFIG_NAME);
 		final InputStream defaults = this.getResource(CONFIG_NAME);
 		this.configuration = new PluginConfiguration(file, defaults);
@@ -126,7 +132,7 @@ public class jChat extends AbstractPlugin implements Reloadable {
 
 	private void registerListeners() {
 		if (this.configuration.isScoreboardEnabled()) {
-			titleManager = new ScoreboardTitleManager(this, this.getServer().getPluginManager(), this.getServer(), (Set<ScoreboardTitleConfigurationEntry>) titles, this.getServer().getScoreboardManager().getMainScoreboard());
+			titleManager = new ScoreboardTitleManager(this, this.getServer().getPluginManager(), this.getServer(), (Set<ScoreboardTitleConfigurationEntry>) titles, this.getServer().getScoreboardManager().getNewScoreboard());
 		} else {
 			titleManager = new TitleManager(this, this.getServer().getPluginManager(), this.getServer(), titles);
 		}

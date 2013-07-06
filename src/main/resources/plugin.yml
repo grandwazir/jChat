@@ -9,22 +9,3 @@ commands:
   jchat:
     description: The root jChat command
     usage: There was an error enabling jChat.
-permissions:
-  jchat:
-    default: op
-    children:
-      jchat.refresh: true
-      jchat.reload: true
-  jchat.refresh:
-    default: op
-    children:
-      jchat.refresh.self: true
-      jchat.refresh.others: true
-  jchat.refresh.self:
-    default: true
-  jchat.refresh.others:
-    default: false
-  jchat.reload:
-    default: op
-  jchat.title.default:
-    default: true
