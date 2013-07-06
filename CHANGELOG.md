@@ -1,5 +1,7 @@
 # Changelog for jChat (v2.0.0-SNAPSHOT)
 
+2013-07-06 21:01:25 +0100    added copyright notices (James Richardson)  
+2013-07-06 20:51:17 +0100    metadata now correctly updates on reload (James Richardson)  
 2013-07-06 17:43:56 +0100    finalised testing, added permissions (James Richardson)  
 2013-07-06 17:02:18 +0100    working on refresh command (James Richardson)  
 2013-07-06 16:46:01 +0100    allow players to refresh their own names by default (James Richardson)  
