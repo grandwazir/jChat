@@ -1,5 +1,7 @@
 package name.richardson.james.bukkit.jchat;
 
+import org.bukkit.plugin.PluginManager;
+
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;

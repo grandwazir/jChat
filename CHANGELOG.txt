@@ -1,5 +1,6 @@
 Changelog for jChat (v2.0.0-SNAPSHOT)
 
+2013-07-06 17:02:18 +0100    working on refresh command (James Richardson)
 2013-07-06 16:46:01 +0100    allow players to refresh their own names by default (James Richardson)
 2013-07-06 16:45:22 +0100    added logging to TitleManager (James Richardson)
 2013-07-06 15:37:55 +0100    add markdown changelog (James Richardson)

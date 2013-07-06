@@ -37,11 +37,11 @@ public class TitleConfigurationEntry implements Comparable<TitleConfigurationEnt
 	}
 
 	public String getPrefix() {
-		return prefix;
+		return (prefix == null) ? "" : prefix;
 	}
 
 	public String getSuffix() {
-		return suffix;
+		return (suffix == null) ? "" : suffix;
 	}
 
 	public int getWeight() {

@@ -25,6 +25,7 @@ import org.bukkit.plugin.PluginManager;
 import org.apache.commons.lang.ObjectUtils;
 
 import name.richardson.james.bukkit.utilities.command.AbstractCommand;
+import name.richardson.james.bukkit.utilities.command.AbstractRestrictedCommand;
 import name.richardson.james.bukkit.utilities.command.Context;
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
 import name.richardson.james.bukkit.utilities.command.matcher.OnlinePlayerMatcher;
@@ -40,11 +41,9 @@ public class RefreshCommand extends AbstractCommand {
 	private Player player;
 
 	public RefreshCommand(Server server, PluginManager pluginManager) {
-		super();
 		this.pluginManager = pluginManager;
 		Matcher matcher = new OnlinePlayerMatcher(server);
 		addMatcher(matcher);
-		pluginManager.getPermission("jchat.refresh.self").setDefault(PermissionDefault.TRUE);
 	}
 
 	@Override

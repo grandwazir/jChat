@@ -74,7 +74,7 @@ public class ScoreboardTitleManagerTest extends TestCase {
 		when(server.getOnlinePlayers()).thenReturn(players);
 		manager.refreshAll();
 		verify(playerWithMetaData, atLeastOnce()).hasPermission("jchat.title.default");
-		verify(scoreboard).getTeam("default");
+		verify(scoreboard, atLeastOnce()).getTeam("default");
 	}
 
 	@Test
@@ -90,7 +90,7 @@ public class ScoreboardTitleManagerTest extends TestCase {
 		when(metadataValue.asString()).thenReturn("test");
 		manager.onPlayerChangedWorld(event);
 		verify(playerWithoutMetaData, atLeastOnce()).hasPermission("jchat.title.default");
-		verify(scoreboard).getTeam("default");
+		verify(scoreboard, atLeastOnce()).getTeam("default");
 	}
 
 	@Test
@@ -106,7 +106,7 @@ public class ScoreboardTitleManagerTest extends TestCase {
 		when(metadataValue.asString()).thenReturn("test");
 		manager.onPlayerJoin(event);
 		verify(playerWithoutMetaData, atLeastOnce()).hasPermission("jchat.title.default");
-		verify(scoreboard).getTeam("default");
+		verify(scoreboard, atLeastOnce()).getTeam("default");
 	}
 
 	@Before

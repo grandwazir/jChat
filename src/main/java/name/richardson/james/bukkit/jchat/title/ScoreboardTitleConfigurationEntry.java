@@ -32,7 +32,7 @@ public class ScoreboardTitleConfigurationEntry extends TitleConfigurationEntry {
 	}
 
 	public String getDisplayName() {
-		return displayName;
+		return (displayName == null) ? getName() : displayName;
 	}
 
 	public boolean isAppendingTeamName() {
@@ -41,7 +41,7 @@ public class ScoreboardTitleConfigurationEntry extends TitleConfigurationEntry {
 
 	@Override
 	public String toString() {
-		return "ScoreboardTitleConfigurationEntry [" +
+		return super.toString() + " ScoreboardTitleConfigurationEntry [" +
 		"appendTeamName:" + appendTeamName +
 		", displayName:'" + displayName + '\'' +
 		", friendlyFire:" + friendlyFire +
