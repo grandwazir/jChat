@@ -1,9 +1,9 @@
 default:
-  prefix: &BLUE
-  suffix:
+  prefix: "&BLUE"
+  suffix: ''
   weight: 0
   scoreboard:
-    display-name: Guest
+    display-name: "Guest"
     append-team-name: true
     friendly-fire: false
     see-invisibles: false

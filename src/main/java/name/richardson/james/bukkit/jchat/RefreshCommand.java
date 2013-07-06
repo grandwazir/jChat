@@ -39,6 +39,7 @@ public class RefreshCommand extends AbstractCommand {
 	private Player player;
 
 	public RefreshCommand(Server server, PluginManager pluginManager) {
+		super();
 		this.pluginManager = pluginManager;
 		Matcher matcher = new OnlinePlayerMatcher(server);
 		addMatcher(matcher);

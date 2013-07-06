@@ -31,6 +31,7 @@ public class ScoreboardTitleManager extends TitleManager {
 	public void setTeams() {
 		for (ScoreboardTitleConfigurationEntry title : titles) {
 			Team team = scoreboard.registerNewTeam(title.getName());
+			System.out.print(team);
 			team.setPrefix(title.getTitle(TitleConfigurationEntry.TitleType.PREFIX));
 			team.setSuffix(title.getTitle(TitleConfigurationEntry.TitleType.SUFFIX));
 			team.setDisplayName(title.getDisplayName());
@@ -64,8 +65,10 @@ public class ScoreboardTitleManager extends TitleManager {
 
 	private void updateScoreboard(Player player) {
 		for (ScoreboardTitleConfigurationEntry entry : titles) {
+			System.out.print("updating name");
 			if (player.hasPermission(TitleManager.PERMISSION_PREFIX + entry.getName())) {
-				scoreboard.getTeam(entry.getName()).addPlayer(player);
+				Team team = scoreboard.getTeam(entry.getName());
+				team.addPlayer(player);
 				player.setScoreboard(scoreboard);
 				break;
 			}

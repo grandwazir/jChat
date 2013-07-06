@@ -17,7 +17,7 @@ public class ScoreboardTitleConfigurationEntry extends TitleConfigurationEntry {
 
 	public ScoreboardTitleConfigurationEntry(String sectionKey, ConfigurationSection section) {
 		super(sectionKey, section);
-		displayName = section.getString(DISPLAY_NAME_KEY, getName());
+		displayName = section.getString(DISPLAY_NAME_KEY);
 		appendTeamName = section.getBoolean(APPEND_TEAM_KEY);
 		friendlyFire = section.getBoolean(FRIENDLY_FIRE_KEY);
 		friendlyInvisibles = section.getBoolean(SEE_FRIENDLY_INVISIBLES_KEY);

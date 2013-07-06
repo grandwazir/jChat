@@ -54,7 +54,7 @@ public class TitleManager extends AbstractListener {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(player.getMetadata(METADATA_PREFIX_KEY).get(0).asString());
 		stringBuilder.append(player.getName());
-		stringBuilder.append(player.getMetadata(METADATA_SUFFIX_KEY));
+		stringBuilder.append(player.getMetadata(METADATA_SUFFIX_KEY).get(0).asString());
 		stringBuilder.append(ChatColor.RESET);
 		player.setDisplayName(stringBuilder.toString());
 	}
