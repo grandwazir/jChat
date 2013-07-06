@@ -1,5 +1,8 @@
 # Changelog for jChat (v2.0.0-SNAPSHOT)
 
+2013-07-06 21:47:49 +0100    attempt to fix clean builds (James Richardson)  
+2013-07-06 21:41:23 +0100    refactored TitleManagerTest (James Richardson)  
+2013-07-06 21:22:58 +0100    sort properties files (James Richardson)  
 2013-07-06 21:01:25 +0100    added copyright notices (James Richardson)  
 2013-07-06 20:51:17 +0100    metadata now correctly updates on reload (James Richardson)  
 2013-07-06 17:43:56 +0100    finalised testing, added permissions (James Richardson)  
