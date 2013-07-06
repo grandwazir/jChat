@@ -4,6 +4,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
@@ -79,6 +80,8 @@ public class RefreshCommandTest extends TestCase {
 	@Before
 	public void setUp()
 	throws Exception {
+		Permission permission = mock(Permission.class);
+		when(pluginManager.getPermission(anyString())).thenReturn(permission);
 		command = new RefreshCommand(server, pluginManager);
 		when(player.getName()).thenReturn("grandwazir");
 	}
