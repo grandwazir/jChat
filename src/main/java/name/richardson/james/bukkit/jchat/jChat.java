@@ -26,7 +26,6 @@ import org.bukkit.command.PluginCommand;
 
 import name.richardson.james.bukkit.utilities.command.DefaultCommandInvoker;
 import name.richardson.james.bukkit.utilities.command.HelpCommand;
-import name.richardson.james.bukkit.utilities.command.ReloadCommand;
 import name.richardson.james.bukkit.utilities.permissions.Permissions;
 import name.richardson.james.bukkit.utilities.plugin.AbstractPlugin;
 import name.richardson.james.bukkit.utilities.plugin.Reloadable;
