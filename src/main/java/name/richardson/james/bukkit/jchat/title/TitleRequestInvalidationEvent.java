@@ -16,6 +16,10 @@ public class TitleRequestInvalidationEvent extends Event {
 
 	@Override
 	public HandlerList getHandlers() {
+		return TitleRequestInvalidationEvent.handlers;
+	}
+
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 

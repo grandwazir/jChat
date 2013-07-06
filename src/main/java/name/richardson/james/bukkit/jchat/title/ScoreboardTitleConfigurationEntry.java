@@ -41,11 +41,11 @@ public class ScoreboardTitleConfigurationEntry extends TitleConfigurationEntry {
 
 	@Override
 	public String toString() {
-		return "ScoreboardTitleConfigurationEntry{" +
-		"appendTeamName=" + appendTeamName +
-		", displayName='" + displayName + '\'' +
-		", friendlyFire=" + friendlyFire +
-		", friendlyInvisibles=" + friendlyInvisibles +
-		'}';
+		return "ScoreboardTitleConfigurationEntry [" +
+		"appendTeamName:" + appendTeamName +
+		", displayName:'" + displayName + '\'' +
+		", friendlyFire:" + friendlyFire +
+		", friendlyInvisibles:" + friendlyInvisibles +
+		']';
 	}
 }

@@ -61,12 +61,12 @@ public class TitleConfigurationEntry implements Comparable<TitleConfigurationEnt
 
 	@Override
 	public String toString() {
-		return "TitleConfigurationEntry {" +
-		"name='" + name + '\'' +
-		", prefix='" + prefix + '\'' +
-		", suffix='" + suffix + '\'' +
-		", weight=" + weight +
-		'}';
+		return "TitleConfigurationEntry [" +
+		"name:'" + name + '\'' +
+		", prefix:'" + prefix + '\'' +
+		", suffix:'" + suffix + '\'' +
+		", weight:" + weight +
+		']';
 	}
 
 }

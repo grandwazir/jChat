@@ -27,9 +27,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ScoreboardTitleManagerTest extends TestCase {
@@ -75,7 +73,7 @@ public class ScoreboardTitleManagerTest extends TestCase {
 		Player[] players = {playerWithMetaData};
 		when(server.getOnlinePlayers()).thenReturn(players);
 		manager.refreshAll();
-		verify(playerWithMetaData).hasPermission("jchat.title.default");
+		verify(playerWithMetaData, atLeastOnce()).hasPermission("jchat.title.default");
 		verify(scoreboard).getTeam("default");
 	}
 
@@ -91,7 +89,7 @@ public class ScoreboardTitleManagerTest extends TestCase {
 		when(playerWithoutMetaData.getName()).thenReturn("grandwazir");
 		when(metadataValue.asString()).thenReturn("test");
 		manager.onPlayerChangedWorld(event);
-		verify(playerWithoutMetaData).hasPermission("jchat.title.default");
+		verify(playerWithoutMetaData, atLeastOnce()).hasPermission("jchat.title.default");
 		verify(scoreboard).getTeam("default");
 	}
 
@@ -107,7 +105,7 @@ public class ScoreboardTitleManagerTest extends TestCase {
 		when(playerWithoutMetaData.getName()).thenReturn("grandwazir");
 		when(metadataValue.asString()).thenReturn("test");
 		manager.onPlayerJoin(event);
-		verify(playerWithoutMetaData).hasPermission("jchat.title.default");
+		verify(playerWithoutMetaData, atLeastOnce()).hasPermission("jchat.title.default");
 		verify(scoreboard).getTeam("default");
 	}
 
