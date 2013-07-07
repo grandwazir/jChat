@@ -1,4 +1,4 @@
 default:
-  prefix: "&BLUE"
+  prefix: "§3"
   suffix: ''
   weight: 0

@@ -1,5 +1,9 @@
 Changelog for jChat (v2.0.0-SNAPSHOT)
 
+2013-07-07 14:59:53 +0100    needs a . to be valid (James Richardson)
+2013-07-07 14:56:36 +0100    see if travis test coverage support is better than codeship (James Richardson)
+2013-07-07 14:50:33 +0100    implement tests for jChat (James Richardson)
+2013-07-06 21:52:44 +0100    really fix the build problem this time (James Richardson)
 2013-07-06 21:47:49 +0100    attempt to fix clean builds (James Richardson)
 2013-07-06 21:41:23 +0100    refactored TitleManagerTest (James Richardson)
 2013-07-06 21:22:58 +0100    sort properties files (James Richardson)
