@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.command.PluginCommand;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import name.richardson.james.bukkit.utilities.command.Command;
 import name.richardson.james.bukkit.utilities.command.DefaultCommandInvoker;
@@ -94,7 +95,7 @@ public class jChat extends AbstractPlugin implements Reloadable {
 			loadConfiguration();
 			loadTitleConfiguration();
 			loadMessageConfiguration();
-			registerListeners();
+			titleManager.refreshAll();
 		} catch (IOException e) {
 			return false;
 		}
@@ -135,7 +136,6 @@ public class jChat extends AbstractPlugin implements Reloadable {
 			titleManager = new TitleManager(this, this.getServer().getPluginManager(), this.getServer(), titles);
 		}
 		new MessagesManager(this, this.getServer().getPluginManager(), messagesConfiguration);
-		titleManager.refreshAll();
 	}
 
 }
