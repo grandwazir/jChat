@@ -1,0 +1,8 @@
+
+http://grandwazir.github.io/jChat/sitemap.txt
+http://grandwazir.github.io/jChat/index.html
+http://grandwazir.github.io/jChat/rss.xml
+http://grandwazir.github.io/jChat/getting_started.html
+http://grandwazir.github.io/jChat/download.html
+http://grandwazir.github.io/jChat/atom.xml
+http://grandwazir.github.io/jChat/features.html
