@@ -49,6 +49,7 @@ public class jChat extends AbstractPlugin implements Reloadable {
 	private TitleManager titleManager;
 	private Set<? extends TitleConfigurationEntry> titles;
 
+
 	@Override
 	public String getArtifactID() {
 		return "jchat";
@@ -77,16 +78,13 @@ public class jChat extends AbstractPlugin implements Reloadable {
 		PluginCommand rootCommand = getCommand(COMMAND_LABEL);
 		HelpCommand helpCommand = new HelpCommand(getPermissionManager(), COMMAND_LABEL, getDescription());
 		DefaultCommandInvoker commandInvoker = new DefaultCommandInvoker(helpCommand);
-		// Create actual commands
 		Set<Command> commands = new HashSet<Command>();
 		commands.add(new ReloadCommand(getPermissionManager(), this));
 		commands.add(new RefreshCommand(getPermissionManager(), getServer(), getServer().getPluginManager()));
-		// Set commands with help and the invoker
 		for (Command command : commands) {
 			commandInvoker.addCommand(command);
 			helpCommand.addCommand(command);
 		}
-		// Bind the invoker to the root command
 		rootCommand.setExecutor(commandInvoker);
 	}
 
