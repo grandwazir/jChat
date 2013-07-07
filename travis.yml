@@ -1,0 +1,2 @@
+language: java
+script: "mvn -DserviceName=travis-ci cobertura:cobertura coveralls:cobertura"
