@@ -22,13 +22,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import name.richardson.james.bukkit.utilities.persistence.YAMLStorage;
+import name.richardson.james.bukkit.utilities.persistence.configuration.AbstractConfiguration;
 
-public class MessagesConfiguration extends YAMLStorage {
+public class MessagesConfiguration extends AbstractConfiguration {
 
 	public MessagesConfiguration(File file, InputStream defaults)
 	throws IOException {
-		super(file, defaults);
+		super(file, defaults, true);
 	}
 
 	public boolean isColouringDeathMessages() {

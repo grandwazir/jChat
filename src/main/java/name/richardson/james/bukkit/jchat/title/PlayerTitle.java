@@ -5,9 +5,6 @@ import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 
-/**
-* Created with IntelliJ IDEA. User: james Date: 13/07/13 Time: 16:39 To change this template use File | Settings | File Templates.
-*/
 public class PlayerTitle implements Callable<Object> {
 
 	private final Player player;

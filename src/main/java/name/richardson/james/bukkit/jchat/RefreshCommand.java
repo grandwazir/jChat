@@ -24,7 +24,7 @@ import org.bukkit.plugin.PluginManager;
 import org.apache.commons.lang.ObjectUtils;
 
 import name.richardson.james.bukkit.utilities.command.AbstractCommand;
-import name.richardson.james.bukkit.utilities.command.Context;
+import name.richardson.james.bukkit.utilities.command.context.CommandContext;
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
 import name.richardson.james.bukkit.utilities.command.matcher.OnlinePlayerMatcher;
 import name.richardson.james.bukkit.utilities.formatters.colours.ColourScheme;
@@ -47,7 +47,7 @@ public class RefreshCommand extends AbstractCommand {
 	}
 
 	@Override
-	public void execute(Context context) {
+	public void execute(CommandContext context) {
 		if (!setPlayer(context)) return;
 		if (!isAuthorised(context)) return;
 		TitleRequestInvalidationEvent event = new TitleRequestInvalidationEvent(player);
@@ -57,7 +57,7 @@ public class RefreshCommand extends AbstractCommand {
 		player = null;
 	}
 
-	private boolean setPlayer(Context context) {
+	private boolean setPlayer(CommandContext context) {
 		if (context.has(0)) {
 			context.getPlayer(0);
 		}
@@ -70,7 +70,7 @@ public class RefreshCommand extends AbstractCommand {
 		return (player != null);
 	}
 
-	private boolean isAuthorised(Context context) {
+	private boolean isAuthorised(CommandContext context) {
 		boolean targetingSelf = ObjectUtils.equals(player, context.getCommandSender());
 		if (targetingSelf && context.getCommandSender().hasPermission("jchat.refresh.self")) return true;
 		if (!targetingSelf && context.getCommandSender().hasPermission("jchat.refresh.others")) return true;

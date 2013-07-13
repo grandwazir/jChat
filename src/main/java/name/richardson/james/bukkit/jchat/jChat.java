@@ -20,15 +20,16 @@ package name.richardson.james.bukkit.jchat;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.bukkit.command.PluginCommand;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 import name.richardson.james.bukkit.utilities.command.Command;
-import name.richardson.james.bukkit.utilities.command.DefaultCommandInvoker;
 import name.richardson.james.bukkit.utilities.command.HelpCommand;
+import name.richardson.james.bukkit.utilities.command.invoker.CommandInvoker;
+import name.richardson.james.bukkit.utilities.command.invoker.FallthroughCommandInvoker;
 import name.richardson.james.bukkit.utilities.permissions.Permissions;
 import name.richardson.james.bukkit.utilities.plugin.AbstractPlugin;
 import name.richardson.james.bukkit.utilities.plugin.Reloadable;
@@ -52,13 +53,8 @@ public class jChat extends AbstractPlugin implements Reloadable {
 
 
 	@Override
-	public String getArtifactID() {
+	public String getArtifactId() {
 		return "jchat";
-	}
-
-	@Override
-	public String getVersion() {
-		return this.getDescription().getVersion();
 	}
 
 	@Override
@@ -76,16 +72,14 @@ public class jChat extends AbstractPlugin implements Reloadable {
 	}
 
 	private void registerCommands() {
+		Map<String, Command> commands = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
+		ReloadCommand reloadCommand = new ReloadCommand(getPermissionManager(), this);
+		commands.put(reloadCommand.getName(), reloadCommand);
+		RefreshCommand refreshCommand = new RefreshCommand(getPermissionManager(), getServer(), getServer().getPluginManager());
+		commands.put(refreshCommand.getName(), refreshCommand);
+		HelpCommand helpCommand = new HelpCommand(getPermissionManager(), COMMAND_LABEL, getDescription(), commands);
+		CommandInvoker commandInvoker = new FallthroughCommandInvoker(helpCommand);
 		PluginCommand rootCommand = getCommand(COMMAND_LABEL);
-		HelpCommand helpCommand = new HelpCommand(getPermissionManager(), COMMAND_LABEL, getDescription());
-		DefaultCommandInvoker commandInvoker = new DefaultCommandInvoker(helpCommand);
-		Set<Command> commands = new HashSet<Command>();
-		commands.add(new ReloadCommand(getPermissionManager(), this));
-		commands.add(new RefreshCommand(getPermissionManager(), getServer(), getServer().getPluginManager()));
-		for (Command command : commands) {
-			commandInvoker.addCommand(command);
-			helpCommand.addCommand(command);
-		}
 		rootCommand.setExecutor(commandInvoker);
 	}
 
