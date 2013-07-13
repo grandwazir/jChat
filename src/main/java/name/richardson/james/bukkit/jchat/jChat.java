@@ -20,10 +20,14 @@ package name.richardson.james.bukkit.jchat;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 
 import name.richardson.james.bukkit.utilities.command.Command;
@@ -72,15 +76,18 @@ public class jChat extends AbstractPlugin implements Reloadable {
 	}
 
 	private void registerCommands() {
-		Map<String, Command> commands = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
+		Map<String, Command> commands = new HashMap<String, Command>();
 		ReloadCommand reloadCommand = new ReloadCommand(getPermissionManager(), this);
 		commands.put(reloadCommand.getName(), reloadCommand);
 		RefreshCommand refreshCommand = new RefreshCommand(getPermissionManager(), getServer(), getServer().getPluginManager());
 		commands.put(refreshCommand.getName(), refreshCommand);
 		HelpCommand helpCommand = new HelpCommand(getPermissionManager(), COMMAND_LABEL, getDescription(), commands);
 		CommandInvoker commandInvoker = new FallthroughCommandInvoker(helpCommand);
+		commandInvoker.addCommands(commands.values());
 		PluginCommand rootCommand = getCommand(COMMAND_LABEL);
 		rootCommand.setExecutor(commandInvoker);
+		System.out.print(commandInvoker.getCommands().containsKey("reload"));
+		System.out.print(commandInvoker.getCommands().get("reload"));
 	}
 
 	@Override

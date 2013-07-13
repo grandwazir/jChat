@@ -1,5 +1,11 @@
 # Changelog for jChat (v2.0.0-SNAPSHOT)
 
+2013-07-13 17:27:39 +0100    change travis command (James Richardson)  
+2013-07-13 17:25:14 +0100    fix remaining failing tests (James Richardson)  
+2013-07-13 17:09:35 +0100    use alternative colour code in configuration to fix encoding issues (James Richardson)  
+2013-07-13 17:08:35 +0100    added comments to configuration files (James Richardson)  
+2013-07-13 16:55:47 +0100    finish clean up to match new library version (James Richardson)  
+2013-07-13 16:41:38 +0100    move PlayerTitle into its own class. Should prevent the issue where titles where not updating due to the titles being treated as final by PlayerTitle. (James Richardson)  
 2013-07-07 19:51:00 +0100    fix [#7](https://github.com/grandwazir/jChat/jchat/issues/7), listeners being registered multiple times on reloads. This has the downside in that it is no longer possible to enable or disable scoreboard support without restarting the server. (James Richardson)  
 2013-07-07 15:29:00 +0100    add markdown license file (James Richardson)  
 2013-07-07 15:20:34 +0100    delete plain text changelog (James Richardson)  

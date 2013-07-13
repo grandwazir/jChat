@@ -59,7 +59,7 @@ public class RefreshCommand extends AbstractCommand {
 
 	private boolean setPlayer(CommandContext context) {
 		if (context.has(0)) {
-			context.getPlayer(0);
+			player = context.getPlayer(0);
 		}
 		if (player == null && context.isConsoleCommandSender()) {
 			String message = getColouredMessage(ColourScheme.Style.ERROR, "must-specify-online-player");
