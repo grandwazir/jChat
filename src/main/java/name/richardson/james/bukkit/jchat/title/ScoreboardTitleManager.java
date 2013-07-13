@@ -47,7 +47,7 @@ public class ScoreboardTitleManager extends TitleManager {
 	public ScoreboardTitleManager(Plugin plugin, PluginManager pluginManager, Server server, Set<ScoreboardTitleConfigurationEntry> titles, Scoreboard scoreboard) {
 		super(plugin, pluginManager, server, titles);
 		this.scoreboard = scoreboard;
-		this.titles = titles;
+		this.titles = (Set<ScoreboardTitleConfigurationEntry>) getTitles();
 		this.server = server;
 		setTeams();
 	}

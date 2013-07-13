@@ -19,7 +19,6 @@
 package name.richardson.james.bukkit.jchat.title;
 
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,6 +53,10 @@ public class TitleManager extends AbstractListener {
 		this.titles = titles;
 		this.plugin = plugin;
 		this.server = server;
+	}
+
+	public Set<? extends TitleConfigurationEntry> getTitles() {
+		return titles;
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -96,7 +99,7 @@ public class TitleManager extends AbstractListener {
 			player.getMetadata(METADATA_PREFIX_KEY).get(0).invalidate();
 			LOGGER.log(Level.FINER, "Invalidating existing metadata for " + player.getName());
 		} else {
-			PlayerTitle playerTitle = new PlayerTitle(TitleConfigurationEntry.TitleType.PREFIX, player);
+			PlayerTitle playerTitle = new PlayerTitle(this, TitleConfigurationEntry.TitleType.PREFIX, player);
 			LazyMetadataValue metadataValue = new LazyMetadataValue(plugin, playerTitle);
 			player.setMetadata(METADATA_PREFIX_KEY, metadataValue);
 			LOGGER.log(Level.FINER, "Created metadata for " + player.getName());
@@ -104,31 +107,10 @@ public class TitleManager extends AbstractListener {
 		if (player.hasMetadata(METADATA_SUFFIX_KEY) && !recreateMetaData) {
 			player.getMetadata(METADATA_SUFFIX_KEY).get(0).invalidate();
 		} else {
-			PlayerTitle playerTitle = new PlayerTitle(TitleConfigurationEntry.TitleType.SUFFIX, player);
+			PlayerTitle playerTitle = new PlayerTitle(this, TitleConfigurationEntry.TitleType.SUFFIX, player);
 			LazyMetadataValue metadataValue = new LazyMetadataValue(plugin, playerTitle);
 			player.setMetadata(METADATA_SUFFIX_KEY, metadataValue);
 		}
-	}
-
-	public class PlayerTitle implements Callable<Object> {
-
-		private final Player player;
-		private final TitleConfigurationEntry.TitleType titleType;
-
-		public PlayerTitle(TitleConfigurationEntry.TitleType title, Player player) {
-			this.titleType = title;
-			this.player = player;
-		}
-
-		public String call() {
-			for (TitleConfigurationEntry entry : titles) {
-				boolean permitted = player.hasPermission(PERMISSION_PREFIX + entry.getName());
-				LOGGER.log(Level.FINEST, "Does " + player.getName() + " have permission for " + entry.getName() + "? " + permitted);
-				if (permitted) return entry.getTitle(titleType);
-			}
-			return "";
-		}
-
 	}
 
 }

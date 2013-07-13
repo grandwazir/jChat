@@ -1,5 +1,10 @@
 # Changelog for jChat (v2.0.0-SNAPSHOT)
 
+2013-07-07 19:51:00 +0100    fix [#7](https://github.com/grandwazir/jChat/jchat/issues/7), listeners being registered multiple times on reloads. This has the downside in that it is no longer possible to enable or disable scoreboard support without restarting the server. (James Richardson)  
+2013-07-07 15:29:00 +0100    add markdown license file (James Richardson)  
+2013-07-07 15:20:34 +0100    delete plain text changelog (James Richardson)  
+2013-07-07 15:17:48 +0100    remove .idea directory and add .gitignore (James Richardson)  
+2013-07-07 15:04:36 +0100    change from old formatting colour style to built in minecraft one (James Richardson)  
 2013-07-07 14:59:53 +0100    needs a . to be valid (James Richardson)  
 2013-07-07 14:56:36 +0100    see if travis test coverage support is better than codeship (James Richardson)  
 2013-07-07 14:50:33 +0100    implement tests for jChat (James Richardson)  

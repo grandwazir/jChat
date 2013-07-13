@@ -84,6 +84,7 @@ public class jChatTest extends TestCase {
 	@Test
 	public void testReload()
 	throws Exception {
+		plugin.onEnable();
 		plugin.reload();
 	}
 
