@@ -1,9 +1,50 @@
+# titles.yml
+# - This configuration file is responsible for the titles that can be displayed in game
+# - Any values _not set_ in this file will be set to the configuration default.
+# - Any _invalid_ values will be left for you to fix.
+# - To rebuild this file stop your server, delete it and then restart.
+# values:
+# - This file is separated out into a number of different sections.
+# - Each section is a separate title and it is named after the name of the section.
+# - In the example configuration there is only one title and it is called `default`.
+# - prefix:
+# -- This value specifies what text should be placed in front of the player's name.
+# -- Colour codes can be specified by prefixing them with '&'.
+# -- Valid values: Any valid String
+# -- Default: ""
+# - suffix:
+# -- This value specifies what text should be placed in after a player's name
+# -- Valid values: Any valid String
+# -- Default: ""
+# - weight:
+# -- This value specifies how heavy the title is in relation to the others in the file.
+# -- Heavy titles 'sink' to the bottom of the list, while 'lighter' ones rise to the top.
+# -- Valid values: Any integer
+# -- Default: 0
+# - scoreboard.display-name:
+# -- This value specifies what the display name of this team should be.
+# -- The display name is mainly used to append to the end of the player's name in the scoreboard.
+# -- Valid values: Any String
+# -- Default: the name of the title
+# - scoreboard.append-team-name:
+# -- This value specifies if a team's display name should be printed in brackets after a player's name on the scoreboard.
+# -- Valid values: true or false
+# -- Default: true
+# - scoreboard.friendly-fire:
+# -- This value specifies if members of this team can hurt each other
+# -- Valid values: true or false
+# -- Default: true
+# - scoreboard.see-invisibles:
+# -- This value specifies if members of this team can see each other when they are invisible.
+# -- Valid values: true or false
+# -- Default: false
+
 default:
-  prefix: "§3"
+  prefix: "&3"
   suffix: ''
   weight: 0
   scoreboard:
     display-name: "Guest"
     append-team-name: true
-    friendly-fire: false
+    friendly-fire: true
     see-invisibles: false

@@ -1,3 +1,23 @@
+# messages.yml
+# - This configuration file is responsible for setting if system messages will be coloured in game.
+# - This effectively means a player's display name will be used instead of their actual name.
+# - Any values _not set_ in this file will be set to the configuration default.
+# - Any _invalid_ values will be left for you to fix.
+# - To rebuild this file stop your server, delete it and then restart.
+# values:
+# - death:
+# -- This value specifies if death messages should be coloured.
+# -- Valid values: true, false
+# -- Default: true
+# - join:
+# -- This value specifies if join messages should be coloured.
+# -- Valid values: true, false
+# -- Default: true
+# - quit:
+# -- This value specifies if quit messages should be coloured.
+# -- Valid values: true, false
+# -- Default: true
+
 death: true
 join: true
 quit: true
