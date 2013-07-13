@@ -32,7 +32,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
@@ -47,7 +46,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.Matchers.anyCollection;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -115,15 +113,9 @@ public class jChatTest extends TestCase {
 	}
 
 	@Test
-	public void testGetVersion()
-	throws Exception {
-		Assert.assertTrue("Plugin version is inconsistent! Expected `1.0` but got " + plugin.getVersion(), plugin.getVersion().contentEquals("1.0"));
-	}
-
-	@Test
 	public void testGetArtifactID()
 	throws Exception {
-		Assert.assertTrue("Plugin artifact is inconsistent! Expected `jchat` but got " + plugin.getArtifactID(), plugin.getArtifactID().contentEquals("jchat"));
+		Assert.assertTrue("Plugin artifact is inconsistent! Expected `jchat` but got " + plugin.getArtifactId(), plugin.getArtifactId().contentEquals("jchat"));
 	}
 
 	@Before

@@ -1,5 +1,5 @@
 default:
-  prefix: "&BLUE"
+  prefix: "&e"
   suffix: ''
   weight: 0
   scoreboard:

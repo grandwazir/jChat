@@ -43,7 +43,7 @@ public class TitleConfigurationEntryTest extends TestCase {
 	@Test
 	public void testGetTitle()
 	throws Exception {
-		Assert.assertTrue(entry.getTitle(TitleConfigurationEntry.TitleType.PREFIX).contentEquals("&BLUE"));
+		Assert.assertTrue(entry.getTitle(TitleConfigurationEntry.TitleType.PREFIX).contentEquals("§e"));
 		Assert.assertTrue(entry.getTitle(TitleConfigurationEntry.TitleType.SUFFIX).contentEquals(""));
 	}
 
@@ -62,7 +62,7 @@ public class TitleConfigurationEntryTest extends TestCase {
 	@Test
 	public void testGetPrefix()
 	throws Exception {
-		Assert.assertTrue(entry.getPrefix().contentEquals("&BLUE"));
+		Assert.assertTrue(entry.getPrefix().contentEquals("§e"));
 	}
 
 	@Test
