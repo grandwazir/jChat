@@ -18,6 +18,7 @@
 
 package name.richardson.james.bukkit.jchat.title;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class TitleConfigurationEntry implements Comparable<TitleConfigurationEntry> {
@@ -55,11 +56,11 @@ public class TitleConfigurationEntry implements Comparable<TitleConfigurationEnt
 	}
 
 	public String getPrefix() {
-		return (prefix == null) ? "" : prefix;
+		return (prefix == null) ? "" : ChatColor.translateAlternateColorCodes('&', prefix);
 	}
 
 	public String getSuffix() {
-		return (suffix == null) ? "" : suffix;
+		return (suffix == null) ? "" : ChatColor.translateAlternateColorCodes('&', suffix);
 	}
 
 	public int getWeight() {
