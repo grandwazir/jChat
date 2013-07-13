@@ -42,17 +42,16 @@ public class ScoreboardTitleManager extends TitleManager {
 
 	private final Scoreboard scoreboard;
 	private final Server server;
-	private final Set<ScoreboardTitleConfigurationEntry> titles;
 
 	public ScoreboardTitleManager(Plugin plugin, PluginManager pluginManager, Server server, Set<ScoreboardTitleConfigurationEntry> titles, Scoreboard scoreboard) {
 		super(plugin, pluginManager, server, titles);
 		this.scoreboard = scoreboard;
-		this.titles = (Set<ScoreboardTitleConfigurationEntry>) getTitles();
 		this.server = server;
 		setTeams();
 	}
 
 	public void setTeams() {
+		Set<ScoreboardTitleConfigurationEntry> titles = (Set<ScoreboardTitleConfigurationEntry>) getTitles();
 		for (ScoreboardTitleConfigurationEntry title : titles) {
 			Team team = (scoreboard.getTeam(title.getName()) == null) ? scoreboard.registerNewTeam(title.getName()) : scoreboard.getTeam(title.getName());
 			team.setPrefix(title.getTitle(TitleConfigurationEntry.TitleType.PREFIX));
@@ -81,12 +80,14 @@ public class ScoreboardTitleManager extends TitleManager {
 	@Override
 	public void refreshAll() {
 		super.refreshAll();
+		setTeams();
 		for (Player player : server.getOnlinePlayers()) {
 			updateScoreboard(player);
 		}
 	}
 
 	private void updateScoreboard(Player player) {
+		Set<ScoreboardTitleConfigurationEntry> titles = (Set<ScoreboardTitleConfigurationEntry>) getTitles();
 		for (ScoreboardTitleConfigurationEntry entry : titles) {
 			if (player.hasPermission(TitleManager.PERMISSION_PREFIX + entry.getName())) {
 				LOGGER.log(Level.FINE, "Adding " + player.getName() + " to " + entry.getName() + " team.");

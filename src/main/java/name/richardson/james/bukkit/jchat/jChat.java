@@ -86,8 +86,6 @@ public class jChat extends AbstractPlugin implements Reloadable {
 		commandInvoker.addCommands(commands.values());
 		PluginCommand rootCommand = getCommand(COMMAND_LABEL);
 		rootCommand.setExecutor(commandInvoker);
-		System.out.print(commandInvoker.getCommands().containsKey("reload"));
-		System.out.print(commandInvoker.getCommands().get("reload"));
 	}
 
 	@Override
@@ -96,6 +94,7 @@ public class jChat extends AbstractPlugin implements Reloadable {
 			loadConfiguration();
 			loadTitleConfiguration();
 			loadMessageConfiguration();
+			titleManager.setTitles(titles);
 			titleManager.refreshAll();
 		} catch (IOException e) {
 			return false;

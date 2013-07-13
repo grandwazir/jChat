@@ -1,5 +1,6 @@
 # Changelog for jChat (v2.0.0-SNAPSHOT)
 
+2013-07-13 18:16:46 +0100    fix bug where I never actually assigned the target player (James Richardson)  
 2013-07-13 17:27:39 +0100    change travis command (James Richardson)  
 2013-07-13 17:25:14 +0100    fix remaining failing tests (James Richardson)  
 2013-07-13 17:09:35 +0100    use alternative colour code in configuration to fix encoding issues (James Richardson)  

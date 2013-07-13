@@ -46,7 +46,7 @@ public class TitleManager extends AbstractListener {
 
 	private final Plugin plugin;
 	private final Server server;
-	private final Set<? extends TitleConfigurationEntry> titles;
+	private Set<? extends TitleConfigurationEntry> titles;
 
 	public TitleManager(Plugin plugin, PluginManager pluginManager, Server server, Set<? extends TitleConfigurationEntry> titles) {
 		super(plugin, pluginManager);
@@ -57,6 +57,10 @@ public class TitleManager extends AbstractListener {
 
 	public Set<? extends TitleConfigurationEntry> getTitles() {
 		return titles;
+	}
+
+	public void setTitles(Set<? extends TitleConfigurationEntry> titles) {
+		this.titles = titles;
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

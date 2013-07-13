@@ -17,6 +17,7 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.jchat;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -48,6 +49,7 @@ public class RefreshCommand extends AbstractCommand {
 
 	@Override
 	public void execute(CommandContext context) {
+		System.out.print(context.toString());
 		if (!setPlayer(context)) return;
 		if (!isAuthorised(context)) return;
 		TitleRequestInvalidationEvent event = new TitleRequestInvalidationEvent(player);
