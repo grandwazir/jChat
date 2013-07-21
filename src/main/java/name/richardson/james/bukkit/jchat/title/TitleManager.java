@@ -63,13 +63,13 @@ public class TitleManager extends AbstractListener {
 		this.titles = titles;
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		LOGGER.log(Level.FINEST, "Recieved " + event.getClass().getSimpleName());
 		this.updateDisplayName(event.getPlayer(), false);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
 		LOGGER.log(Level.FINEST, "Recieved " + event.getClass().getSimpleName());
 		this.updateDisplayName(event.getPlayer(), false);

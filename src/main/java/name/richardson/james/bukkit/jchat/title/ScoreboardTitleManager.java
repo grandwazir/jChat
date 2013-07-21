@@ -71,11 +71,18 @@ public class ScoreboardTitleManager extends TitleManager {
 		this.updateScoreboard(event.getPlayer());
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
 		super.onPlayerChangedWorld(event);
 		this.updateScoreboard(event.getPlayer());
 	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onTitleRequestInvalidation(TitleRequestInvalidationEvent event) {
+		super.onTitleRequestInvalidation(event);
+		this.updateScoreboard(event.getPlayer());
+	}
+
 
 	@Override
 	public void refreshAll() {
