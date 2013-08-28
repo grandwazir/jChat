@@ -20,46 +20,35 @@ package name.richardson.james.bukkit.jchat;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import name.richardson.james.bukkit.utilities.command.AbstractCommand;
 import name.richardson.james.bukkit.utilities.command.Command;
 import name.richardson.james.bukkit.utilities.command.HelpCommand;
 import name.richardson.james.bukkit.utilities.command.invoker.CommandInvoker;
 import name.richardson.james.bukkit.utilities.command.invoker.FallthroughCommandInvoker;
-import name.richardson.james.bukkit.utilities.permissions.Permissions;
-import name.richardson.james.bukkit.utilities.plugin.AbstractPlugin;
-import name.richardson.james.bukkit.utilities.plugin.Reloadable;
+import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
+import name.richardson.james.bukkit.utilities.command.matcher.OnlinePlayerMatcher;
 
 import name.richardson.james.bukkit.jchat.message.MessagesConfiguration;
 import name.richardson.james.bukkit.jchat.message.MessagesManager;
 import name.richardson.james.bukkit.jchat.title.*;
 
-@Permissions(permissions = "jchat")
-public class jChat extends AbstractPlugin implements Reloadable {
+public class jChat extends JavaPlugin {
 
 	public static final String COMMAND_LABEL = "jchat";
 	public static final String MESSAGES_CONFIG_NAME = "messages.yml";
 	public static final String TITLE_CONFIG_NAME = "titles.yml";
+	public static final String CONFIG_NAME = "config.yml";
 
 	private PluginConfiguration configuration;
 	private MessagesConfiguration messagesConfiguration;
 	private TitleConfiguration titleConfiguration;
 	private TitleManager titleManager;
 	private Set<? extends TitleConfigurationEntry> titles;
-
-
-	@Override
-	public String getArtifactId() {
-		return "jchat";
-	}
 
 	@Override
 	public void onEnable() {
@@ -76,19 +65,20 @@ public class jChat extends AbstractPlugin implements Reloadable {
 	}
 
 	private void registerCommands() {
-		Map<String, Command> commands = new HashMap<String, Command>();
-		ReloadCommand reloadCommand = new ReloadCommand(getPermissionManager(), this);
-		commands.put(reloadCommand.getName(), reloadCommand);
-		RefreshCommand refreshCommand = new RefreshCommand(getPermissionManager(), getServer(), getServer().getPluginManager());
-		commands.put(refreshCommand.getName(), refreshCommand);
-		HelpCommand helpCommand = new HelpCommand(getPermissionManager(), COMMAND_LABEL, getDescription(), commands);
-		CommandInvoker commandInvoker = new FallthroughCommandInvoker(helpCommand);
-		commandInvoker.addCommands(commands.values());
-		PluginCommand rootCommand = getCommand(COMMAND_LABEL);
-		rootCommand.setExecutor(commandInvoker);
+		// create argument matchers
+		Matcher onlinePlayerMatcher = new OnlinePlayerMatcher(getServer());
+		// create commands
+		Set<Command> commands = new HashSet<Command>();
+		AbstractCommand command = new RefreshCommand(getServer(), getServer().getPluginManager());
+		command.addMatcher(onlinePlayerMatcher);
+		commands.add(command);
+		// create the invoker
+		command = new HelpCommand("jchat", commands);
+		CommandInvoker invoker = new FallthroughCommandInvoker(command);
+		// bind invoker to plugin command
+		getCommand("jchat").setExecutor(invoker);
 	}
 
-	@Override
 	public boolean reload() {
 		try {
 			loadConfiguration();
@@ -111,7 +101,7 @@ public class jChat extends AbstractPlugin implements Reloadable {
 
 	private void loadConfiguration()
 	throws IOException {
-		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + AbstractPlugin.CONFIG_NAME);
+		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + CONFIG_NAME);
 		final InputStream defaults = this.getResource(CONFIG_NAME);
 		this.configuration = new PluginConfiguration(file, defaults);
 	}

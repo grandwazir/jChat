@@ -9,3 +9,17 @@ commands:
   jchat:
     description: The root jChat command
     usage: There was an error enabling jChat.
+permissions:
+  jchat:
+    description: Allow full access to use jChat.
+    children:
+      jchat.refresh: true
+  jchat.refresh:
+    description: Allow users to refresh any player's display name.
+    children:
+      jchat.refresh.self: true
+      jchat.refresh.others: true
+  jchat.refresh.self:
+    description: Allow users to refresh their own display name.
+  jchat.refresh.others:
+    description: Allow users to refresh the display names of others.

@@ -34,11 +34,11 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import name.richardson.james.bukkit.utilities.listener.AbstractListener;
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 public class TitleManager extends AbstractListener {
 
-	public static final Logger LOGGER = PrefixedLogger.getLogger(TitleManager.class);
+	private final Logger logger = PluginLoggerFactory.getLogger(TitleManager.class);
 
 	public static String METADATA_PREFIX_KEY = "chatPrefix";
 	public static String METADATA_SUFFIX_KEY = "chatSuffix";
@@ -65,19 +65,19 @@ public class TitleManager extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		LOGGER.log(Level.FINEST, "Recieved " + event.getClass().getSimpleName());
+		logger.log(Level.FINEST, "Recieved " + event.getClass().getSimpleName());
 		this.updateDisplayName(event.getPlayer(), false);
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-		LOGGER.log(Level.FINEST, "Recieved " + event.getClass().getSimpleName());
+		logger.log(Level.FINEST, "Recieved " + event.getClass().getSimpleName());
 		this.updateDisplayName(event.getPlayer(), false);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onTitleRequestInvalidation(TitleRequestInvalidationEvent event) {
-		LOGGER.log(Level.FINEST, "Recieved " + event.getClass().getSimpleName());
+		logger.log(Level.FINEST, "Recieved " + event.getClass().getSimpleName());
 		this.updateDisplayName(event.getPlayer(), false);
 	}
 
@@ -94,19 +94,19 @@ public class TitleManager extends AbstractListener {
 		stringBuilder.append(player.getName());
 		stringBuilder.append(player.getMetadata(METADATA_SUFFIX_KEY).get(0).asString());
 		stringBuilder.append(ChatColor.RESET);
-		LOGGER.log(Level.FINE, "Setting " + player.getName() + " display name to " + stringBuilder.toString());
+		logger.log(Level.FINE, "Setting " + player.getName() + " display name to " + stringBuilder.toString());
 		player.setDisplayName(stringBuilder.toString());
 	}
 
 	private void setMetaData(Player player, boolean recreateMetaData) {
 		if (player.hasMetadata(METADATA_PREFIX_KEY) && !recreateMetaData) {
 			player.getMetadata(METADATA_PREFIX_KEY).get(0).invalidate();
-			LOGGER.log(Level.FINER, "Invalidating existing metadata for " + player.getName());
+			logger.log(Level.FINER, "Invalidating existing metadata for " + player.getName());
 		} else {
 			PlayerTitle playerTitle = new PlayerTitle(this, TitleConfigurationEntry.TitleType.PREFIX, player);
 			LazyMetadataValue metadataValue = new LazyMetadataValue(plugin, playerTitle);
 			player.setMetadata(METADATA_PREFIX_KEY, metadataValue);
-			LOGGER.log(Level.FINER, "Created metadata for " + player.getName());
+			logger.log(Level.FINER, "Created metadata for " + player.getName());
 		}
 		if (player.hasMetadata(METADATA_SUFFIX_KEY) && !recreateMetaData) {
 			player.getMetadata(METADATA_SUFFIX_KEY).get(0).invalidate();

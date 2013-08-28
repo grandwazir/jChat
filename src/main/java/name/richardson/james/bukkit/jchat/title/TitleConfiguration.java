@@ -28,12 +28,13 @@ import java.util.logging.Logger;
 
 import org.bukkit.configuration.ConfigurationSection;
 
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 import name.richardson.james.bukkit.utilities.persistence.configuration.AbstractConfiguration;
 
 public class TitleConfiguration extends AbstractConfiguration {
 
-	public static Logger LOGGER = PrefixedLogger.getLogger(TitleConfiguration.class);
+	private Logger LOGGER = PluginLoggerFactory.getLogger(TitleConfiguration.class);
 
 	public TitleConfiguration(File file, InputStream defaults)
 	throws IOException {

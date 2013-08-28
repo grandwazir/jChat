@@ -28,11 +28,11 @@ import java.util.logging.Logger;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 public class ScoreboardTitleConfiguration extends TitleConfiguration {
 
-	public static final Logger LOGGER = PrefixedLogger.getLogger(ScoreboardTitleConfiguration.class);
+	private final Logger logger = PluginLoggerFactory.getLogger(ScoreboardTitleConfiguration.class);
 
 	public ScoreboardTitleConfiguration(File file, InputStream defaults)
 	throws IOException {
@@ -46,7 +46,7 @@ public class ScoreboardTitleConfiguration extends TitleConfiguration {
 			final ConfigurationSection section = this.getConfiguration().getConfigurationSection(sectionKey);
 			ScoreboardTitleConfigurationEntry entry = new ScoreboardTitleConfigurationEntry(sectionKey, section);
 			set.add(entry);
-			LOGGER.log(Level.CONFIG, entry.toString());
+			logger.log(Level.CONFIG, entry.toString());
 		}
 		return set;
 	}

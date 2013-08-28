@@ -34,11 +34,12 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 import name.richardson.james.bukkit.utilities.logging.PrefixedLogger;
 
 public class ScoreboardTitleManager extends TitleManager {
 
-	public static final Logger LOGGER = PrefixedLogger.getLogger(TitleManager.class);
+	private final Logger logger = PluginLoggerFactory.getLogger(TitleManager.class);
 
 	private final Scoreboard scoreboard;
 	private final Server server;
@@ -97,7 +98,7 @@ public class ScoreboardTitleManager extends TitleManager {
 		Set<ScoreboardTitleConfigurationEntry> titles = (Set<ScoreboardTitleConfigurationEntry>) getTitles();
 		for (ScoreboardTitleConfigurationEntry entry : titles) {
 			if (player.hasPermission(TitleManager.PERMISSION_PREFIX + entry.getName())) {
-				LOGGER.log(Level.FINE, "Adding " + player.getName() + " to " + entry.getName() + " team.");
+				logger.log(Level.FINE, "Adding " + player.getName() + " to " + entry.getName() + " team.");
 				Team team = scoreboard.getTeam(entry.getName());
 				team.addPlayer(player);
 				player.setScoreboard(scoreboard);

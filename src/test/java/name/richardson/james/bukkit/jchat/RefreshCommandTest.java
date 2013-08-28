@@ -64,7 +64,7 @@ public class RefreshCommandTest extends TestCase {
 		when(player.hasPermission(anyString())).thenReturn(true);
 		when(server.getPlayer(anyString())).thenReturn(player);
 		String[] arguments = {"grandwazir"};
-		CommandContext context = new PassthroughCommandContext(arguments, player, server);
+		CommandContext context = new PassthroughCommandContext(arguments, player);
 		command.execute(context);
 		verify(player).sendMessage("§a§bgrandwazir§a's display name refreshed.");
 	}
@@ -74,7 +74,7 @@ public class RefreshCommandTest extends TestCase {
 		when(player.hasPermission(anyString())).thenReturn(false);
 		when(server.getPlayer(anyString())).thenReturn(player);
 		String[] arguments = {"grandwazir"};
-		CommandContext context = new PassthroughCommandContext(arguments, player, server);
+		CommandContext context = new PassthroughCommandContext(arguments, player);
 		command.execute(context);
 		verify(player).sendMessage("§cYou are not allowed to target §egrandwazir§c.");
 	}
@@ -83,7 +83,7 @@ public class RefreshCommandTest extends TestCase {
 	public void testExecuteSelf()
 	throws Exception {
 		String[] arguments = {""};
-		CommandContext context = new PassthroughCommandContext(arguments, player, server);
+		CommandContext context = new PassthroughCommandContext(arguments, player);
 		when(player.hasPermission(anyString())).thenReturn(true);
 		command.execute(context);
 		verify(player).sendMessage(anyString());
@@ -93,7 +93,7 @@ public class RefreshCommandTest extends TestCase {
 	public void testCommandSenderExecute() {
 		CommandSender sender = mock(ConsoleCommandSender.class);
 		String[] arguments = {""};
-		CommandContext context = new PassthroughCommandContext(arguments, sender, server);
+		CommandContext context = new PassthroughCommandContext(arguments, sender);
 		command.execute(context);
 		verify(sender).sendMessage("§cYou must specify the name of a player!");
 	}
@@ -104,7 +104,7 @@ public class RefreshCommandTest extends TestCase {
 	throws Exception {
 		Permission permission = mock(Permission.class);
 		when(pluginManager.getPermission(anyString())).thenReturn(permission);
-		command = new RefreshCommand(permissionManager, server, pluginManager);
+		command = new RefreshCommand(server, pluginManager);
 		when(player.getName()).thenReturn("grandwazir");
 	}
 

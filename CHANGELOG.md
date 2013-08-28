@@ -1,5 +1,6 @@
 # Changelog for jChat (v2.0.0-SNAPSHOT)
 
+2013-07-21 13:08:05 +0100    scoreboard teams now correctly updated when using refresh command (James Richardson)  
 2013-07-21 12:51:13 +0100    add missing message (James Richardson)  
 2013-07-13 18:35:52 +0100    fix issue where scoreboards where not being updated on reload (James Richardson)  
 2013-07-13 18:16:46 +0100    fix bug where I never actually assigned the target player (James Richardson)  

@@ -20,7 +20,6 @@ public class PlayerTitle implements Callable<Object> {
 	public String call() {
 		for (TitleConfigurationEntry entry : titleManager.getTitles()) {
 			boolean permitted = player.hasPermission(TitleManager.PERMISSION_PREFIX + entry.getName());
-			TitleManager.LOGGER.log(Level.FINEST, "Does " + player.getName() + " have permission for " + entry.getName() + "? " + permitted);
 			if (permitted) return entry.getTitle(titleType);
 		}
 		return "";

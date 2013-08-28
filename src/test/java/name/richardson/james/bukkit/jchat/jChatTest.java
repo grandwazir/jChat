@@ -112,12 +112,6 @@ public class jChatTest extends TestCase {
  		plugin.onEnable();
 	}
 
-	@Test
-	public void testGetArtifactID()
-	throws Exception {
-		Assert.assertTrue("Plugin artifact is inconsistent! Expected `jchat` but got " + plugin.getArtifactId(), plugin.getArtifactId().contentEquals("jchat"));
-	}
-
 	@Before
 	public void setUp()
 	throws Exception {
@@ -138,7 +132,7 @@ public class jChatTest extends TestCase {
 		field.setAccessible(true);
 		field.set(null, server);
 		// Initalize the plugin
-		Class<?> clazz = plugin.getClass().getSuperclass().getSuperclass();
+		Class<?> clazz = plugin.getClass().getSuperclass();
 		Method method = clazz.getDeclaredMethod("initialize", PluginLoader.class, Server.class, PluginDescriptionFile.class, File.class, File.class, ClassLoader.class);
 		method.setAccessible(true);
 		method.invoke(plugin, null, server, pluginDescriptionFile, folder, null, getClass().getClassLoader());
