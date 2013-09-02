@@ -103,7 +103,7 @@ public class TitleManager extends AbstractListener {
 			player.getMetadata(METADATA_PREFIX_KEY).get(0).invalidate();
 			logger.log(Level.FINER, "Invalidating existing metadata for " + player.getName());
 		} else {
-			PlayerTitle playerTitle = new PlayerTitle(this, TitleConfigurationEntry.TitleType.PREFIX, player);
+			PlayerTitle playerTitle = new PlayerTitle(this, TitleConfigurationEntry.TitleType.PREFIX, server, player.getName());
 			LazyMetadataValue metadataValue = new LazyMetadataValue(plugin, playerTitle);
 			player.setMetadata(METADATA_PREFIX_KEY, metadataValue);
 			logger.log(Level.FINER, "Created metadata for " + player.getName());
@@ -111,7 +111,7 @@ public class TitleManager extends AbstractListener {
 		if (player.hasMetadata(METADATA_SUFFIX_KEY) && !recreateMetaData) {
 			player.getMetadata(METADATA_SUFFIX_KEY).get(0).invalidate();
 		} else {
-			PlayerTitle playerTitle = new PlayerTitle(this, TitleConfigurationEntry.TitleType.SUFFIX, player);
+			PlayerTitle playerTitle = new PlayerTitle(this, TitleConfigurationEntry.TitleType.SUFFIX, server, player.getName());
 			LazyMetadataValue metadataValue = new LazyMetadataValue(plugin, playerTitle);
 			player.setMetadata(METADATA_SUFFIX_KEY, metadataValue);
 		}

@@ -1,26 +1,30 @@
 package name.richardson.james.bukkit.jchat.title;
 
 import java.util.concurrent.Callable;
-import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
 public class PlayerTitle implements Callable<Object> {
 
-	private final Player player;
+	private final String playerName;
+	private final Server server;
 	private final TitleConfigurationEntry.TitleType titleType;
-	private TitleManager titleManager;
+	private final TitleManager titleManager;
 
-	public PlayerTitle(TitleManager titleManager, TitleConfigurationEntry.TitleType title, Player player) {
+	public PlayerTitle(TitleManager titleManager, TitleConfigurationEntry.TitleType title, Server server, String playerName) {
 		this.titleManager = titleManager;
 		this.titleType = title;
-		this.player = player;
+		this.server = server;
+		this.playerName = playerName;
 	}
 
 	public String call() {
 		for (TitleConfigurationEntry entry : titleManager.getTitles()) {
-			boolean permitted = player.hasPermission(TitleManager.PERMISSION_PREFIX + entry.getName());
-			if (permitted) return entry.getTitle(titleType);
+			boolean permitted = this.server.getPlayerExact(playerName).hasPermission(TitleManager.PERMISSION_PREFIX + entry.getName());
+			String title = entry.getTitle(titleType);
+			if (permitted) return title;
 		}
 		return "";
 	}

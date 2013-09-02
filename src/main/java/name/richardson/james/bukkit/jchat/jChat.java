@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,6 +33,7 @@ import name.richardson.james.bukkit.utilities.command.invoker.CommandInvoker;
 import name.richardson.james.bukkit.utilities.command.invoker.FallthroughCommandInvoker;
 import name.richardson.james.bukkit.utilities.command.matcher.Matcher;
 import name.richardson.james.bukkit.utilities.command.matcher.OnlinePlayerMatcher;
+import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
 
 import name.richardson.james.bukkit.jchat.message.MessagesConfiguration;
 import name.richardson.james.bukkit.jchat.message.MessagesManager;
@@ -44,6 +46,7 @@ public class jChat extends JavaPlugin {
 	public static final String TITLE_CONFIG_NAME = "titles.yml";
 	public static final String CONFIG_NAME = "config.yml";
 
+	private final Logger logger = PluginLoggerFactory.getLogger(jChat.class);
 	private PluginConfiguration configuration;
 	private MessagesConfiguration messagesConfiguration;
 	private TitleConfiguration titleConfiguration;
@@ -104,6 +107,7 @@ public class jChat extends JavaPlugin {
 		final File file = new File(this.getDataFolder().getPath() + File.separatorChar + CONFIG_NAME);
 		final InputStream defaults = this.getResource(CONFIG_NAME);
 		this.configuration = new PluginConfiguration(file, defaults);
+		this.logger.setLevel(configuration.getLogLevel());
 	}
 
 	private void loadTitleConfiguration()
